@@ -25,10 +25,24 @@
   </head>
 
   <body>
-    <main><h1>A Tiny Wiki</h1><p>Over the past few years I&#x27;ve tried to keep better notes.</p><p>What I&#x27;ve arrived at has very little friction.
+    <main><h1>A Tiny Wiki</h1><p>Over the past few years I&#x27;ve tried to keep better notes.
+I&#x27;ve tried pen-and-paper and notecards, but I write quite slowly and couldn&#x27;t
+devise a decent way to organize my notes.
+I toyed around with popular publishing sites like Medium and dev.to, but I was
+quickly frustrated.
+Then I built several systems for transforming plain-text notes into HTML.
+This is the latest such attempt.</p><p>Qualities a note-taking system should have:</p><ul><li>Plain text editing (no WYSIWYG)</li><li>Possible to use any text editor (<code class="inline">vi</code> keybindings are critical)</li><li>Easy to version control</li><li>Able to typeset prose, code, and math</li><li>Able to <a href="#">link</a> to other notes, and other locations within a note</li></ul><p>Need to come to terms with the fact that <em>no system is perfect</em>.
+I suspect (as others have) that the true value of taking notes is not in having
+them, but in writing them.
+If this is the case, then even if I never look at them again they will have had
+some benefit.</p><p>What I&#x27;ve arrived at has very little friction.
 I can type plain-text notes like this:</p><pre><code># A Tiny Wiki
 
 Over the past few years I&#x27;ve tried to keep better notes.
-...</code></pre><p>which get automatically transformed into</p><blockquote><h1>A Tiny Wiki</h1><p>Over the past few years I&#x27;ve tried to keep better notes.</p><p>...</p></blockquote></main>
+I&#x27;ve tried pen-and-paper and notecards, but I write quite slowly and couldn&#x27;t
+devise a decent way to organize my notes.
+...</code></pre><p>which get automatically transformed into</p><blockquote><h1>A Tiny Wiki</h1><p>Over the past few years I&#x27;ve tried to keep better notes.
+I&#x27;ve tried pen-and-paper and notecards, but I write quite slowly and couldn&#x27;t
+devise a decent way to organize my notes.</p><h2>A secondary (section) title</h2><p>👆 <code class="inline">FIXME</code> This shouldn&#x27;t have a link, and the <code class="inline">id</code> should be URL-encoded.</p><ul><li><code class="inline">TODO</code> Set the font size in blockquotes to <code class="inline">12px</code>?</li><li><code class="inline">TODO</code> Add a background to <code class="inline">mono</code> entities?</li></ul><p>...</p></blockquote></main>
   </body>
 </html>
