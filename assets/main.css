@@ -115,26 +115,3 @@ img {
   margin: 0 auto;
   max-width: 100%;
 }
-
-/* Subsection links */
-
-.subsection-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: -16px;
-}
-
-.subsection-link a {
-  visibility: hidden;
-  font-size: 1.5em;
-  width: 12px;
-}
-
-.subsection-link a:hover {
-  text-decoration: none;
-}
-
-.subsection-link:hover a {
-  visibility: unset;
-}
