@@ -11,14 +11,6 @@
       crossorigin="anonymous"
     />
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Mono&family=Source+Serif+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      rel="stylesheet"
-    />
-
     <link rel="stylesheet" href="./assets/main.css" />
 
     <title>Simple Lexing in JavaScript</title>
@@ -29,87 +21,87 @@
 simple pattern for doing so.
 In this note, we&#x27;ll walk through the process of writing a lexer for a small
 JS-like language.
-Here&#x27;s the lexer&#x27;s skeleton:</p><pre><code>function lex(source) {
-  // The current position (index) within the source string.
-  let pos = 0;
-  const tokens = [];
+Here&#x27;s the lexer&#x27;s skeleton:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">lex</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// The current position (index) within the source string.</span><span class="line">
+</span><span class="space">  </span><span class="keyword">let</span><span class="space"> </span><span class="name">pos</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="number">0</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">tokens</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="punct">[</span><span class="punct">]</span><span class="punct">;</span><span class="line">
 
-  while (pos &lt; source.length) {
-    // Advance `pos` to the end of the next token, and add the token&#x27;s
-    // information to `tokens`.
-  }
+</span><span class="space">  </span><span class="keyword">while</span><span class="space"> </span><span class="punct">(</span><span class="name">pos</span><span class="space"> </span><span class="op">&lt;</span><span class="space"> </span><span class="name">source</span><span class="op">.</span><span class="name">length</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// Advance `pos` to the end of the next token, and add the token&#x27;s</span><span class="line">
+</span><span class="space">    </span><span class="comment">// information to `tokens`.</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  return new Tokens(tokens);
-}</code></pre><p>Within the body of the <code class="inline">while</code> loop, we examine the current character to
+</span><span class="space">  </span><span class="keyword">return</span><span class="space"> </span><span class="keyword">new</span><span class="space"> </span><span class="name">Tokens</span><span class="punct">(</span><span class="name">tokens</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>Within the body of the <code class="inline">while</code> loop, we examine the current character to
 determine the type of token we&#x27;re looking at.
-Here&#x27;s how I&#x27;ve been doing this recently:</p><pre><code>while (pos &lt; source) {
-  const startPos = pos;
-  const c = source[pos++];
+Here&#x27;s how I&#x27;ve been doing this recently:</p><pre><code><span class="keyword">while</span><span class="space"> </span><span class="punct">(</span><span class="name">pos</span><span class="space"> </span><span class="op">&lt;</span><span class="space"> </span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">startPos</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">pos</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">c</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">source</span><span class="punct">[</span><span class="name">pos</span><span class="op">+</span><span class="op">+</span><span class="punct">]</span><span class="punct">;</span><span class="line">
 
-  let type;
-  if (c in simpleTypes) {
-    // Advance past the &quot;simple type&quot;.
-    type = simpleTypes[c];
-  } else if (c === &#x27;&quot;&#x27;) {
-    // Advance past the string.
-    type = &#x27;STRING&#x27;;
-  } else if (isDigit(c)) {
-    // Advance past the number.
-    type = &#x27;NUMBER&#x27;;
-  } else if (startsName(c)) {
-    // Advance past the name (variable or keyword).
-    type = &#x27;NAME&#x27;;
-  } else {
-    throw new Error(...);
-  }
+</span><span class="space">  </span><span class="keyword">let</span><span class="space"> </span><span class="name">type</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">c</span><span class="space"> </span><span class="keyword">in</span><span class="space"> </span><span class="name">simpleTypes</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// Advance past the &quot;simple type&quot;.</span><span class="line">
+</span><span class="space">    </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">simpleTypes</span><span class="punct">[</span><span class="name">c</span><span class="punct">]</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="space"> </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">c</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;&quot;&#x27;</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// Advance past the string.</span><span class="line">
+</span><span class="space">    </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;STRING&#x27;</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="space"> </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">isDigit</span><span class="punct">(</span><span class="name">c</span><span class="punct">)</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// Advance past the number.</span><span class="line">
+</span><span class="space">    </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;NUMBER&#x27;</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="space"> </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">startsName</span><span class="punct">(</span><span class="name">c</span><span class="punct">)</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// Advance past the name (variable or keyword).</span><span class="line">
+</span><span class="space">    </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;NAME&#x27;</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="space"> </span><span class="keyword">else</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">throw</span><span class="space"> </span><span class="keyword">new</span><span class="space"> </span><span class="name">Error</span><span class="punct">(</span><span class="op">.</span><span class="op">.</span><span class="op">.</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  const text = source.slice(startPos, pos);
-  tokens.push({ text, type });
-}</code></pre><p>What is <code class="inline">simpleTypes</code>, and how do we <span>“<!-- -->advance past X<!-- -->”</span>?</p><p>First, the <code class="inline">simpleTypes</code>.
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">text</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">source</span><span class="op">.</span><span class="name">slice</span><span class="punct">(</span><span class="name">startPos</span><span class="punct">,</span><span class="space"> </span><span class="name">pos</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="name">tokens</span><span class="op">.</span><span class="name">push</span><span class="punct">(</span><span class="punct">{</span><span class="space"> </span><span class="name">text</span><span class="punct">,</span><span class="space"> </span><span class="name">type</span><span class="space"> </span><span class="punct">}</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>What is <code class="inline">simpleTypes</code>, and how do we <span>“<!-- -->advance past X<!-- -->”</span>?</p><p>First, the <code class="inline">simpleTypes</code>.
 Most languages have lots of non-keyword symbols that are fixed in advance,
 things like parentheses, brackets, braces, and operators.
 Instead of checking for these individually, we can construct an object mapping
-each of these to their token <span>“<!-- -->types<!-- -->”</span>:</p><pre><code>const simpleTypes = {
-  &#x27;(&#x27;: &#x27;LPAREN&#x27;,
-  &#x27;)&#x27;: &#x27;RPAREN&#x27;,
-  &#x27;;&#x27;: &#x27;SEMI&#x27;,
-  &#x27;+&#x27;: &#x27;PLUS&#x27;,
-  // ...
-};</code></pre><p>Most languages include operators containing multiple symbols, in which case we
+each of these to their token <span>“<!-- -->types<!-- -->”</span>:</p><pre><code><span class="keyword">const</span><span class="space"> </span><span class="name">simpleTypes</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;(&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;LPAREN&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;)&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;RPAREN&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;;&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;SEMI&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;+&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;PLUS&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="punct">;</span></code></pre><p>Most languages include operators containing multiple symbols, in which case we
 need to do something slightly more sophisticated here.
-If we define <code class="inline">simpleTypes</code> instead like so:</p><pre><code>const simpleTypes = {
-  &#x27;(&#x27;: &#x27;LPAREN&#x27;,
-  // ...
-  &#x27;=&#x27;: {
-    // The &#x27;=&#x27; character starts two different operator tokens: the single equals
-    // sign, and double-equals.
-    default: &#x27;EQ&#x27;,
-    &#x27;=&#x27;: &#x27;EQ_EQ&#x27;,
-  },
-  &#x27;+&#x27;: {
-    default: &#x27;PLUS&#x27;,
-    &#x27;=&#x27;: &#x27;PLUS_EQ&#x27;,
-  },
-  // ...
-};</code></pre><p>We use this more elaborate <code class="inline">simpleTypes</code> like so:</p><pre><code>if (c in simpleTypes) {
-  type = simpleTypes[c];
-  while (type &amp;&amp; typeof type === &#x27;object&#x27;) {
-    const nextC = source[pos];
-    
-    if (nextC in type) {
-      type = type[nextC];
-      pos++;
-    } {
-      type = type.default;
-    }
-  }
-}</code></pre><p>Let&#x27;s do an example.
+If we define <code class="inline">simpleTypes</code> instead like so:</p><pre><code><span class="keyword">const</span><span class="space"> </span><span class="name">simpleTypes</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;(&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;LPAREN&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;=&#x27;</span><span class="op">:</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="comment">// The &#x27;=&#x27; character starts two different operator tokens: the single equals</span><span class="line">
+</span><span class="space">    </span><span class="comment">// sign, and double-equals.</span><span class="line">
+</span><span class="space">    </span><span class="keyword">default</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;EQ&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">    </span><span class="string">&#x27;=&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;EQ_EQ&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;+&#x27;</span><span class="op">:</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">default</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;PLUS&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">    </span><span class="string">&#x27;=&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;PLUS_EQ&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="punct">;</span></code></pre><p>We use this more elaborate <code class="inline">simpleTypes</code> like so:</p><pre><code><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">c</span><span class="space"> </span><span class="keyword">in</span><span class="space"> </span><span class="name">simpleTypes</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">simpleTypes</span><span class="punct">[</span><span class="name">c</span><span class="punct">]</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">while</span><span class="space"> </span><span class="punct">(</span><span class="name">type</span><span class="space"> </span><span class="op">&amp;</span><span class="op">&amp;</span><span class="space"> </span><span class="keyword">typeof</span><span class="space"> </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;object&#x27;</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">const</span><span class="space"> </span><span class="name">nextC</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">source</span><span class="punct">[</span><span class="name">pos</span><span class="punct">]</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="line">
+</span><span class="space">    </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">nextC</span><span class="space"> </span><span class="keyword">in</span><span class="space"> </span><span class="name">type</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">      </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">type</span><span class="punct">[</span><span class="name">nextC</span><span class="punct">]</span><span class="punct">;</span><span class="line">
+</span><span class="space">      </span><span class="name">pos</span><span class="op">+</span><span class="op">+</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="punct">}</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">      </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">type</span><span class="op">.</span><span class="keyword">default</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="punct">}</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>Let&#x27;s do an example.
 Suppose our <code class="inline">source</code> is <code class="inline">&#x27;== ...&#x27;</code>, and <code class="inline">pos</code> is <code class="inline">0</code>.
 Then <code class="inline">&#x27;=&#x27; in simpleTypes</code> is <code class="inline">true</code>, so <code class="inline">type</code> is equal to <code class="inline">simpleTypes[&#x27;=&#x27;]</code>,
-which is in turn equal to</p><pre><code>{
-  default: &#x27;EQ&#x27;,
-  &#x27;=&#x27;: &#x27;EQ_EQ&#x27;,
-}</code></pre><p>At this point, <code class="inline">typeof type === &#x27;object&#x27;</code>, so we enter the body of the <code class="inline">while</code>
+which is in turn equal to</p><pre><code><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="keyword">default</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;EQ&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;=&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;EQ_EQ&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>At this point, <code class="inline">typeof type === &#x27;object&#x27;</code>, so we enter the body of the <code class="inline">while</code>
 loop.
 The next character in <code class="inline">source</code> is <code class="inline">&#x27;=&#x27;</code>, so <code class="inline">nextC</code> is <code class="inline">&#x27;=&#x27;</code>.
 Since <code class="inline">&#x27;=&#x27;</code> is in <code class="inline">type</code> (the object above), <code class="inline">nextC in type</code> is <code class="inline">true</code>, so we
@@ -122,85 +114,85 @@ As a result, we&#x27;d set <code class="inline">type</code> to the <code class="
 is no longer part of the type of token that we&#x27;re reading.
 In most cases we simply stop and add the token at that point, but in some (such
 as when lexing string literals) there are characters that must be seen at the
-end of the token, and ones that cannot occur within.</p><p>Here, this function comes in handy:</p><pre><code>function skipWhile(pred) {
-  while (pos &lt; source.length &amp;&amp; pred(source[pos)) {
-    pos++;
-  }
-}</code></pre><p>The fragment for lexing names (keywords and identifiers) now looks like:</p><pre><code>else if (startsName(c)) {
-  skipWhile(continumesName);
-  type = &#x27;NAME&#x27;;
-}</code></pre><h2>Distinguishing keywords</h2><p>Most languages distinguish identifiers used to name program elements (like <code class="inline">foo</code>
+end of the token, and ones that cannot occur within.</p><p>Here, this function comes in handy:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">skipWhile</span><span class="punct">(</span><span class="name">pred</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="keyword">while</span><span class="space"> </span><span class="punct">(</span><span class="name">pos</span><span class="space"> </span><span class="op">&lt;</span><span class="space"> </span><span class="name">source</span><span class="op">.</span><span class="name">length</span><span class="space"> </span><span class="op">&amp;</span><span class="op">&amp;</span><span class="space"> </span><span class="name">pred</span><span class="punct">(</span><span class="name">source</span><span class="punct">[</span><span class="name">pos</span><span class="punct">)</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="name">pos</span><span class="op">+</span><span class="op">+</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>The fragment for lexing names (keywords and identifiers) now looks like:</p><pre><code><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">startsName</span><span class="punct">(</span><span class="name">c</span><span class="punct">)</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="name">skipWhile</span><span class="punct">(</span><span class="name">continumesName</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="name">type</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;NAME&#x27;</span><span class="punct">;</span><span class="line">
+</span><span class="punct">}</span></code></pre><div class="h2-container"><h2 id="Distinguishing keywords">Distinguishing keywords</h2><a href="#Distinguishing keywords">#</a></div><p>Most languages distinguish identifiers used to name program elements (like <code class="inline">foo</code>
 and <code class="inline">bar</code>) from <em>keywords</em> in the language (<code class="inline">for</code>, <code class="inline">while</code>, <code class="inline">function</code>).
 I&#x27;ve found it easiest to first lex a name <em>or</em> keyword while examining the
 source, and then later determine if it&#x27;s a keyword or identifier.
 If keywords aren&#x27;t contextual, this can be done in the lexer right before
-<code class="inline">push</code>ing the token onto the <code class="inline">tokens</code> array:</p><pre><code>const text = source.slice(startPos, pos);
-const actualType = keywords[text] ?? type;
-tokens.push({
-  type: actualType,
-  text,
-});
+<code class="inline">push</code>ing the token onto the <code class="inline">tokens</code> array:</p><pre><code><span class="keyword">const</span><span class="space"> </span><span class="name">text</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">source</span><span class="op">.</span><span class="name">slice</span><span class="punct">(</span><span class="name">startPos</span><span class="punct">,</span><span class="space"> </span><span class="name">pos</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="keyword">const</span><span class="space"> </span><span class="name">actualType</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">keywords</span><span class="punct">[</span><span class="name">text</span><span class="punct">]</span><span class="space"> </span><span class="op">?</span><span class="op">?</span><span class="space"> </span><span class="name">type</span><span class="punct">;</span><span class="line">
+</span><span class="name">tokens</span><span class="op">.</span><span class="name">push</span><span class="punct">(</span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="name">type</span><span class="op">:</span><span class="space"> </span><span class="name">actualType</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="name">text</span><span class="punct">,</span><span class="line">
+</span><span class="punct">}</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 
-// ...
+</span><span class="comment">// ...</span><span class="line">
 
-const keywords = {
-  break: &#x27;KW_BREAK&#x27;,
-  function: &#x27;KW_FUNCTION&#x27;,
-  for: &#x27;KW_FOR&#x27;,
-  // ...
-  return: &#x27;KW_RETURN&#x27;,
-  while: &#x27;KW_WHILE&#x27;,
-};</code></pre><p>Contextual keywords (names that may be either identifiers or keywords depending
-on <em>where</em> they&#x27;re used) on the other hand, must be handled in a parser.</p><h2>Interfacing with a parser</h2><p>Finally, I&#x27;ve found if helpful to wrap the <code class="inline">tokens</code> array in a small object with
-a few methods for requesting tokens in the parser:</p><pre><code>class Tokens {
-  constructor(tokens) {
-    this.tokens = tokens;
-  }
+</span><span class="keyword">const</span><span class="space"> </span><span class="name">keywords</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="keyword">break</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;KW_BREAK&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="keyword">function</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;KW_FUNCTION&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="keyword">for</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;KW_FOR&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="space">  </span><span class="keyword">return</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;KW_RETURN&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="keyword">while</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;KW_WHILE&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="punct">}</span><span class="punct">;</span></code></pre><p>Contextual keywords (names that may be either identifiers or keywords depending
+on <em>where</em> they&#x27;re used) on the other hand, must be handled in a parser.</p><div class="h2-container"><h2 id="Interfacing with a parser">Interfacing with a parser</h2><a href="#Interfacing with a parser">#</a></div><p>Finally, I&#x27;ve found if helpful to wrap the <code class="inline">tokens</code> array in a small object with
+a few methods for requesting tokens in the parser:</p><pre><code><span class="keyword">class</span><span class="space"> </span><span class="name">Tokens</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="name">constructor</span><span class="punct">(</span><span class="name">tokens</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">tokens</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  isEmpty() {
-    return this.tokens.length === 0;
-  }
+</span><span class="space">  </span><span class="name">isEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">return</span><span class="space"> </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="op">.</span><span class="name">length</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="number">0</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  assertNonEmpty() {
-    if (this.isEmpty()) {
-      throw new Error(&#x27;unexpected EOF&#x27;);
-    }
-  }
+</span><span class="space">  </span><span class="name">assertNonEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="keyword">this</span><span class="op">.</span><span class="name">isEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">      </span><span class="keyword">throw</span><span class="space"> </span><span class="keyword">new</span><span class="space"> </span><span class="name">Error</span><span class="punct">(</span><span class="string">&#x27;unexpected EOF&#x27;</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="punct">}</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  peek() {
-    this.assertNonEmpty();
-    return this.tokens[0];
-  }
+</span><span class="space">  </span><span class="name">peek</span><span class="punct">(</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">this</span><span class="op">.</span><span class="name">assertNonEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="keyword">return</span><span class="space"> </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="punct">[</span><span class="number">0</span><span class="punct">]</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  next() {
-    this.assertNonEmpty();
-    return this.tokens.shift();
-  }
+</span><span class="space">  </span><span class="name">next</span><span class="punct">(</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">this</span><span class="op">.</span><span class="name">assertNonEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="keyword">return</span><span class="space"> </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="op">.</span><span class="name">shift</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
 
-  expect(expectedType) {
-    this.assertNonEmpty();
-    const nextType = this.tokens[0].type;
-    if (nextType !== expectedType) {
-      throw new Error(`expected ${expectedType}, not ${nextType}`);
-    }
-  
-    return this.tokens.shift();
-  }
-}</code></pre><p>These functions wrap some common parsing checks, which would otherwise need to
+</span><span class="space">  </span><span class="name">expect</span><span class="punct">(</span><span class="name">expectedType</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="keyword">this</span><span class="op">.</span><span class="name">assertNonEmpty</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="keyword">const</span><span class="space"> </span><span class="name">nextType</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="punct">[</span><span class="number">0</span><span class="punct">]</span><span class="op">.</span><span class="name">type</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">nextType</span><span class="space"> </span><span class="op">!</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="name">expectedType</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">      </span><span class="keyword">throw</span><span class="space"> </span><span class="keyword">new</span><span class="space"> </span><span class="name">Error</span><span class="punct">(</span><span class="string">`expected </span><span class="op">${</span><span class="name">expectedType</span><span class="op">}</span><span class="string">, not </span><span class="op">${</span><span class="name">nextType</span><span class="op">}</span><span class="string">`</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">    </span><span class="punct">}</span><span class="line">
+</span><span class="space">  </span><span class="line">
+</span><span class="space">    </span><span class="keyword">return</span><span class="space"> </span><span class="keyword">this</span><span class="op">.</span><span class="name">tokens</span><span class="op">.</span><span class="name">shift</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="line">
+</span><span class="punct">}</span></code></pre><p>These functions wrap some common parsing checks, which would otherwise need to
 be repeated throughout parser code.
 As an example of how this might be used, consider parsing a <code class="inline">const foo = ...</code>
-declaration in JavaScript:</p><pre><code>function parseConstDecl(t) {
-  t.expect(&#x27;KW_CONST&#x27;);
-  const ident = t.expect(&#x27;IDENT&#x27;).text;
-  t.expect(&#x27;EQ&#x27;);
-  const rhs = parseExpr(t);
+declaration in JavaScript:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">parseConstDecl</span><span class="punct">(</span><span class="name">t</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="name">t</span><span class="op">.</span><span class="name">expect</span><span class="punct">(</span><span class="string">&#x27;KW_CONST&#x27;</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">ident</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">t</span><span class="op">.</span><span class="name">expect</span><span class="punct">(</span><span class="string">&#x27;IDENT&#x27;</span><span class="punct">)</span><span class="op">.</span><span class="name">text</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="name">t</span><span class="op">.</span><span class="name">expect</span><span class="punct">(</span><span class="string">&#x27;EQ&#x27;</span><span class="punct">)</span><span class="punct">;</span><span class="line">
+</span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">rhs</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">parseExpr</span><span class="punct">(</span><span class="name">t</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 
-  // Return an AST node.
-  return {
-    type: &#x27;CONST_DECL&#x27;,
-    ident,
-    rhs,
-  };
-}</code></pre></main>
+</span><span class="space">  </span><span class="comment">// Return an AST node.</span><span class="line">
+</span><span class="space">  </span><span class="keyword">return</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">    </span><span class="name">type</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;CONST_DECL&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">    </span><span class="name">ident</span><span class="punct">,</span><span class="line">
+</span><span class="space">    </span><span class="name">rhs</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="punct">}</span><span class="punct">;</span><span class="line">
+</span><span class="punct">}</span></code></pre></main>
   </body>
 </html>

@@ -1,10 +1,43 @@
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('./SourceCodePro-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('./SourceSerifPro-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('./SourceSerifPro-Italic.ttf');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Serif Pro';
+  src: url('./SourceSerifPro-Bold.ttf');
+  font-weight: bold;
+}
+
 :root {
   --dark: #333;
   --dark__lighter: #444;
   --border-gray: #aaa;
   --code-bg: #efefef;
   --code-bg__lighter: #f0f0f0;
-  --link-blue: #3182bd;
+  --link-color: #008ec4;
+
+  --body-font: 'Source Serif Pro', sans-serif;
+  --code-font: 'Source Code Pro', monospace;
+
+  --syntax-punct: #1b1e23;
+  --syntax-comment: #828282;
+  --syntax-number: #20a5ba;
+  --syntax-keyword: #c30771;
+  --syntax-name: #10a778;
+  --syntax-string: #008ec4;
+  --syntax-unknown: #ffbedc;
 }
 
 html,
@@ -15,7 +48,7 @@ body {
 }
 
 html {
-  font-family: 'Source Serif Pro', serif;
+  font-family: var(--body-font);
   font-size: 14px;
   color: var(--dark);
 }
@@ -47,14 +80,62 @@ h2 {
   margin: 0.25em 0;
 }
 
+.h2-container {
+  align-items: baseline;
+  display: flex;
+  gap: 8px;
+}
+
+.h2-container a {
+  font-size: 1.5em;
+  font-weight: bold;
+  font-family: var(--code-font);
+  visibility: hidden;
+}
+
+.h2-container:hover a {
+  visibility: unset;
+}
+
 p {
   margin: 1em 0;
   line-height: 1.3;
 }
 
 code {
-  font-family: 'Fira Mono', monospace;
+  font-family: var(--code-font);
   font-size: 0.9em;
+  line-height: 1.3;
+}
+
+code .punct,
+code .op {
+  color: var(--syntax-punct);
+}
+
+code .keyword,
+code .regex {
+  color: var(--syntax-keyword);
+}
+
+code .name {
+  color: var(--syntax-name);
+}
+
+code .number {
+  color: var(--syntax-number);
+}
+
+code .comment {
+  color: var(--syntax-comment);
+}
+
+code .string {
+  color: var(--syntax-string);
+}
+
+code .unknown {
+  color: var(--syntax-unknown);
 }
 
 code.inline {
@@ -90,7 +171,7 @@ ol {
 }
 
 a {
-  color: var(--link-blue);
+  color: var(--link-color);
   text-decoration: unset;
   cursor: pointer;
 }
