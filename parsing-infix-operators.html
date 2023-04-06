@@ -609,6 +609,23 @@ Do so requires revising <code class="inline">parseAtom</code> ever so slightly:<
 </span><span class="space">  </span><span class="punct">}</span><span class="line">
 </span><span class="punct">}</span></code></pre><p>This approach gives all postfix operators higher precedence than any prefix
 operator.
-But what if we don&#x27;t want this?</p><div class="h2-container"><h2 id="Non-associative operators?">Non-associative operators?</h2><a href="#Non-associative operators?">#</a></div></main>
+But what if we don&#x27;t want this?</p><p>I don&#x27;t actually know how to solve this problem in general!
+Here&#x27;s an example that I&#x27;ve been thinking about: suppose we have 2 infix
+operators (<code class="inline">-</code> and <code class="inline">~</code>), and one postfix operator (<code class="inline">!</code>), where <code class="inline">-</code> has the
+lowest precedence, <code class="inline">!</code> has medium precedence, and <code class="inline">~</code> has the highest
+precedence.
+So <code class="inline">~a!</code> should be parsed as <code class="inline">(~a)!</code>, whereas <code class="inline">-a!</code> should be parsed as <code class="inline">-(a!)</code>.</p><p>How should we parse <code class="inline">~-a!</code>?</p><p>Reading <span>“<!-- -->outwards-in<!-- -->”</span>, <code class="inline">~</code> has a higher precedence than <code class="inline">!</code>, so it should be
+parsed as <code class="inline">(~(-a))!</code>.
+But reading <span>“<!-- -->inwards-out<!-- -->”</span>, <code class="inline">-</code> has a lower precedence than <code class="inline">!</code>, so it should be
+parsed as <code class="inline">~(-(a!))</code>.</p><p>I don&#x27;t know how this ambiguous situation should be resolved.
+Furthermore, the few grammars (e.g. C&#x27;s) that I consulted arrange things so that
+postfix operators always take precedence over prefix operators.
+This is exactly what <code class="inline">parseAtom</code> does, so maybe it&#x27;s okay.</p><div class="h2-container"><h2 id="Postfix-like constructions">Postfix-like constructions</h2><a href="#Postfix-like constructions">#</a></div><p>Finally, there&#x27;s a whole host of <span>“<!-- -->postfix-like<!-- -->”</span> constructions that we can now
+parse.
+The classic example is the ternary operator offered in many languages: <code class="inline">A ? B :
+C</code>.
+But we can also parse function applications (e.g. <code class="inline">quux(a, b, c)</code>), Rust-like
+<code class="inline">struct</code> declarations (e.g. <code class="inline">Person { name: &quot;John&quot;, age: 42 }</code>), array access
+(e.g. <code class="inline">quux[1][2]</code>)</p><div class="h2-container"><h2 id="Non-associative operators?">Non-associative operators?</h2><a href="#Non-associative operators?">#</a></div></main>
   </body>
 </html>
