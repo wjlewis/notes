@@ -13,11 +13,11 @@
 
     <link rel="stylesheet" href="./assets/main.css" />
 
-    <title>You already know how to parse infix operators (DRAFT)</title>
+    <title>You already know how to parse infix operators</title>
   </head>
 
   <body>
-    <main><h1>You already know how to parse infix operators (DRAFT)</h1><p>Our first goal is to parse infix expressions involving just a single operator.
+    <main><h1>You already know how to parse infix operators</h1><p>Our first goal is to parse infix expressions involving just a single operator.
 The general case turns out to be not much more difficult that this.</p><div class="h2-container"><h2 id="A lexer">A lexer</h2><a href="#A lexer">#</a></div><p>Our parser will manipulate tokens, not the source string itself.
 A <em>lexer</em> bridges this gap, extracting tokens from the source program.
 This lexer maintains an index into the <code class="inline">source</code> string (<code class="inline">pos</code>), and a array of
