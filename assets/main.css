@@ -146,6 +146,7 @@ code.inline {
 
 pre {
   background-color: var(--code-bg);
+  border-radius: 3px;
   padding: 0.5em;
   margin: 1.5em -0.5em;
   overflow-x: auto;
@@ -155,9 +156,8 @@ blockquote {
   margin: 0;
   padding: 0;
   padding-left: 1em;
-  border-left: 4px solid var(--dark__lighter);
+  border-left: 4px solid var(--border-gray);
   color: var(--dark__lighter);
-  font-size: 13px;
 }
 
 blockquote pre {

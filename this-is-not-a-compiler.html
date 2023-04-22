@@ -256,12 +256,12 @@ keep the core of the evaluator smaller.</p><pre><code><span class="comment">// .
       [#t      123])
 `</span><span class="punct">)</span><span class="line">
 </span><span class="space">  </span><span class="punct">)</span><span class="line">
-</span><span class="punct">)</span></code></pre><p>produces</p><pre><code>[
-  &#x27;if&#x27;,
-  [&#x27;=&#x27;, &#x27;n&#x27;, 1],
-  1,
-  [&#x27;if&#x27;, [&#x27;=&#x27;, &#x27;n&#x27;, 2], 42, [&#x27;if&#x27;, true, 123, 0]],
-]</code></pre><p>Definitions add a binding for the defined name, <em>mutating</em> the current
+</span><span class="punct">)</span></code></pre><p>produces</p><pre><code><span class="punct">[</span><span class="line">
+</span><span class="space">  </span><span class="string">&#x27;if&#x27;</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="punct">[</span><span class="string">&#x27;=&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="string">&#x27;n&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="number">1</span><span class="punct">]</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="number">1</span><span class="punct">,</span><span class="line">
+</span><span class="space">  </span><span class="punct">[</span><span class="string">&#x27;if&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="string">&#x27;=&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="string">&#x27;n&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="number">2</span><span class="punct">]</span><span class="punct">,</span><span class="space"> </span><span class="number">42</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="string">&#x27;if&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="keyword">true</span><span class="punct">,</span><span class="space"> </span><span class="number">123</span><span class="punct">,</span><span class="space"> </span><span class="number">0</span><span class="punct">]</span><span class="punct">]</span><span class="punct">,</span><span class="line">
+</span><span class="punct">]</span></code></pre><p>Definitions add a binding for the defined name, <em>mutating</em> the current
 environment:</p><pre><code><span class="comment">// ...</span><span class="line">
 </span><span class="punct">}</span><span class="space"> </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">first</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;define&#x27;</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">isDefiningName</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="keyword">typeof</span><span class="space"> </span><span class="name">rest</span><span class="punct">[</span><span class="number">0</span><span class="punct">]</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;string&#x27;</span><span class="punct">;</span><span class="line">
