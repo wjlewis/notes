@@ -1,1 +1,41 @@
 # On _Naked Money_
+
+## Fiat money vs commodity money
+
+Commodity money feels safer, more rooted than fiat money.
+But fiat money is just commodity money, "taken to the limit".
+To see how, consider the following progression:
+
+A small town has a fixed reserve of gold.
+They exchange a paper money that's backed by the gold: 1 unit of money is worth
+1 gram of gold.
+Prices have stabilized over time so that, for instance, a chicken costs 1 unit,
+an axe 2 units, etc.
+All is right with the world.
+
+Now imagine two scenarios:
+
+First, suppose that a large pocket of gold is discovered, and the townspeople
+each double the amount of gold in their possession.
+What happens to prices?
+Since the amount of "stuff" in the town has not changed, prices will roughly
+double: a chicken will now cost 2 units, an axe 4 units, etc.
+Why?
+One way to justify this is that the _fraction_ of my wealth that I'd be willing
+to part with in order to own X remains constant.
+If 1 unit was 1 percent of my former wealth, 2 units is now 2 percent of it.
+
+Second, suppose that an innovation in agriculture makes it possible to produce
+twice as much rice with the same amount of effort on the same area of land.
+What happens to the price of rice?
+It should _decrease_.
+Why?
+Suppose that 10% of the town currently grows rice.
+After the first double-harvest, they roughly double their wealth.
+As more of the town becomes aware of the innovation, they begin to grow and sell
+rice as well.
+This drives the price down, to roughly half its former amount.
+
+^Seems a little hand-wavy...
+
+If there are enough innovations, then prices will begin to fall _uniformly_.

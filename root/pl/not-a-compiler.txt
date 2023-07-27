@@ -1,0 +1,755 @@
+# This is not a compiler
+
+What's the difference between a compiler and an interpreter?
+A compiler transforms a program in one language into an equivalent program in
+another language, whereas an interpreter "runs" a program.
+
+Let's try to formalize this.
+We'll let `L_1` and `L_2` be sets containing all legal programs written in two
+languages, and `M` be the set of all possible "meanings" a program might have.
+Finally, for each language `L_n`, suppose we've got some function
+
+```
+m_n : L_n -> M
+```
+
+that produces the meaning of any program in `L`.
+
+Then an interpreter for language `L_1` is just a function
+
+```
+i : L_1 -> M
+```
+
+that produces the right meaning for each program in `L`.
+That is, for every `p` in `L_1`, `i(p) = m_1(p)`.
+Likewise, a compiler from `L_1` to `L_2` is just a function `K : L_1 -> L_2`
+that translates any program in `L_1` into an _equivalent_ program in `L_2`.
+So, for every `p` in `L_1`, `m_1(p) = m_2(k(p))`.
+
+We've arrived at two simple, pleasing definitions which reveal the distinction
+between a compiler and interpreter.
+But this isn't the whole story, and that's the point of this note.
+For the remainder of our time, we'll look at a pathological example that
+_technically_ satisfies the definition of a compiler while _morally_ failing to
+be one.
+This has absolutely no practical significance, but it's a neat exercise, and it
+also serves as an interesting example of the difficulty (or futility) of trying
+to pin down even seemingly well-behaved concepts.
+
+## The big picture
+
+We're going to write a program that "compiles" Scheme to JavaScript by simply
+embedding a Scheme interpreter (written in JavaScript) along with the program we
+asked it to compile.
+Here's the bird's eye view:
+
+```javascript
+// Transform a Scheme program into an equivalent JavaScript program.
+function compile(program) {
+  return `
+// Run the provided Scheme program, producing its meaning.
+function interpret(program) {
+  // ...
+}
+
+interpret(\`${program}\`);
+`;
+}
+```
+
+Does this satisfy our formal definition above?
+Is it a compiler?
+We'll return to these questions [later](#Is this a compiler?).
+But first, let's write this thing.
+
+## A pocket-sized Scheme
+
+The bulk of our `compile` function is just a quoted Scheme interpreter, written
+in JavaScript.
+To keep the exercise interesting, the interpreter should at least be capable of
+running a metacircular evaluator.
+To keep it simple, we'll forgo any of the bells and whistles that usually
+accompany Scheme implementations (like a macro system, and even error messages).
+The result is a "pocket-sized" Scheme that comes in under 200 lines.
+
+First, let's write a lexer that converts a string representation of a Scheme
+program into "tokens":
+
+```javascript
+function lex(source) {
+  const re = /\(|\)|\[|\]|'|[a-z+*\-<>=!?]+|\d+|#(t|f)/g;
+  const parts = source.match(re);
+
+  // Convert '#t' and '#f' into `true` and `false`, and numeric strings into
+  // numbers.
+  return parts.map(part => {
+    if (['#t', '#f'].includes(part)) {
+      return part === '#t';
+    } else if (!isNaN(part)) {
+      return Number(part);
+    } else {
+      return part;
+    }
+  });
+}
+```
+
+The function `lex` first extracts all of the substrings from the source that
+match the regular expression `re`.
+The `g` flag causes
+[`match`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match)
+to return _all_ matches.
+We then `map` over the extracted parts, converting Scheme boolean and number
+tokens into JavaScript booleans and numbers, which will make evaluation easier.
+
+For example,
+
+```javascript
+lex('(and #t (> 2 1))')
+```
+
+produces the array:
+
+```javascript
+['(', 'and', true, '(', '>', 1, 2, ')', ')']
+```
+
+Next, the dreaded parser.
+We'll write a classic recursive-descent parser that represents s-expressions
+using JavaScript arrays.
+We won't handle dotted pairs, which simplifies both the parser and the rest of
+the intepreter.
+
+Here's a grammar to guide our efforts:
+
+```
+Program = Expr*
+Expr = Name
+     | Number
+     | Boolean
+     | "(" Expr* ")"
+     | "[" Expr* "]"
+     | "'" Expr
+```
+
+We can translate this grammar into JavaScript by
+
+- writing a `parseX` function for each nonterminal `X` (i.e. `parseProgram` and
+  `parseExpr`)
+- replacing each `*` with an appropriate loop
+- replacing each reference to a nonterminal `X` on the righthand side with a
+  (potentially recursive) call to the `parseX` function
+- just emit the token for terminals (i.e. names, numbers, and booleans)
+
+Working step-by-step, we write a `parseProgram` function to parse `Program`s:
+
+```javascript
+function parseProgram(tokens) {
+  const exprs = [];
+  while (tokens.length > 0) {
+    exprs.push(parseExpr(tokens));
+  }
+  return exprs;
+}
+```
+
+Easy enough, but what about parsing `Expr`essions?
+
+```javascript
+function parseExpr(tokens) {
+  if (['(', '['].includes(tokens[0])) {
+    return parseList(tokens);
+  } else if (tokens[0] === "'") {
+    tokens.shift();
+    const quoted = parseExpr(tokens);
+    return ['quote', quoted];
+  } else {
+    return tokens.shift();
+  }
+}
+```
+
+`parseExpr` examines the first token.
+If it's an open parenthesis or bracket, it parses a "list" (see below); if it's
+a quote (`'`), it consumes the token, parses an expression (see the grammar),
+and synthesizes an appropriate `(quote ...)` s-expression; and if its an atom
+(name, number, or boolean), it simply consumes and returns the token.
+
+That just leaves `parseList`:
+
+```javascript
+function parseList(tokens) {
+  const opener = tokens.shift();
+  const closers = { '(': ')', '[': ']' };
+  
+  // Determine if we're looking for a ')' or ']'.
+  const closer = closers[opener];
+
+  const exprs = [];
+  while (tokens.length > 0 && tokens[0] !== closer) {
+    exprs.push(parseExpr(tokens));
+  }
+  // Consume the closing token.
+  tokens.shift();
+  
+  return exprs;
+}
+```
+
+Again, this just does what the grammar indicates.
+(This implementation of `parseList` combines the nearly identical cases of
+parenthesized `(...)` and bracketed `[...]` lists, but we could just as well
+have written separate functions for each.)
+
+If this is your first time writing a parser, I'd encourage you to add some
+`console.log`s throughout these functions (or try an example on paper) to see
+how they interact.
+
+We can now parse programs into array-based abstract syntax trees.
+For example:
+
+```javascript
+parseProgram(
+  lex(`
+(define (fact n)
+  (if (= n 0)
+      1
+      (* n (fact (- n 1)))))
+
+(map fact '(0 1 2 3 4 5))
+`)
+)
+```
+
+produces
+
+```javascript
+[
+  ['define', ['fact', 'n'], ['if', [...], 1, [...]]],
+  ['map', 'fact', ['quote', [...]]],
+]
+```
+
+With that, we've arrived at the main event: evaluation.
+
+If you've written a metacircular evaluator in Scheme then this will look very
+familiar.
+If not, check out
+[SICP](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book.html)
+or "The Little Schemer".
+You won't be disappointed.
+
+To evaluate a program, we simply evaluate each expression in the program:
+
+```javascript
+function evalProgram(program, env) {
+  for (const expr of program) {
+    evalExpr(expr, env);
+  }
+}
+```
+
+All of the action occurs in `evalExpr`, which performs a case analysis on the
+`expr` we give it:
+
+```javascript
+function evalExpr(expr, env) {
+  if (['number', 'boolean'].includes(typeof expr)) {
+    return expr;
+  } else if (typeof expr === 'string') {
+    // Names
+  } else {
+    // Compound expressions (e.g. `(let ([x 2]) ...)`)
+  }
+}
+```
+
+Literals (numbers and booleans) evaluate to themselves.
+That is, `evalExpr(42, <anything>)` produces `42`.
+
+What about other expression types?
+Let's work through one case at a time.
+The value of a name is just the value it's bound to in the `env`rionment:
+
+```javascript
+// ...
+else if (typeof expr === 'string') {
+  return lookup(expr, env);
+}
+// ...
+```
+
+We'll represent environments as objects with a `bindings` field whose value is
+an object associating names with values, and a `base` field that points to a
+(possibly empty) environment.
+To `lookup` the value bound to a name in an environment, we check if the name
+occurs in the environment's `bindings`; if not, we recursively check the `base`
+environment:
+
+```javascript
+function lookup(name, env) {
+  if (name in env.bindings) {
+    return env.bindings[name];
+  } else if (env.base) {
+    return lookup(name, env.base);
+  } else {
+    throw new Error(`unbound name: ${name}`);
+  }
+}
+```
+
+As always, let's try an example.
+Suppose
+
+```javascript
+const env = {
+  bindings: { a: 1, b: 2 },
+  base: {
+    bindings: { a: 42, c: true },
+  },
+};
+```
+
+Then `lookup('a', env)` produces `1`, `lookup('b', env)` is `2`, `lookup('c',
+env)` is `true`, and `lookup('quux', env)` throws an error.
+
+Returning to `evalExpr`, all that remains are compound expressions, which we've
+represented as arrays.
+We decide what to do based on the first element.
+For example, if the expression begins with `['if', ...]`, we evaluate either
+the true "arm" or false arm according to the value of the test expression.
+
+```javascript
+// ...
+else {
+  const [first, ...rest] = expr;
+  
+  if (first === 'if') {
+    const [testExpr, trueExpr, falseExpr] = rest;
+    const isTrue = evalExpr(testExpr, env);
+    
+    if (isTrue) {
+      return evalExpr(trueExpr, env);
+    } else {
+      return evalExpr(falseExpr, env);
+    }
+  } else if (...) {
+    // ...
+  }
+}
+// ...
+```
+
+`lambda` expressions evaluate to closures, which we represent as objects
+containing the lambda's parameters, body, and current environment:
+
+```javascript
+// ...
+else if (first === 'lambda') {
+  const [params, body] = rest;
+  return { params, body, env };
+}
+// ...
+```
+
+`quote` expressions simply return the quoted expression _as a value_:
+
+```javascript
+// ...
+else if (first === 'quote') {
+  return rest[0];
+}
+// ...
+```
+
+We "desugar" `let` expressions into equivalent applications of `lambda`
+expressions.
+For example,
+
+```scheme
+(let ([x 1] [y 2])
+  (+ x y))
+```
+
+becomes
+
+```scheme
+((lambda (x y)
+   (+ x y))
+ 1 2)
+```
+
+We could just as well "directly" evaluate `let` expressions, but this lets us
+keep the core of the evaluator smaller.
+
+```javascript
+// ...
+else if (first === 'let') {
+  return evalExpr(desugarLet(expr), env);
+}
+// ...
+```
+
+where
+
+```javascript
+function desugarLet(expr) {
+  const [_let, bindings, body] = expr;
+  const params = bindings.map(([param, _rand]) => param);
+  const rands = bindings.map(([_param, rand]) => rand);
+
+  const lambda = ['lambda', params, body];
+  return [lambda, ...rands];
+}
+```
+
+Try it out!
+
+Likewise, `cond` gets desugared into a sequence of `if`s:
+
+```javascript
+// ...
+} else if (first === 'cond') {
+  return evalExpr(desugarCond(expr), env);
+}
+// ...
+```
+
+where
+
+```javascript
+function desugarCond(expr) {
+  const [_cond, clauses] = expr;
+
+  return clauses.reduceRight(
+    (falseExpr, [testExpr, trueExpr]) => ['if', testExpr, trueExpr, falseExpr],
+    0
+  );
+}
+```
+
+Try it!
+
+```javascript
+desugarCond(
+  parseExpr(
+    lex(`
+(cond [(= n 1) 1]
+      [(= n 2) 42]
+      [#t      123])
+`)
+  )
+)
+```
+
+produces
+
+```javascript
+[
+  'if',
+  ['=', 'n', 1],
+  1,
+  ['if', ['=', 'n', 2], 42, ['if', true, 123, 0]],
+]
+```
+
+Definitions add a binding for the defined name, _mutating_ the current
+environment:
+
+```javascript
+// ...
+} else if (first === 'define') {
+  const isDefiningName = typeof rest[0] === 'string';
+  if (isDefiningName) {
+    const [name, rhs] = rest;
+    env.bindings[name] = evalExpr(rhs, env);
+  } else {
+    const [[name, ...params], body] = rest;
+    const lambda = ['lambda', params, body];
+    env.bindings[name] = evalExpr(lambda, env);
+  }
+}
+// ...
+```
+
+Here we support defining both names _and_ functions:
+
+```scheme
+(define quux 42)
+
+(define (square x)
+  (* x x))
+```
+
+Finally, applications:
+
+```javascript
+// ...
+} else {
+  const [rator, ...rands] = expr;
+  const op = evalExpr(rator, env);
+  const args = rands.map(rand => evalExpr(rand, env));
+  
+  if (typeof op === 'function') {
+    return op(...args);
+  } else {
+    const { params, body, env } = op;
+    const bindings = Object.fromEntries(zip(params, args));
+    const env1 = { bindings, base: env };
+    return evalExpr(body, env1);
+  }
+}
+// ...
+```
+
+We'll include some primitives (like `+`, `cons`, etc.) as JavaScript functions,
+which is why we need to check the operator's type.
+If the operator is a JavaScript function, we simply apply it to the arguments;
+if it's a closure we do the usual thing: extend the environment by binding the
+closure's parameters to the arguments, and evaluate the body in this new
+extended environment.
+
+Constructing the new bindings is a simple matter of `zip`ping the names and args
+together, and turning the resulting array into an object.
+
+```javascript
+function zip(xs, ys) {
+  return xs.map((x, i) => [x, ys[i]]);
+}
+```
+
+We're now ready to define `interpret`:
+
+```javascript
+function interpret(source) {
+  const env0 = {
+    bindings: {
+      '+': (l, r) => l + r,
+      '-': (l, r) => l - r,
+      '*': (l, r) => l * r,
+      '<': (l, r) => l < r,
+      '=': (l, r) => l === r,
+      'number?': v => typeof v === 'number',
+      'boolean?': v => typeof v === 'boolean',
+      'symbol?': v => typeof v === 'string',
+      'eq?': (l, r) => l === r,
+      'empty?': xs => xs.length === 0,
+      cons: (head, tail) => [head, ...tail],
+      head: xs => xs[0],
+      tail: xs => xs.slice(1),
+      debug: v => console.log(showValue(v)),
+    },
+  };
+
+  evalProgram(parseProgram(lex(source)), env0);
+}
+```
+
+`interpret` just glues all of the pieces together and provides a few primitives
+for working with numbers and lists.
+We also include a `debug` primitive for printing to the console, which relies on
+`showValue`:
+
+```javascript
+function showValue(v) {
+  if (Array.isArray(v)) {
+    return `(${v.map(showValue).join(' ')})`;
+  } else if (typeof v === 'object') {
+    return '#<closure>';
+  } else {
+    return v.toString();
+  }
+}
+```
+
+Let's give this baby a whirl:
+
+```javascript
+interpret(`
+(define (fact n)
+  (if (= n 0)
+      1
+      (* n (fact (- n 1)))))
+
+(define (map fn xs)
+  (if (empty? xs)
+      '()
+      (cons (fn (head xs))
+            (map fn (tail xs)))))
+
+(define quux (map fact '(0 1 2 3 4 5)))
+
+(debug quux)
+`);
+
+// => (1 1 2 6 24 120)
+```
+
+## The compiler, finally
+
+If you perservered through the previous section, I applaud you.
+Time for the payoff.
+All that's left is to write `compile`, which simply interpolates the provided
+program into a template containing the interpreter code we just wrote.
+
+Since we're going to paste the interpreter source code inside a template string,
+we need to be careful to escape all backticks (`\``); we also need to escape
+dollar signs (`$`) and escape characters (`\\`) as well.
+This is easy enough to do manually, but we can also automate it with a little
+script.
+
+If the following is saved in a file named _quote.js_:
+
+```javascript
+process.stdin
+  .setEncoding('utf-8')
+  // Replace backticks (`), dollar signs ($), and escape characters (\) with an
+  // escaped version, e.g. $ -> \$.
+  .map(chunk => chunk.replace(/`|\$|\\/g, c => `\\${c}`))
+  .pipe(process.stdout);
+```
+
+and the interpreter source is saved in _pocket-scheme.js_, then
+
+```shell
+$ node quote.js < pocket-scheme.js > quoted-interpreter.txt
+```
+
+will save the quoted interpreter source in _quoted-interpreter.txt_.
+
+In a new file (which I'm calling _not-a-compiler.js_), copy the quoted
+interpreter source into the body of a function named `compile`, along with a
+(quoted) invocation of the `interpret` function on the `source` of the program
+to be "compiled":
+
+```javascript
+function compile(source) {
+  const interpreterSource = `
+function lex(source) {
+  const re = /\\(|\\)|\\[|\\]|'|[a-z+*\\-<>=!?]+|\\d+|#(t|f)/g;
+  const parts = source.match(re);
+...
+`;
+
+  return `
+${interpreterSource}
+
+interpret(\`${source}\`);
+`;
+}
+```
+
+_The full listing is available [here](https://gist.github.com/wjlewis/a85a5b9a66875d82c1155a59474aee7d)._
+
+Finally, to make our "compiler" a little more ergonomic, let's read input
+programs from `stdin` and write our compiled output to `stdout`:
+
+```javascript
+const fs = require('fs');
+
+function compile(source) {
+  // ...
+}
+
+const source = fs.readFileSync(0, 'utf-8');
+fs.writeFileSync(1, compile(source));
+```
+
+We can now compile Scheme files by executing
+
+```shell
+$ node not-a-compiler.js < my-program.scm
+```
+
+and compile-and-execute via
+
+```shell
+$ node not-a-compiler.js < my-program.scm | node
+```
+
+or compose on-the-fly with
+
+```shell
+$ node not-a-compiler.js | node
+(define (fib n)
+  (cond [(= n 1) 1]
+        [(= n 2) 1]
+        [#t      (+ (fib (- n 1))
+                    (fib (- n 2)))]))
+
+(debug (fib 10))
+Ctrl+D
+55
+```
+
+## Is this a compiler?
+
+Yes, according to our definition above.
+It transforms Scheme programs into equivalent JavaScript programs, in the sense
+that
+
+```shell
+$ scheme my-program.scm
+```
+
+and
+
+```
+$ node not-a-compiler.js < my-program.scm > my-program.js
+$ node my-program.js
+```
+
+produce the same result.
+
+But it doesn't actually _do_ anything.
+It just packages an interpreter alongside the program we gave it and says "run
+this later".
+A compiler should "know something" about the two languages it works with, and
+`compile` doesn't really know anything about JavaScript.
+
+To put this into more familiar terms, suppose I told you that I could translate
+French imperative statements into English.
+To test my abilities, you write a French command, say
+
+```
+passe-moi le sel
+```
+
+on a slip of paper, and hand it to me.
+On the back of the slip, I write
+
+```
+The following is a command written in French:
+
+    passe-moi le sel
+
+Call my friend Jacques at (864) 555-8729.
+Ask him to tell you what it means, and then do whatever he says.
+```
+
+As always, let's try this out.
+You and I are eating dinner with a French friend, and I say to our guest,
+"passe-moi le sel".
+Sure enough, he passes me the salt.
+Now I want to ask you to do the same, but you only speak English.
+Do I ask you to "please pass the salt"?
+No; I pass you this card, and
+
+1. You call Jacques and ask him, "What does 'passe-moi le sel' mean?"
+2. He says, "It means 'pass the salt'"
+3. You pass me the salt
+
+This _works_ in the sense that it allows people who only speak English to carry
+out orders written in French.
+But I haven't translated anything here.
+I've just deferred the work until "runtime", leaning on my friend (and
+"interpreter") Jacques.
+
+_This result has absolutely no practical consequences_, but it does punch a hole
+through a pair of otherwise nice definitions.
+I'm perenially interested in the ways that concepts break down or "blur".
+This is yet another example, but in a somewhat surprising context.
+Can we patch up these definitions so that they "correctly" categorize our
+`compile` function as ... something else?
+It seems unlikely, but I'll continue to think on this.
