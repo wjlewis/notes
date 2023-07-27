@@ -1,3 +1,3 @@
 #!/bin/sh
 
-npx http-server .
+npx http-server root

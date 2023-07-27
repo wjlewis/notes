@@ -5,10 +5,13 @@ rm -rf dist
 mkdir dist
 
 echo "Copying notes into dist"
+cd root
 find -type f \
+     -path "./*" \
+     -a -not -path "../dist/*" \
      '(' -name "*.html" -o -name "*.css" ')' \
-     -a -not -path "./dist/*" \
-     -exec cp --parents '{}' ./dist ';'
+     -exec cp --parents '{}' ../dist ';'
+cd ..
 
 echo "Updating paths to main.css"
 find -type f \

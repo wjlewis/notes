@@ -1,0 +1,3 @@
+# Notes
+
+A [link](./test.html) to another note.
