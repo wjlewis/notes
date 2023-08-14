@@ -7,30 +7,13 @@ body {
 
 html {
   font-size: 16px;
-  font-family: 'Fira Mono', monospace;
-  line-height: 1.3;
-  background-color: #282828;
-  color: #ebdbb2;
+  line-height: 1.4;
 }
 
 main {
   margin: 1em;
+  margin-bottom: 24em;
   max-width: 40em;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-size: 1em;
-  margin: 1em 0;
-  margin-top: 2em;
-}
-
-h1 {
-  margin: 2em 0;
 }
 
 p,
@@ -64,34 +47,45 @@ blockquote {
   font-size: 0.95rem;
 }
 
-ol {
-  padding-left: 2.5em;
+div.footnote:first-of-type {
+  margin-top: 4em;
 }
 
-ul {
-  padding-left: 2em;
+div.footnote {
+  display: flex;
+  gap: 1em;
+  margin: 1em 0;
 }
 
-ul {
-  list-style: '- ';
+/*
+ * + ---- +
+ * | Code |
+ * + ---- +
+ */
+
+code {
+  font-family: monospace;
 }
 
-a {
-  color: #ebdbb2;
-}
-
-a:hover {
-  color: #fbf1c7;
+code.inline,
+pre {
+  background-color: #f0f0f0;
 }
 
 code.inline {
-  background-color: #3c3836;
   padding: 0.05rem 0.2rem;
   margin: 0 -0.2rem;
 }
 
+pre {
+  padding: 0.5em;
+  margin-left: -0.5em;
+  margin-right: -0.5em;
+  overflow-x: auto;
+}
+
 .comment {
-  color: #978374;
+  color: #7c6f64;
 }
 
 .keyword {
@@ -99,7 +93,7 @@ code.inline {
 }
 
 .name {
-  color: #ebdbb2;
+  color: #282828;
 }
 
 .string {
@@ -111,11 +105,11 @@ code.inline {
 }
 
 .punct {
-  color: #d5c4a1;
+  color: #928374;
 }
 
 .op {
-  color: #d5c4a1;
+  color: #928374;
 }
 
 .regex {

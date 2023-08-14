@@ -1,0 +1,28 @@
+# Embracing the low road
+
+A good tool disappears as it becomes an extension of ourselves.
+I don't think about `vim` when programming, and I don't think about a sharp,
+well-balanced knife while chopping vegetables.
+Well-made artifacts escape notice.
+
+It's hard to get things right the very first time, but easy to make small
+improvements to an imperfect object.
+In order to reach the state of harmony described above, a thing needs to be able
+to change.
+
+_A high degree of polish resists change._
+To make significant changes, polish must often be removed or undone, the change
+made, and the polish reapplied.
+We pay for premature polish again and again.
+
+In spite of this it's tempting to polish prematurely.
+Polishing is fun, instantly rewarding, and feels like important work.
+Besides, unpolished things look unsophisticated.
+
+But polish is unimportant, and to think otherwise is to mistake precision for
+accuracy.
+A bicycle's color and finish don't matter if it's well-tuned; a poorly-tuned
+bike, no matter how beautiful, will remind you of its shortcomings with ever
+pedal stroke.
+
+Unrefined work invites change.

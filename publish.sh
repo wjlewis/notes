@@ -9,6 +9,7 @@ cd root
 find -type f \
      -path "./*" \
      -a -not -path "../dist/*" \
+     -a -not -name "*.draft.html" \
      '(' -name "*.html" -o -name "*.css" ')' \
      -exec cp --parents '{}' ../dist ';'
 cd ..

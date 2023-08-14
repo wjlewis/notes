@@ -60,7 +60,7 @@ interpret(\`${program}\`);
 
 Does this satisfy our formal definition above?
 Is it a compiler?
-We'll return to these questions [later](#Is this a compiler?).
+We'll return to these questions later.
 But first, let's write this thing.
 
 ## A pocket-sized Scheme
@@ -173,7 +173,7 @@ function parseExpr(tokens) {
 `parseExpr` examines the first token.
 If it's an open parenthesis or bracket, it parses a "list" (see below); if it's
 a quote (`'`), it consumes the token, parses an expression (see the grammar),
-and synthesizes an appropriate `(quote ...)` s-expression; and if its an atom
+and synthesizes an appropriate `(quote ...)` s-expression; and if it's an atom
 (name, number, or boolean), it simply consumes and returns the token.
 
 That just leaves `parseList`:
@@ -202,10 +202,6 @@ Again, this just does what the grammar indicates.
 parenthesized `(...)` and bracketed `[...]` lists, but we could just as well
 have written separate functions for each.)
 
-If this is your first time writing a parser, I'd encourage you to add some
-`console.log`s throughout these functions (or try an example on paper) to see
-how they interact.
-
 We can now parse programs into array-based abstract syntax trees.
 For example:
 
@@ -232,13 +228,6 @@ produces
 ```
 
 With that, we've arrived at the main event: evaluation.
-
-If you've written a metacircular evaluator in Scheme then this will look very
-familiar.
-If not, check out
-[SICP](https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book.html)
-or "The Little Schemer".
-You won't be disappointed.
 
 To evaluate a program, we simply evaluate each expression in the program:
 
@@ -588,7 +577,6 @@ interpret(`
 
 ## The compiler, finally
 
-If you perservered through the previous section, I applaud you.
 Time for the payoff.
 All that's left is to write `compile`, which simply interpolates the provided
 program into a template containing the interpreter code we just wrote.

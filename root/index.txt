@@ -1,3 +1,10 @@
 # Notes
 
-A [link](./test.html) to another note.
+## General
+
+[Embracing the low road](./general/embracing-the-low-road.html)
+
+## Programming
+
+[This is not a compiler](./pl/not-a-compiler.html)
+

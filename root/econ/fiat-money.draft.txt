@@ -1,0 +1,82 @@
+# Fiat Money vs Commodity Money[^naked_money]
+
+[^naked_money]: These ideas are taken largely from "Naked Money" by Charles
+                Wheelan.
+
+Fiat money is monopoly money backed by an army.
+Why should we prefer monopoly money over a currency tied to something "real",
+like gold?
+After all, fiat money can be created at will, producing savings-eroding
+inflation.
+In this note we'll look at why fiat money is superior to commodity money in a
+_growing_ economy.
+This syllogism offers a nice summary:
+
+- In a growing economy, the amount of available stuff is increasing
+- Everyone is better off when prices remain relatively stable
+- Keeping prices stable when the amount of stuff _isn't_ stable requires the
+  ability to grow the money supply "out of thin air"
+
+## Some downsides of commodity money
+
+Suppose each US dollar were redeemable for a gram of gold.
+Now a new supply of gold is discovered that doubles the amount previously in
+existence.
+What happens to the value of a dollar?
+It's impossible to say without knowing how the new gold is distributed, but
+let's say that the government takes possession of it and it slowly finds its way
+into ordinary citizens' bank accounts as roads are repaired and libraries
+are built.
+Over time many normal people will own about twice as much gold as they did
+before.
+If the amount of "stuff" hasn't changed, then (barring other factors) prices
+will roughly double.[^prices_double]
+This is the very inflation that a commodity money was supposed to prevent from
+happening!
+The lesson here is that commodity money is subject to inflation, even if it
+can't be created on a whim.
+True, the risk of inflation is probably much lower, especially if the people in
+charge aren't trustworthy; however, the risk is still non-zero and, perhaps more
+importantly, is largely out of anyone's hands.
+
+[^prices_double]: This is usually dismissed as a consequence of "the rules of
+  supply and demand", but let's try and make this explicit.
+  Suppose you run a watermelon stand.
+  Each day you open up with 100 watermelons and expect to sell them all by 5 in
+  the afternoon.
+  However, you begin to notice long lines behind your stand, and that you sell
+  out much earlier than normal.
+  This is because people now have more money to spend; whereas they might have
+  only bought a watermelon on a special occassion, they can now afford to buy
+  one every day.
+  You increase your price in response and notice that the lines are slightly
+  shorter and your supply lasts a little longer.
+  You continue to "dial in" the price until you once again sell all your
+  watermelons by the end of the day.
+
+However, there's an even _worse_ possibility.
+Suppose instead that the gold supply is stable but that there have been a number
+of innovations leading to a doubling in the amount of "stuff" for sale.
+In this case prices will _decrease_ by roughly half.
+This is great for savers (whose cash is now worth twice as much).
+It makes no long-term difference in the day-to-day consumption of goods: prices
+have decreased, but wages and salaries will soon follow, resulting in a new
+equilibrium.
+However, it really hurts people with fixed-rate debts.
+The $1000-a-month mortgage was manageable at your previous salary, but now looks
+twice as expensive.
+You're now at risk of being foreclosed on, _all because of some innovations_.
+
+It would have been much better for everyone except the savers if the gold supply
+could have been doubled alongside the doubling of "stuff".
+In that case, prices would have remained stable, and your mortgage would feel
+no different.
+
+TK How do innovations that increase the amount of stuff (broadly-speaking) make
+everyone richer?
+Why should the money supply reflect this?
+
+The appeal of commodity money is that the coins and slips of paper in our
+pockets have tangible worth.
+If a dollar can be redeemed for a gram of gold, then having a dollar and having
+a gram of gold are no different.
