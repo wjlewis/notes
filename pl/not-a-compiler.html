@@ -7,11 +7,11 @@
   </head>
 
   <body>
-    <main><h1>This is not a compiler</h1><p>What&#x27;s the difference between a compiler and an interpreter?
+    <main><h1 id="This-is-not-a-compiler">This is not a compiler</h1><p>What&#x27;s the difference between a compiler and an interpreter?
 A compiler transforms a program in one language into an equivalent program in
-another language, whereas an interpreter <span>“<!-- -->runs<!-- -->”</span> a program.</p><p>Let&#x27;s try to formalize this.
+another language, whereas an interpreter &quot;runs&quot; a program.</p><p>Let&#x27;s try to formalize this.
 We&#x27;ll let <code class="inline">L_1</code> and <code class="inline">L_2</code> be sets containing all legal programs written in two
-languages, and <code class="inline">M</code> be the set of all possible <span>“<!-- -->meanings<!-- -->”</span> a program might have.
+languages, and <code class="inline">M</code> be the set of all possible &quot;meanings&quot; a program might have.
 Finally, for each language <code class="inline">L_n</code>, suppose we&#x27;ve got some function</p><pre><code>m_n : L_n -&gt; M</code></pre><p>that produces the meaning of any program in <code class="inline">L</code>.</p><p>Then an interpreter for language <code class="inline">L_1</code> is just a function</p><pre><code>i : L_1 -&gt; M</code></pre><p>that produces the right meaning for each program in <code class="inline">L</code>.
 That is, for every <code class="inline">p</code> in <code class="inline">L_1</code>, <code class="inline">i(p) = m_1(p)</code>.
 Likewise, a compiler from <code class="inline">L_1</code> to <code class="inline">L_2</code> is just a function <code class="inline">K : L_1 -&gt; L_2</code>
@@ -24,7 +24,7 @@ For the remainder of our time, we&#x27;ll look at a pathological example that
 be one.
 This has absolutely no practical significance, but it&#x27;s a neat exercise, and it
 also serves as an interesting example of the difficulty (or futility) of trying
-to pin down even seemingly well-behaved concepts.</p><h2>The big picture</h2><p>We&#x27;re going to write a program that <span>“<!-- -->compiles<!-- -->”</span> Scheme to JavaScript by simply
+to pin down even seemingly well-behaved concepts.</p><h2 id="The-big-picture">The big picture</h2><p>We&#x27;re going to write a program that &quot;compiles&quot; Scheme to JavaScript by simply
 embedding a Scheme interpreter (written in JavaScript) along with the program we
 asked it to compile.
 Here&#x27;s the bird&#x27;s eye view:</p><pre><code><span class="comment">// Transform a Scheme program into an equivalent JavaScript program.</span><span class="line">
@@ -35,19 +35,19 @@ function interpret(program) {
   // ...
 }
 
-interpret(`</span><span class="unknown">$</span><span class="punct">{</span><span class="name">program</span><span class="punct">}</span><span class="string">`);
+interpret(\`</span><span class="op">${</span><span class="name">program</span><span class="op">}</span><span class="string">\`);
 `</span><span class="punct">;</span><span class="line">
 </span><span class="punct">}</span></code></pre><p>Does this satisfy our formal definition above?
 Is it a compiler?
 We&#x27;ll return to these questions <a href="#Is this a compiler?">later</a>.
-But first, let&#x27;s write this thing.</p><h2>A pocket-sized Scheme</h2><p>The bulk of our <code class="inline">compile</code> function is just a quoted Scheme interpreter, written
+But first, let&#x27;s write this thing.</p><h2 id="A-pocket-sized-Scheme">A pocket-sized Scheme</h2><p>The bulk of our <code class="inline">compile</code> function is just a quoted Scheme interpreter, written
 in JavaScript.
 To keep the exercise interesting, the interpreter should at least be capable of
 running a metacircular evaluator.
 To keep it simple, we&#x27;ll forgo any of the bells and whistles that usually
 accompany Scheme implementations (like a macro system, and even error messages).
-The result is a <span>“<!-- -->pocket-sized<!-- -->”</span> Scheme that comes in under 200 lines.</p><p>First, let&#x27;s write a lexer that converts a string representation of a Scheme
-program into <span>“<!-- -->tokens<!-- -->”</span>:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">lex</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+The result is a &quot;pocket-sized&quot; Scheme that comes in under 200 lines.</p><p>First, let&#x27;s write a lexer that converts a string representation of a Scheme
+program into &quot;tokens&quot;:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">lex</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">re</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="regex">/\(|\)|\[|\]|&#x27;|[a-z+*\-&lt;&gt;=!?]+|\d+|#(t|f)/</span><span class="name">g</span><span class="punct">;</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">parts</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">source</span><span class="op">.</span><span class="name">match</span><span class="punct">(</span><span class="name">re</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 
@@ -97,9 +97,9 @@ Expr = Name
 </span><span class="space">    </span><span class="keyword">return</span><span class="space"> </span><span class="name">tokens</span><span class="op">.</span><span class="name">shift</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 </span><span class="space">  </span><span class="punct">}</span><span class="line">
 </span><span class="punct">}</span></code></pre><p><code class="inline">parseExpr</code> examines the first token.
-If it&#x27;s an open parenthesis or bracket, it parses a <span>“<!-- -->list<!-- -->”</span> (see below); if it&#x27;s
+If it&#x27;s an open parenthesis or bracket, it parses a &quot;list&quot; (see below); if it&#x27;s
 a quote (<code class="inline">&#x27;</code>), it consumes the token, parses an expression (see the grammar),
-and synthesizes an appropriate <code class="inline">(quote ...)</code> s-expression; and if its an atom
+and synthesizes an appropriate <code class="inline">(quote ...)</code> s-expression; and if it&#x27;s an atom
 (name, number, or boolean), it simply consumes and returns the token.</p><p>That just leaves <code class="inline">parseList</code>:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">parseList</span><span class="punct">(</span><span class="name">tokens</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">opener</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">tokens</span><span class="op">.</span><span class="name">shift</span><span class="punct">(</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">closers</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="punct">{</span><span class="space"> </span><span class="string">&#x27;(&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;)&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="string">&#x27;[&#x27;</span><span class="op">:</span><span class="space"> </span><span class="string">&#x27;]&#x27;</span><span class="space"> </span><span class="punct">}</span><span class="punct">;</span><span class="line">
@@ -118,9 +118,7 @@ and synthesizes an appropriate <code class="inline">(quote ...)</code> s-express
 </span><span class="punct">}</span></code></pre><p>Again, this just does what the grammar indicates.
 (This implementation of <code class="inline">parseList</code> combines the nearly identical cases of
 parenthesized <code class="inline">(...)</code> and bracketed <code class="inline">[...]</code> lists, but we could just as well
-have written separate functions for each.)</p><p>If this is your first time writing a parser, I&#x27;d encourage you to add some
-<code class="inline">console.log</code>s throughout these functions (or try an example on paper) to see
-how they interact.</p><p>We can now parse programs into array-based abstract syntax trees.
+have written separate functions for each.)</p><p>We can now parse programs into array-based abstract syntax trees.
 For example:</p><pre><code><span class="name">parseProgram</span><span class="punct">(</span><span class="line">
 </span><span class="space">  </span><span class="name">lex</span><span class="punct">(</span><span class="string">`
 (define (fact n)
@@ -133,12 +131,7 @@ For example:</p><pre><code><span class="name">parseProgram</span><span class="pu
 </span><span class="punct">)</span></code></pre><p>produces</p><pre><code><span class="punct">[</span><span class="line">
 </span><span class="space">  </span><span class="punct">[</span><span class="string">&#x27;define&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="string">&#x27;fact&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="string">&#x27;n&#x27;</span><span class="punct">]</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="string">&#x27;if&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="op">.</span><span class="op">.</span><span class="op">.</span><span class="punct">]</span><span class="punct">,</span><span class="space"> </span><span class="number">1</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="op">.</span><span class="op">.</span><span class="op">.</span><span class="punct">]</span><span class="punct">]</span><span class="punct">]</span><span class="punct">,</span><span class="line">
 </span><span class="space">  </span><span class="punct">[</span><span class="string">&#x27;map&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="string">&#x27;fact&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="string">&#x27;quote&#x27;</span><span class="punct">,</span><span class="space"> </span><span class="punct">[</span><span class="op">.</span><span class="op">.</span><span class="op">.</span><span class="punct">]</span><span class="punct">]</span><span class="punct">]</span><span class="punct">,</span><span class="line">
-</span><span class="punct">]</span></code></pre><p>With that, we&#x27;ve arrived at the main event: evaluation.</p><p>If you&#x27;ve written a metacircular evaluator in Scheme then this will look very
-familiar.
-If not, check out
-<a href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/full-text/book/book.html">SICP</a>
-or <span>“<!-- -->The Little Schemer<!-- -->”</span>.
-You won&#x27;t be disappointed.</p><p>To evaluate a program, we simply evaluate each expression in the program:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">evalProgram</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="punct">]</span></code></pre><p>With that, we&#x27;ve arrived at the main event: evaluation.</p><p>To evaluate a program, we simply evaluate each expression in the program:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">evalProgram</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">for</span><span class="space"> </span><span class="punct">(</span><span class="keyword">const</span><span class="space"> </span><span class="name">expr</span><span class="space"> </span><span class="keyword">of</span><span class="space"> </span><span class="name">program</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">    </span><span class="name">evalExpr</span><span class="punct">(</span><span class="name">expr</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 </span><span class="space">  </span><span class="punct">}</span><span class="line">
@@ -182,7 +175,7 @@ env)</code> is <code class="inline">true</code>, and <code class="inline">lookup
 represented as arrays.
 We decide what to do based on the first element.
 For example, if the expression begins with <code class="inline">[&#x27;if&#x27;, ...]</code>, we evaluate either
-the true <span>“<!-- -->arm<!-- -->”</span> or false arm according to the value of the test expression.</p><pre><code><span class="comment">// ...</span><span class="line">
+the true &quot;arm&quot; or false arm according to the value of the test expression.</p><pre><code><span class="comment">// ...</span><span class="line">
 </span><span class="keyword">else</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="punct">[</span><span class="name">first</span><span class="punct">,</span><span class="space"> </span><span class="op">.</span><span class="op">.</span><span class="op">.</span><span class="name">rest</span><span class="punct">]</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">expr</span><span class="punct">;</span><span class="line">
 </span><span class="space">  </span><span class="line">
@@ -209,12 +202,12 @@ containing the lambda&#x27;s parameters, body, and current environment:</p><pre>
 </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">first</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;quote&#x27;</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">return</span><span class="space"> </span><span class="name">rest</span><span class="punct">[</span><span class="number">0</span><span class="punct">]</span><span class="punct">;</span><span class="line">
 </span><span class="punct">}</span><span class="line">
-</span><span class="comment">// ...</span></code></pre><p>We <span>“<!-- -->desugar<!-- -->”</span> <code class="inline">let</code> expressions into equivalent applications of <code class="inline">lambda</code>
+</span><span class="comment">// ...</span></code></pre><p>We &quot;desugar&quot; <code class="inline">let</code> expressions into equivalent applications of <code class="inline">lambda</code>
 expressions.
 For example,</p><pre><code>(let ([x 1] [y 2])
   (+ x y))</code></pre><p>becomes</p><pre><code>((lambda (x y)
    (+ x y))
- 1 2)</code></pre><p>We could just as well <span>“<!-- -->directly<!-- -->”</span> evaluate <code class="inline">let</code> expressions, but this lets us
+ 1 2)</code></pre><p>We could just as well &quot;directly&quot; evaluate <code class="inline">let</code> expressions, but this lets us
 keep the core of the evaluator smaller.</p><pre><code><span class="comment">// ...</span><span class="line">
 </span><span class="keyword">else</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="punct">(</span><span class="name">first</span><span class="space"> </span><span class="op">=</span><span class="op">=</span><span class="op">=</span><span class="space"> </span><span class="string">&#x27;let&#x27;</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">return</span><span class="space"> </span><span class="name">evalExpr</span><span class="punct">(</span><span class="name">desugarLet</span><span class="punct">(</span><span class="name">expr</span><span class="punct">)</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="punct">;</span><span class="line">
@@ -338,24 +331,24 @@ We also include a <code class="inline">debug</code> primitive for printing to th
 (debug quux)
 `</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 
-</span><span class="comment">// =&gt; (1 1 2 6 24 120)</span></code></pre><h2>The compiler, finally</h2><p>If you perservered through the previous section, I applaud you.
-Time for the payoff.
+</span><span class="comment">// =&gt; (1 1 2 6 24 120)</span></code></pre><h2 id="The-compiler,-finally">The compiler, finally</h2><p>Time for the payoff.
 All that&#x27;s left is to write <code class="inline">compile</code>, which simply interpolates the provided
 program into a template containing the interpreter code we just wrote.</p><p>Since we&#x27;re going to paste the interpreter source code inside a template string,
 we need to be careful to escape all backticks (<code class="inline">`</code>); we also need to escape
-dollar signs (<code class="inline">$</code>) and escape characters (<code class="inline">\</code>) as well.
+dollar signs (<code class="inline">$</code>) and escape characters (<code class="inline">\\</code>) as well.
 This is easy enough to do manually, but we can also automate it with a little
 script.</p><p>If the following is saved in a file named <em>quote.js</em>:</p><pre><code><span class="name">process</span><span class="op">.</span><span class="name">stdin</span><span class="line">
 </span><span class="space">  </span><span class="op">.</span><span class="name">setEncoding</span><span class="punct">(</span><span class="string">&#x27;utf-8&#x27;</span><span class="punct">)</span><span class="line">
 </span><span class="space">  </span><span class="comment">// Replace backticks (`), dollar signs ($), and escape characters (\) with an</span><span class="line">
 </span><span class="space">  </span><span class="comment">// escaped version, e.g. $ -&gt; \$.</span><span class="line">
-</span><span class="space">  </span><span class="op">.</span><span class="name">map</span><span class="punct">(</span><span class="name">chunk</span><span class="space"> </span><span class="op">=</span><span class="op">&gt;</span><span class="space"> </span><span class="name">chunk</span><span class="op">.</span><span class="name">replace</span><span class="punct">(</span><span class="op">/</span><span class="string">`|\$|\/g, c =&gt; `</span><span class="unknown">\</span><span class="unknown">$</span><span class="punct">{</span><span class="name">c</span><span class="punct">}</span></code></pre><p>and the interpreter source is saved in <em>pocket-scheme.js</em>, then</p><pre><code>$ node quote.js &lt; pocket-scheme.js &gt; quoted-interpreter.txt</code></pre><p>will save the quoted interpreter source in <em>quoted-interpreter.txt</em>.</p><p>In a new file (which I&#x27;m calling <em>not-a-compiler.js</em>), copy the quoted
+</span><span class="space">  </span><span class="op">.</span><span class="name">map</span><span class="punct">(</span><span class="name">chunk</span><span class="space"> </span><span class="op">=</span><span class="op">&gt;</span><span class="space"> </span><span class="name">chunk</span><span class="op">.</span><span class="name">replace</span><span class="punct">(</span><span class="regex">/`|\$|\\/</span><span class="name">g</span><span class="punct">,</span><span class="space"> </span><span class="name">c</span><span class="space"> </span><span class="op">=</span><span class="op">&gt;</span><span class="space"> </span><span class="string">`\\</span><span class="op">${</span><span class="name">c</span><span class="op">}</span><span class="string">`</span><span class="punct">)</span><span class="punct">)</span><span class="line">
+</span><span class="space">  </span><span class="op">.</span><span class="name">pipe</span><span class="punct">(</span><span class="name">process</span><span class="op">.</span><span class="name">stdout</span><span class="punct">)</span><span class="punct">;</span></code></pre><p>and the interpreter source is saved in <em>pocket-scheme.js</em>, then</p><pre><code>$ node quote.js &lt; pocket-scheme.js &gt; quoted-interpreter.txt</code></pre><p>will save the quoted interpreter source in <em>quoted-interpreter.txt</em>.</p><p>In a new file (which I&#x27;m calling <em>not-a-compiler.js</em>), copy the quoted
 interpreter source into the body of a function named <code class="inline">compile</code>, along with a
 (quoted) invocation of the <code class="inline">interpret</code> function on the <code class="inline">source</code> of the program
-to be <span>“<!-- -->compiled<!-- -->”</span>:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">compile</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+to be &quot;compiled&quot;:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">compile</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
 </span><span class="space">  </span><span class="keyword">const</span><span class="space"> </span><span class="name">interpreterSource</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="string">`
 function lex(source) {
-  const re = /\(|\)|\[|\]|&#x27;|[a-z+*\-&lt;&gt;=!?]+|\d+|#(t|f)/g;
+  const re = /\\(|\\)|\\[|\\]|&#x27;|[a-z+*\\-&lt;&gt;=!?]+|\\d+|#(t|f)/g;
   const parts = source.match(re);
 ...
 `</span><span class="punct">;</span><span class="line">
@@ -363,9 +356,9 @@ function lex(source) {
 </span><span class="space">  </span><span class="keyword">return</span><span class="space"> </span><span class="string">`
 </span><span class="op">${</span><span class="name">interpreterSource</span><span class="op">}</span><span class="string">
 
-interpret(`</span><span class="unknown">$</span><span class="punct">{</span><span class="name">source</span><span class="punct">}</span><span class="string">`);
+interpret(\`</span><span class="op">${</span><span class="name">source</span><span class="op">}</span><span class="string">\`);
 `</span><span class="punct">;</span><span class="line">
-</span><span class="punct">}</span></code></pre><p><em>The full listing is available <a href="https://gist.github.com/wjlewis/a85a5b9a66875d82c1155a59474aee7d">here</a>.</em></p><p>Finally, to make our <span>“<!-- -->compiler<!-- -->”</span> a little more ergonomic, let&#x27;s read input
+</span><span class="punct">}</span></code></pre><p><em>The full listing is available <a href="https://gist.github.com/wjlewis/a85a5b9a66875d82c1155a59474aee7d">here</a>.</em></p><p>Finally, to make our &quot;compiler&quot; a little more ergonomic, let&#x27;s read input
 programs from <code class="inline">stdin</code> and write our compiled output to <code class="inline">stdout</code>:</p><pre><code><span class="keyword">const</span><span class="space"> </span><span class="name">fs</span><span class="space"> </span><span class="op">=</span><span class="space"> </span><span class="name">require</span><span class="punct">(</span><span class="string">&#x27;fs&#x27;</span><span class="punct">)</span><span class="punct">;</span><span class="line">
 
 </span><span class="keyword">function</span><span class="space"> </span><span class="name">compile</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
@@ -382,13 +375,13 @@ programs from <code class="inline">stdin</code> and write our compiled output to
 
 (debug (fib 10))
 Ctrl+D
-55</code></pre><h2>Is this a compiler?</h2><p>Yes, according to our definition above.
+55</code></pre><h2 id="Is-this-a-compiler?">Is this a compiler?</h2><p>Yes, according to our definition above.
 It transforms Scheme programs into equivalent JavaScript programs, in the sense
 that</p><pre><code>$ scheme my-program.scm</code></pre><p>and</p><pre><code>$ node not-a-compiler.js &lt; my-program.scm &gt; my-program.js
 $ node my-program.js</code></pre><p>produce the same result.</p><p>But it doesn&#x27;t actually <em>do</em> anything.
-It just packages an interpreter alongside the program we gave it and says <span>“<!-- -->run
-this later<!-- -->”</span>.
-A compiler should <span>“<!-- -->know something<!-- -->”</span> about the two languages it works with, and
+It just packages an interpreter alongside the program we gave it and says &quot;run
+this later&quot;.
+A compiler should &quot;know something&quot; about the two languages it works with, and
 <code class="inline">compile</code> doesn&#x27;t really know anything about JavaScript.</p><p>To put this into more familiar terms, suppose I told you that I could translate
 French imperative statements into English.
 To test my abilities, you write a French command, say</p><pre><code>passe-moi le sel</code></pre><p>on a slip of paper, and hand it to me.
@@ -399,19 +392,19 @@ On the back of the slip, I write</p><pre><code>The following is a command writte
 Call my friend Jacques at (864) 555-8729.
 Ask him to tell you what it means, and then do whatever he says.</code></pre><p>As always, let&#x27;s try this out.
 You and I are eating dinner with a French friend, and I say to our guest,
-<span>“<!-- -->passe-moi le sel<!-- -->”</span>.
+&quot;passe-moi le sel&quot;.
 Sure enough, he passes me the salt.
 Now I want to ask you to do the same, but you only speak English.
-Do I ask you to <span>“<!-- -->please pass the salt<!-- -->”</span>?
-No; I pass you this card, and</p><ol><li><p>You call Jacques and ask him, <span>“<!-- -->What does &#x27;passe-moi le sel&#x27; mean?<!-- -->”</span></p></li><li><p>He says, <span>“<!-- -->It means &#x27;pass the salt&#x27;<!-- -->”</span></p></li><li><p>You pass me the salt</p></li></ol><p>This <em>works</em> in the sense that it allows people who only speak English to carry
+Do I ask you to &quot;please pass the salt&quot;?
+No; I pass you this card, and</p><ol><li><p>You call Jacques and ask him, &quot;What does &#x27;passe-moi le sel&#x27; mean?&quot;</p></li><li><p>He says, &quot;It means &#x27;pass the salt&#x27;&quot;</p></li><li><p>You pass me the salt</p></li></ol><p>This <em>works</em> in the sense that it allows people who only speak English to carry
 out orders written in French.
 But I haven&#x27;t translated anything here.
-I&#x27;ve just deferred the work until <span>“<!-- -->runtime<!-- -->”</span>, leaning on my friend (and
-<span>“<!-- -->interpreter<!-- -->”</span>) Jacques.</p><p><em>This result has absolutely no practical consequences</em>, but it does punch a hole
+I&#x27;ve just deferred the work until &quot;runtime&quot;, leaning on my friend (and
+&quot;interpreter&quot;) Jacques.</p><p><em>This result has absolutely no practical consequences</em>, but it does punch a hole
 through a pair of otherwise nice definitions.
-I&#x27;m perenially interested in the ways that concepts break down or <span>“<!-- -->blur<!-- -->”</span>.
+I&#x27;m perenially interested in the ways that concepts break down or &quot;blur&quot;.
 This is yet another example, but in a somewhat surprising context.
-Can we patch up these definitions so that they <span>“<!-- -->correctly<!-- -->”</span> categorize our
+Can we patch up these definitions so that they &quot;correctly&quot; categorize our
 <code class="inline">compile</code> function as ... something else?
 It seems unlikely, but I&#x27;ll continue to think on this.</p></main>
   </body>
