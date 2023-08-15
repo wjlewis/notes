@@ -8,9 +8,28 @@
 
   <body>
     <main><h1 id="Homogeneous-Coordinates">Homogeneous Coordinates</h1><p>There&#x27;s a lot to love about linear transforms.
-Unfortunately they can&#x27;t express translations<a id="__footnote_ref_1" href="#__footnote_1" class="footnote-ref"><sup>1</sup></a>.
-However, with a clever trick we can <em>almost</em> do this.</p><p><img src="./stretch-1d.png" alt="Stretch"/></p><p>The idea is to embed our original space in higher dimensional space, apply a
-linear transform to this space, and then project back into the original space.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>This is because any linear transform necessarily maps <strong>0</strong> to <strong>0</strong>:
+Matrices are easy to work and compute with.
+However, one apparent shortcoming of linear maps is that they can&#x27;t express
+translations<a id="__footnote_ref_1" href="#__footnote_1" class="footnote-ref"><sup>1</sup></a>.
+For instance, we can&#x27;t do this with a linear transform:</p><p><img src="./translate-1d.png" alt="A translation of a 1-dimensional space"/></p><p>Or can we?</p><p>One clever idea is to embed our original space in higher dimensional space,
+apply a linear transform to <em>this</em> space, and then project back into the
+original space.</p><p><img src="./higher-dim.png" alt="Applying a linear transformation after embedding our original space in 2
+dimensions"/></p><p>This is great because we still get all of the benefits of linear
+transformations, and it only costs us one additional dimension (along with some
+really simple operations).</p><p>For instance, suppose we want to translate every vector in a 1-dimensional space
+by 1 unit in the positive direction (as shown in the original image).
+Let&#x27;s first &quot;lift&quot; each vector into a 2-dimensional space (giving them each the
+same arbitrary, non-zero y-coordinate):</p><pre><code>[x] -&gt; [x, 1]</code></pre><p>What does a general 2-dimensional linear transformation do to this vector?</p><pre><code>[a, b, * [x,  =  [a * x + b,
+ c, d]    1]      c * x + d]</code></pre><p>We&#x27;re going to &quot;forget&quot; about the y-coordinate when we project back into 1
+dimension, so let&#x27;s focus on the transformed x-coordinate.
+Our original x-coordinate <code class="inline">x</code> is mapped to <code class="inline">a * x + b</code>; by adjusting <code class="inline">b</code>, we can
+translate our vector!
+For instance, the matrix</p><pre><code>[1, 1,
+ 0, 0]</code></pre><p>will shift all vectors by 1 unit in the positive direction.</p><p>The idea of operating on a vector in a higher dimensional space like this goes
+by the name &quot;Homogenous Coordinates&quot;.
+There&#x27;s much more to it than just this, but this usage shows up frequently when
+dealing with graphics.</p><p>For instance, the CSS <code class="inline">transform: matrix(a, b, c, d, e, f)</code> uses homogeneous
+coordinates to represent the desired transformation.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>This is because any linear transform necessarily maps <strong>0</strong> to <strong>0</strong>:
   If <code class="inline">T</code> is a linear map from a vector space <code class="inline">U</code> to a vector space <code class="inline">V</code> (both over
   the same field <code class="inline">F</code>), then</p><pre><code>T(0) = T(0 * 0)
          ^-------- The zero _field_ element
