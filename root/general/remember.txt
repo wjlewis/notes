@@ -1,0 +1,38 @@
+# Remember!
+
+## Tools
+
+Keep cutting edges sharp!
+Pausing to sharpen a chisel or chef's knife feels like a disruption, but it's a
+nice break and will more than pay for itself in time and satisfaction.
+There are few things more frustrating than cutting with a dull blade.
+
+## Problems
+
+If you're putting a well-fed baby to sleep in a warm bed, most of your problems
+are solved.
+
+## Learning
+
+The more you know, the easier it is to learn more.
+This means that knowledge behaves like an exponential:
+
+```
+dKnow / dt = b Know(t)  =>  Know(t) = a e^{bt}
+
+"The rate at which you learn new things depends
+on how much you currently know"
+```
+
+Exponentials can grow _so_ slowly at first, but at some point they all turn the
+corner.
+This is partly why perserverence and humility are so important when learning new
+things.
+
+## Polish
+
+Save polish for when things are really finished.
+Polish tends to "freeze" things as they are, making it more difficult to go back
+and correct mistakes.
+Most things are never finished.
+Besides, despite what they think, nobody cares about polish anyway.

@@ -4,7 +4,12 @@
 
 [Embracing the low road](./general/embracing-the-low-road.html)
 
-## Programming
+[Things to remember](./general/remember.html)
+
+## Programming Languages
 
 [This is not a compiler](./pl/not-a-compiler.html)
 
+## Programming (general)
+
+[Homogeneous Coordinates](./dev/homogeneous-coordinates.html)

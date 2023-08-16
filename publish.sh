@@ -10,7 +10,7 @@ find -type f \
      -path "./*" \
      -a -not -path "../dist/*" \
      -a -not -name "*.draft.html" \
-     '(' -name "*.html" -o -name "*.css" ')' \
+     '(' -name "*.html" -o -name "*.css" -o -name "*.png" ')' \
      -exec cp --parents '{}' ../dist ';'
 cd ..
 

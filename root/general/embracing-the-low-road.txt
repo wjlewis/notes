@@ -25,4 +25,6 @@ A bicycle's color and finish don't matter if it's well-tuned; a poorly-tuned
 bike, no matter how beautiful, will remind you of its shortcomings with ever
 pedal stroke.
 
-Unrefined work invites change.
+Unpolished work invites change.
+Whereas the precise lines flaunted by polished work intimidate us, the obvious
+flaws of less refined work invite us to fix them.
