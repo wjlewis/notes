@@ -9,7 +9,3 @@
 ## Programming Languages
 
 [This is not a compiler](./pl/not-a-compiler.html)
-
-## Programming (general)
-
-[Homogeneous Coordinates](./dev/homogeneous-coordinates.html)

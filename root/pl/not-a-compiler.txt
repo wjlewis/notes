@@ -22,16 +22,23 @@ i : L_1 -> M
 ```
 
 that produces the right meaning for each program in `L`.
-That is, for every `p` in `L_1`, `i(p) = m_1(p)`.
-Likewise, a compiler from `L_1` to `L_2` is just a function `K : L_1 -> L_2`
+That is,
+
+> for every `p` in `L_1`, `i(p) = m_1(p)`.
+
+Likewise, a compiler from `L_1` to `L_2` is just a function `k : L_1 -> L_2`
 that translates any program in `L_1` into an _equivalent_ program in `L_2`.
-So, for every `p` in `L_1`, `m_1(p) = m_2(k(p))`.
+So,
+
+> for every `p` in `L_1`, `m_1(p) = m_2(k(p))`.
+
+The slogan is _interpreters reveal meaning; compilers preserve meaning_.
 
 We've arrived at two simple, pleasing definitions which reveal the distinction
 between a compiler and interpreter.
 But this isn't the whole story, and that's the point of this note.
 For the remainder of our time, we'll look at a pathological example that
-_technically_ satisfies the definition of a compiler while _morally_ failing to
+_technically_ satisfies this definition of a compiler while _morally_ failing to
 be one.
 This has absolutely no practical significance, but it's a neat exercise, and it
 also serves as an interesting example of the difficulty (or futility) of trying
@@ -45,7 +52,8 @@ asked it to compile.
 Here's the bird's eye view:
 
 ```javascript
-// Transform a Scheme program into an equivalent JavaScript program.
+// Transform a Scheme program into an equivalent JavaScript program by bundling
+// an interpreter with the original program.
 function compile(program) {
   return `
 // Run the provided Scheme program, producing its meaning.
@@ -395,6 +403,33 @@ function desugarLet(expr) {
 
 Try it out!
 
+Assignments _mutate_ a binding in the current environment:
+
+```javascript
+// ...
+} else if (first === 'set!') {
+  const [name, rhs] = rest;
+  const value = evalExpr(rhs, env);
+  assign(name, value, env);
+  return value;
+}
+// ...
+```
+
+where
+
+```javascript
+function assign(name, value, env) {
+  if (name in env.bindings) {
+    env.bindings[name] = value;
+  } else if (env.base) {
+    assign(name, value, env.base);
+  } else {
+    throw new Error(`unbound name: ${name}`);
+  }
+}
+```
+
 Likewise, `cond` gets desugared into a sequence of `if`s:
 
 ```javascript
@@ -471,7 +506,23 @@ Here we support defining both names _and_ functions:
   (* x x))
 ```
 
-Finally, applications:
+Sequences are evaluated by evaluating each expression in order.
+The value of a sequence is the value of the final expression:
+
+```javascript
+// ...
+} else if (first === 'begin') {
+  const init = rest.slice(0, -1);
+  const last = rest[rest.length - 1];
+  for (const expr of init) {
+    evalExpr(expr, env);
+  }
+  return evalExpr(last, env);
+}
+// ...
+```
+
+All that remains are applications:
 
 ```javascript
 // ...
@@ -650,7 +701,7 @@ We can now compile Scheme files by executing
 $ node not-a-compiler.js < my-program.scm
 ```
 
-and compile-and-execute via
+or compile-and-execute via
 
 ```shell
 $ node not-a-compiler.js < my-program.scm | node
@@ -673,71 +724,3 @@ Ctrl+D
 
 ## Is this a compiler?
 
-Yes, according to our definition above.
-It transforms Scheme programs into equivalent JavaScript programs, in the sense
-that
-
-```shell
-$ scheme my-program.scm
-```
-
-and
-
-```
-$ node not-a-compiler.js < my-program.scm > my-program.js
-$ node my-program.js
-```
-
-produce the same result.
-
-But it doesn't actually _do_ anything.
-It just packages an interpreter alongside the program we gave it and says "run
-this later".
-A compiler should "know something" about the two languages it works with, and
-`compile` doesn't really know anything about JavaScript.
-
-To put this into more familiar terms, suppose I told you that I could translate
-French imperative statements into English.
-To test my abilities, you write a French command, say
-
-```
-passe-moi le sel
-```
-
-on a slip of paper, and hand it to me.
-On the back of the slip, I write
-
-```
-The following is a command written in French:
-
-    passe-moi le sel
-
-Call my friend Jacques at (864) 555-8729.
-Ask him to tell you what it means, and then do whatever he says.
-```
-
-As always, let's try this out.
-You and I are eating dinner with a French friend, and I say to our guest,
-"passe-moi le sel".
-Sure enough, he passes me the salt.
-Now I want to ask you to do the same, but you only speak English.
-Do I ask you to "please pass the salt"?
-No; I pass you this card, and
-
-1. You call Jacques and ask him, "What does 'passe-moi le sel' mean?"
-2. He says, "It means 'pass the salt'"
-3. You pass me the salt
-
-This _works_ in the sense that it allows people who only speak English to carry
-out orders written in French.
-But I haven't translated anything here.
-I've just deferred the work until "runtime", leaning on my friend (and
-"interpreter") Jacques.
-
-_This result has absolutely no practical consequences_, but it does punch a hole
-through a pair of otherwise nice definitions.
-I'm perenially interested in the ways that concepts break down or "blur".
-This is yet another example, but in a somewhat surprising context.
-Can we patch up these definitions so that they "correctly" categorize our
-`compile` function as ... something else?
-It seems unlikely, but I'll continue to think on this.
