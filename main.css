@@ -11,9 +11,10 @@ html {
 }
 
 main {
-  margin: 1em;
+  margin: 1em auto;
+  /* Add space to the bottom so that we can maintain a constant eye-line. */
   margin-bottom: 24em;
-  max-width: 40em;
+  max-width: 45em;
 }
 
 p,
@@ -24,29 +25,12 @@ ul {
   margin: 1em 0;
 }
 
-h1:first-child,
-p:first-child,
-blockquote:first-child,
-pre:first-child,
-ol:first-child,
-ul:first-child {
-  margin-top: 0;
-}
-
-h1:last-child,
-p:last-child,
-blockquote:last-child,
-pre:last-child,
-ol:last-child,
-ul:last-child {
-  margin-bottom: 0;
-}
-
 blockquote {
   padding-left: 1em;
   font-size: 0.95rem;
 }
 
+/* Add some space before the footnotes start. */
 div.footnote:first-of-type {
   margin-top: 4em;
 }
@@ -57,30 +41,23 @@ div.footnote {
   margin: 1em 0;
 }
 
-/*
- * + ---- +
- * | Code |
- * + ---- +
- */
-
 code {
   font-family: monospace;
+  font-size: 1em;
 }
 
+/* Use a slightly darker background to make code stand out. */
 code.inline,
 pre {
   background-color: #f0f0f0;
 }
 
 code.inline {
-  padding: 0.05rem 0.2rem;
-  margin: 0 -0.2rem;
+  padding: 0.05em 0.2em;
 }
 
 pre {
   padding: 0.5em;
-  margin-left: -0.5em;
-  margin-right: -0.5em;
   overflow-x: auto;
 }
 
@@ -112,6 +89,7 @@ pre {
   color: #928374;
 }
 
-.regex {
+.regex,
+.boolean {
   color: #d3869b;
 }
