@@ -32,7 +32,7 @@ So,
 
 > for every `p` in `L_1`, `m_1(p) = m_2(k(p))`.
 
-The slogan is _interpreters reveal meaning; compilers preserve meaning_.
+The slogan: is _interpreters reveal meaning; compilers preserve meaning_.
 
 We've arrived at two simple, pleasing definitions which reveal the distinction
 between a compiler and interpreter.
@@ -724,3 +724,125 @@ Ctrl+D
 
 ## Is this a compiler?
 
+Yes, according to the definition above, since
+
+```
+$ node not-a-compiler.js < my-prog.scm | node
+```
+
+and
+
+```
+$ scheme my-prog.scm
+```
+
+produce the same result[^1].
+
+[^1]: In this case, `node` is our interpreter function `i: JS -> M`, and `node
+      not-a-compiler.js` is our compiler `k: Scheme -> JS`.
+
+However, its output tells a different story.
+We'd expect our compiler to transform the scheme program
+
+```scheme
+(debug (+ 1 2))
+```
+
+into something like
+
+```javascript
+console.log(1 + 2);
+```
+
+instead it produces this monstrosity:
+
+```javascript
+function lex(source) {
+  // ...
+}
+
+function parseProgram(tokens) {
+  // ...
+}
+
+// More definitions related to parsing...
+
+function evalProgram(program, env) {
+  // ...
+}
+
+function evalExpr(expr, env) {
+  // ...
+}
+
+// More definitions related to evaluation...
+
+function interpret(source) {
+  // ...
+}
+
+// Interpreter support code...
+
+
+interpret(`(debug (+ 1 2))`);
+```
+
+Note in particular that our compiler hasn't even touched the input we
+supplied.
+
+### An analogy
+
+Suppose Alice claims to be able to translate French commands into English.
+However, each time you give her a command to translate, she just fills in this
+template:
+
+```
+Call my bilingual sister Marie at 555-1234.
+Tell her you're a friend of Alice and need a favor.
+In particular, say that you need her to "{{original-command}}" as soon as
+possible.
+```
+
+Bob decides to test Alice with the command _apporte-moi un croissant_.
+
+Alice "translates" this to:
+
+```
+Call my bilingual sister Marie at 555-1234.
+Tell her you're a friend of Alice and need a favor.
+In particular, say that you need her to "apporte-moi un croissant" as
+soon as possible.
+```
+
+Is this a valid translation?
+It's in English, and—more importantly—if Bob issues this command to someone who
+only speaks English, he'll end up with a croissant[^context].
+
+[^context]: Marie will still need to infer or ask about some of the surrounding
+            context (who does "moi" refer to?).
+            Alice should really augment her template with an "initial
+            environment" containing bindings for "global" identifiers, like
+            
+            ```
+            moi -> Bob
+            ...
+            ```
+
+However, as in our compiler, _the original French phrase hasn't been touched_.
+Alice has simply bundled an "interpreter" (her sister) with the original French
+phrase, along with enough plumbing to get the interpreter to execute the
+command.
+Our compiler is no different.
+
+## So...is this a compiler?
+
+[Sure, if you want it to be](https://slatestarcodex.com/2014/11/21/the-categories-were-made-for-man-not-man-for-the-categories/).
+What's more interesting is what this means for our original definitions.
+They're short, sweet, and intellectually-pleasing.
+We could even use them to draw some pretty diagrams.
+But they admit pathological examples like the one we constructed here.
+Practically-speaking this poses no problem: those definitions don't really
+matter when compiling or evaluating programs.
+But it does raise an interesting question: can we devise a different pair of
+definitions that excludes our compiler?
+My gut tells me no, but I'll think about this some more.
