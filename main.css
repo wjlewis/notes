@@ -32,13 +32,17 @@ blockquote {
 
 /* Add some space before the footnotes start. */
 div.footnote:first-of-type {
-  margin-top: 4em;
+  margin-top: 8em;
 }
 
 div.footnote {
   display: flex;
   gap: 1em;
   margin: 1em 0;
+}
+
+.footnote-content p {
+  margin: 0;
 }
 
 code {

@@ -15,7 +15,7 @@ languages, and <code class="inline">M</code> be the set of all possible <!-- -->
 Finally, for each language <code class="inline">L_n</code>, suppose we&#x27;ve got some function</p><pre><code>m_n : L_n -&gt; M</code></pre><p>that produces the meaning of any program in <code class="inline">L</code>.</p><p>Then an interpreter for language <code class="inline">L_1</code> is just a function</p><pre><code>i : L_1 -&gt; M</code></pre><p>that produces the right meaning for each program in <code class="inline">L</code>.
 That is,</p><blockquote><p>for every <code class="inline">p</code> in <code class="inline">L_1</code>, <code class="inline">i(p) = m_1(p)</code>.</p></blockquote><p>Likewise, a compiler from <code class="inline">L_1</code> to <code class="inline">L_2</code> is just a function <code class="inline">k : L_1 -&gt; L_2</code>
 that translates any program in <code class="inline">L_1</code> into an <em>equivalent</em> program in <code class="inline">L_2</code>.
-So,</p><blockquote><p>for every <code class="inline">p</code> in <code class="inline">L_1</code>, <code class="inline">m_1(p) = m_2(k(p))</code>.</p></blockquote><p>The slogan is <em>interpreters reveal meaning; compilers preserve meaning</em>.</p><p>We&#x27;ve arrived at two simple, pleasing definitions which reveal the distinction
+So,</p><blockquote><p>for every <code class="inline">p</code> in <code class="inline">L_1</code>, <code class="inline">m_1(p) = m_2(k(p))</code>.</p></blockquote><p>The slogan: is <em>interpreters reveal meaning; compilers preserve meaning</em>.</p><p>We&#x27;ve arrived at two simple, pleasing definitions which reveal the distinction
 between a compiler and interpreter.
 But this isn&#x27;t the whole story, and that&#x27;s the point of this note.
 For the remainder of our time, we&#x27;ll look at a pathological example that
@@ -400,6 +400,63 @@ programs from <code class="inline">stdin</code> and write our compiled output to
 
 (debug (fib 10))
 Ctrl+D
-55</code></pre><h2 id="Is-this-a-compiler?">Is this a compiler?</h2></main>
+55</code></pre><h2 id="Is-this-a-compiler?">Is this a compiler?</h2><p>Yes, according to the definition above, since</p><pre><code>$ node not-a-compiler.js &lt; my-prog.scm | node</code></pre><p>and</p><pre><code>$ scheme my-prog.scm</code></pre><p>produce the same result<a id="__footnote_ref_1" href="#__footnote_1" class="footnote-ref"><sup>1</sup></a>.</p><p>However, its output tells a different story.
+We&#x27;d expect our compiler to transform the scheme program</p><pre><code><span class="punct">(</span><span class="name">debug</span><span class="space"> </span><span class="punct">(</span><span class="name">+</span><span class="space"> </span><span class="number">1</span><span class="space"> </span><span class="number">2</span><span class="punct">)</span><span class="punct">)</span></code></pre><p>into something like</p><pre><code><span class="name">console</span><span class="op">.</span><span class="name">log</span><span class="punct">(</span><span class="number">1</span><span class="space"> </span><span class="op">+</span><span class="space"> </span><span class="number">2</span><span class="punct">)</span><span class="punct">;</span></code></pre><p>instead it produces this monstrosity:</p><pre><code><span class="keyword">function</span><span class="space"> </span><span class="name">lex</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="line">
+
+</span><span class="keyword">function</span><span class="space"> </span><span class="name">parseProgram</span><span class="punct">(</span><span class="name">tokens</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="line">
+
+</span><span class="comment">// More definitions related to parsing...</span><span class="line">
+
+</span><span class="keyword">function</span><span class="space"> </span><span class="name">evalProgram</span><span class="punct">(</span><span class="name">program</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="line">
+
+</span><span class="keyword">function</span><span class="space"> </span><span class="name">evalExpr</span><span class="punct">(</span><span class="name">expr</span><span class="punct">,</span><span class="space"> </span><span class="name">env</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="line">
+
+</span><span class="comment">// More definitions related to evaluation...</span><span class="line">
+
+</span><span class="keyword">function</span><span class="space"> </span><span class="name">interpret</span><span class="punct">(</span><span class="name">source</span><span class="punct">)</span><span class="space"> </span><span class="punct">{</span><span class="line">
+</span><span class="space">  </span><span class="comment">// ...</span><span class="line">
+</span><span class="punct">}</span><span class="line">
+
+</span><span class="comment">// Interpreter support code...</span><span class="line">
+
+
+</span><span class="name">interpret</span><span class="punct">(</span><span class="string">`(debug (+ 1 2))`</span><span class="punct">)</span><span class="punct">;</span></code></pre><p>Note in particular that our compiler hasn&#x27;t even touched the input we
+supplied.</p><h3 id="An-analogy">An analogy</h3><p>Suppose Alice claims to be able to translate French commands into English.
+However, each time you give her a command to translate, she just fills in this
+template:</p><pre><code>Call my bilingual sister Marie at 555-1234.
+Tell her you&#x27;re a friend of Alice and need a favor.
+In particular, say that you need her to &quot;{{original-command}}&quot; as soon as
+possible.</code></pre><p>Bob decides to test Alice with the command <em>apporte-moi un croissant</em>.</p><p>Alice <!-- -->“<!-- -->translates<!-- -->”<!-- --> this to:</p><pre><code>Call my bilingual sister Marie at 555-1234.
+Tell her you&#x27;re a friend of Alice and need a favor.
+In particular, say that you need her to &quot;apporte-moi un croissant&quot; as
+soon as possible.</code></pre><p>Is this a valid translation?
+It&#x27;s in English, and—more importantly—if Bob issues this command to someone who
+only speaks English, he&#x27;ll end up with a croissant<a id="__footnote_ref_2" href="#__footnote_2" class="footnote-ref"><sup>2</sup></a>.</p><p>However, as in our compiler, <em>the original French phrase hasn&#x27;t been touched</em>.
+Alice has simply bundled an <!-- -->“<!-- -->interpreter<!-- -->”<!-- --> (her sister) with the original French
+phrase, along with enough plumbing to get the interpreter to execute the
+command.
+Our compiler is no different.</p><h2 id="So...is-this-a-compiler?">So...is this a compiler?</h2><p><a href="https://slatestarcodex.com/2014/11/21/the-categories-were-made-for-man-not-man-for-the-categories/">Sure, if you want it to be</a>.
+What&#x27;s more interesting is what this means for our original definitions.
+They&#x27;re short, sweet, and intellectually-pleasing.
+We could even use them to draw some pretty diagrams.
+But they admit pathological examples like the one we constructed here.
+Practically-speaking this poses no problem: those definitions don&#x27;t really
+matter when compiling or evaluating programs.
+But it does raise an interesting question: can we devise a different pair of
+definitions that excludes our compiler?
+My gut tells me no, but I&#x27;ll think about this some more.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>In this case, <code class="inline">node</code> is our interpreter function <code class="inline">i: JS -&gt; M</code>, and <code class="inline">node
+      not-a-compiler.js</code> is our compiler <code class="inline">k: Scheme -&gt; JS</code>.</p></div></div><div id="__footnote_2" class="footnote"><a href="#__footnote_ref_2">2<!-- -->.</a><div class="footnote-content"><p>Marie will still need to infer or ask about some of the surrounding
+            context (who does <!-- -->“<!-- -->moi<!-- -->”<!-- --> refer to?).
+            Alice should really augment her template with an <!-- -->“<!-- -->initial
+            environment<!-- -->”<!-- --> containing bindings for <!-- -->“<!-- -->global<!-- -->”<!-- --> identifiers, like</p><pre><code>moi -&gt; Bob
+...</code></pre></div></div></main>
   </body>
 </html>
