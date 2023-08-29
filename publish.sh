@@ -1,10 +1,13 @@
 #!/bin/sh
 
-echo "Cleaning dist"
-rm -rf dist
-mkdir dist
+echo "Cleaning"
+./clean.sh
+
+echo "Rebuilding from scratch"
+./build.sh
 
 echo "Copying notes into dist"
+mkdir dist
 cd root
 find -type f \
      -path "./*" \
