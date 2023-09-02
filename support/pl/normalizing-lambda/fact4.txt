@@ -1,0 +1,31 @@
+(\\self -> \\n -> (n (\\p -> \\t f -> f) (\\t f -> t))
+                  (\\s z -> s z)
+                  ((\\m n -> m (\\p -> \\s z -> p s (n s z)) (\\s z -> z))
+                   n
+                   ((self self)
+                    ((\\n -> 
+                      (n
+                       (\\p -> (\\f s -> \\elim -> elim f s)
+                               (\\s z -> s ((p \\f s -> f) s z))
+                               (p \\f s -> f))
+                       ((\\f s -> \\elim -> elim f s)
+                        (\\s z -> z)
+                        (\\s z -> z)))
+                      (\\f s -> s))
+                     n))))
+(\\self -> \\n -> (n (\\p -> \\t f -> f) (\\t f -> t))
+                  (\\s z -> s z)
+                  ((\\m n -> m (\\p -> \\s z -> p s (n s z)) (\\s z -> z))
+                   n
+                   ((self self)
+                    ((\\n -> 
+                      (n
+                       (\\p -> (\\f s -> \\elim -> elim f s)
+                               (\\s z -> s ((p \\f s -> f) s z))
+                               (p \\f s -> f))
+                       ((\\f s -> \\elim -> elim f s)
+                        (\\s z -> z)
+                        (\\s z -> z)))
+                      (\\f s -> s))
+                     n))))
+(\\s z -> s (s (s (s z))))

@@ -30,6 +30,10 @@ blockquote {
   font-size: 0.95rem;
 }
 
+li > p {
+  margin: 0.5em 0;
+}
+
 /* Add some space before the footnotes start. */
 div.footnote:first-of-type {
   margin-top: 8em;

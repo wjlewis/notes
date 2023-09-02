@@ -1,0 +1,481 @@
+# Normalizing lambda terms: 2 ways
+
+We'll examine two methods for normalizing terms in the lambda calculus.
+
+## Reduction rules
+
+Computation occurs where an abstraction is applied: a so-called _redex_.
+We reduce a redex by substituting the operand term into the body of the
+operator.
+This rule is called `beta`-reduction:
+
+```
+-------------------- [beta]
+(\.b) a -> [0 -> a]b
+```
+
+The two remaining rules allow us to reduce non-redex applications in the hopes
+of finding a redex.
+The first says that operators can be reduced, and the second that operands can
+be, as long as their operator is "stuck" (irreducible)[^norm_strategy]:
+
+[^norm_strategy]: These rules describe the "normal order" reduction strategy.
+  The most common alternative strategy is "applicative order", which requires
+  that operands be normalized before redexes are reduced.
+  
+```
+   a -> a'
+----------- [app1]
+a t -> a' t
+
+
+   b -> b'
+----------- [app2]
+s b -> s b'
+```
+
+It's that simple, and that's the beauty of the lambda calculus.
+
+## Hunting for redexes
+
+Our first approach involves descending into terms on the lookout for redexes.
+Where a redex occurs, we apply the `beta` rule; non-redex applications are
+handled according to the remaining rules.
+We implement this as a `step` function which performs a single computation step
+(reduction) if possible.
+We'd also like `step` to indicate whether a reduction was possible so we know
+when a term is normalized.
+So `step` will produce a pair of values: the (possibly) stepped term, and a
+boolean indicating whether any progress was made:
+
+```javascript
+// Reduce a single redex if possible. Return an array with 2 elements:
+// 1. The (possibly) reduced term.
+// 2. `true` if the term was reduced, and `false` otherwise.
+function step(term) {
+  // ...
+}
+```
+
+Addresses can't be reduced, so we just return them, along with `false` to
+indicate that the term is stuck:
+
+```javascript
+function step(term) {
+  if (term.type === 'ADDR') {
+    return [term, false];
+  }
+  // ...
+}
+```
+
+We handle an abstraction by attempting to `step` its body:
+
+```javascript
+// ...
+} else if (term.type === 'FN') {
+  const [body, progress] = step(term.body);
+  return [{ ...term, body }, progress];
+}
+// ...
+```
+
+All of the action occurs in applications:
+
+```javascript
+// ...
+} else if (term.type === 'APP') {
+  if (term.rator.type === 'FN') {
+    // We're looking at a redex.
+    // Shift unbound operand addrs _up_ by one in anticipation of being
+    // shifted back _down_ after substitution.
+    const arg = shift(term.rand, 1);
+
+    // Substitute arg for the bound addr in the operator's body.
+    const afterSubst = subst(term.rator.body, arg);
+
+    // Shift unbound addrs _down_ by 1 to account for the fact that the binder
+    // has been removed.
+    return [shift(afterSubst, -1), true];
+  }
+  // ...
+}
+// ...
+```
+
+Conceptually, reducing a redex is simple: just substitute the operand for the
+bound address wherever it occurs in the body of the operand abstraction.
+The details are a little grittier:
+
+1. Since we're going to strip a binder off the operand, we'll need to shift all
+   free addresses inside the operand's body _down_ by 1.
+
+2. _In anticipation of this_, we need to shift all free addresses inside the
+   operand _up_ by 1 (since these will be shifted _down_ in the step just
+   described).
+
+3. We'll perform (2) first.
+   Before performing (1), we substitute the (shifted) operand into the body of
+   the operand abstraction.
+   Specifically, we replace all occurrences of the 0 address with the operand.
+
+The shift described in (1) is easier to justify.
+If we're reducing a redex within an abstraction, terms within the body of the
+redex operand may refer to addresses bound _outside_ the operand:
+
+```
+\x -> ... (\y -> <body>) <operand> ...
+ ^        ^^^^^^^^^^^^^^^^^^^^^^^^
+ |        A redex living inside an abstraction.
+ |        Addresses within <body> may refer to `x` -- +
+ |                                                    |
+ + ---------------------------------------------------+
+```
+
+after reduction, these addresses will have one less binder between themselves
+and their binder, so their addresses need to be decremented.
+
+The shift described in (2) is a consequence of the fact that shift (1) occurs
+_after_ substituting the operand into the body[^single_shift].
+
+[^single_shift]: Why can't we first perform shift (1) and then substitute the
+  operand for address `-1` within the shifted body, skipping the anticipatory
+  shift (2)?
+  I'm not sure.
+  This _feels_ like it should work, but I gave this a quick shot and it didn't.
+  That said, I haven't spent too much time checking for silly errors I might
+  have made.
+
+All that remains are non-redex applications:
+
+```javascript
+} else {
+  // The operator isn't an abstraction, but it might be reducible to an
+  // abstraction (which would reveal a redex on a subsequent step). Try to
+  // reduce it.
+  const [rator, progress] = step(term.rator);
+
+  if (progress) {
+    return [{ ...term, rator }, progress];
+  } else {
+    // If the operator was already reduced, try to reduce the operand.
+    const [rand, progress] = step(term.rand);
+    return [{ ...term, rand }, progress];
+  }
+}
+// ...
+```
+
+What about `shift` and `subst`?
+
+As described above, `shift` shifts all _free_ addresses by a given amount:
+
+```javascript
+function shift(term, n, binderCount = 0) {
+  if (term.type === 'ADDR') {
+    // Only shift the address if it's free (greater than or equal to the current
+    // number of binders we've encountered).
+    if (term.addr >= binderCount) {
+      return {
+        ...term,
+        addr: term.addr + n,
+      };
+    } else {
+      return term;
+    }
+  } else if (term.type === 'FN') {
+    // Increment the `binderCount` since we've encountered another binder.
+    return {
+      ...term,
+      body: shift(term.body, n, binderCount + 1),
+    };
+  } else if (term.type === 'APP') {
+    return {
+      ...term,
+      rator: shift(term.rator, n, binderCount),
+      rand: shift(term.rand, n, binderCount),
+    };
+  }
+}
+```
+
+and `subst` substitutes a term for the `0` address inside another term:
+
+```javascript
+function subst(host, sub, binderCount = 0) {
+  if (host.type === 'ADDR') {
+    if (host.addr === binderCount) {
+      return shift(sub, binderCount);
+    } else {
+      return host;
+    }
+  } else if (host.type === 'FN') {
+    return {
+      ...host,
+      body: subst(host.body, sub, binderCount + 1),
+    };
+  } else if (host.type === 'APP') {
+    return {
+      ...host,
+      rator: subst(host.rator, sub, binderCount),
+      rand: subst(host.rand, sub, binderCount),
+    };
+  }
+}
+```
+
+Finally, we can define `normalize` in terms of `step`:
+
+```javascript
+function normalize(term) {
+  while (true) {
+    const [stepped, madeProgress] = step(term);
+    term = stepped;
+    if (!madeProgress) {
+      return term;
+    }
+  }
+}
+```
+
+Let's try a few examples.
+A term representing 4 factorial:
+
+```
+(\self -> \n -> (n (\p -> \t f -> f) (\t f -> t))
+                  (\s z -> s z)
+                  ((\m n -> m (\p -> \s z -> p s (n s z)) (\s z -> z))
+                   n
+                   ((self self)
+                    ((\n -> 
+                      (n
+                       (\p -> (\f s -> \elim -> elim f s)
+                               (\s z -> s ((p \f s -> f) s z))
+                               (p \f s -> f))
+                       ((\f s -> \elim -> elim f s)
+                        (\s z -> z)
+                        (\s z -> z)))
+                      (\f s -> s))
+                     n))))
+(\self -> \n -> (n (\p -> \t f -> f) (\t f -> t))
+                  (\s z -> s z)
+                  ((\m n -> m (\p -> \s z -> p s (n s z)) (\s z -> z))
+                   n
+                   ((self self)
+                    ((\n -> 
+                      (n
+                       (\p -> (\f s -> \elim -> elim f s)
+                               (\s z -> s ((p \f s -> f) s z))
+                               (p \f s -> f))
+                       ((\f s -> \elim -> elim f s)
+                        (\s z -> z)
+                        (\s z -> z)))
+                      (\f s -> s))
+                     n))))
+(\s z -> s (s (s (s z))))
+```
+
+is normalized to 24:
+
+```
+\s z -> s ( ... z )
+            ^^^ 23 more applications of `s`
+```
+
+We can also verify that we're using a normal order strategy by normalizing this
+term:
+
+```
+(\x y -> y) ((\x -> x x) \x -> x x) (\x -> x)
+  ^         ^^^^^^^^^^^^^^^^^^^^^^^
+  |                   |
+  + ----------------- +
+
+If operands are reduced first, this will loop forever.
+In the normal order strategy the first operand is discarded and no
+looping occurs.
+```
+
+to
+
+```
+\x -> x
+```
+
+While naive, this first approach offers some nice benefits:
+
+- It's simple and therefore easy to verify
+- It allows us to step terms, which is useful when learning or debugging.
+
+Unfortunately, it's dreadfully slow (try normalizing 7 factorial).
+I suspect this is because
+
+- It allocates all over the place (when descending into terms, when shifting,
+  when substituting)
+- It throws away information after each `step`, requiring it to
+  re-descend—possibly very deeply—into a term over and over.
+
+The next approach trades simplicity for speed.
+
+## Normalization by evaluation
+
+*WIP WIP WIP*
+
+In the "hunting" approach just described, we've thought about normal forms as
+terms in which no reductions are possible.
+The reductions rules guided this approach by showing us where reductions can be
+made, and how to perform them.
+
+Alternatively, we can think of the reduction rules as defining an equivalence
+relation between terms, and normal forms as special "canonical representatives"
+of each equivalence class.
+The task of normalization then is to find the representative for a given term.
+
+_Normalization by evaluation_ finds the normal form for a term by (1)
+_evaluating_ the term into a "value", and then (2) _reifying_ the value into a
+normal form.
+So we need a type of values, a function `eval : Term -> Value`, and a function
+`reify : Value -> NormalTerm`[^normal_term_type].
+
+[^normal_term_type]: I'm not entirely sure about my definition of `reify` here.
+  requiring that it transform values into a type whose _only_ inhabitants are
+  normal terms feels correct to me, but I haven't seen this anywhere else.
+  Ideally, we'd prove that `NormalTerm` can be _embedded_ in `Term` in a way
+  that respects evaluation:
+
+  ```haskell
+  -- Normal forms _are_ terms.
+  embed : NormalTerm -> Term
+  embed = ...
+  
+  -- There are many ways to write `embed` (e.g. map every normal term to the
+  -- identity term). An embedding "does what we want" if it respects evaluation:
+  embed_respects_eval : (n : NormalTerm) -> eval (embed n) ≡ n
+  embed_respects_eval = ...
+  ```
+
+Normalization is then just a matter of composing `reify` and `eval`.
+This works because `reify` can _only_ produce normal forms.
+
+Enough chit-chat.
+Here's `eval`:
+
+```javascript
+function eval(term, env = []) {
+  if (term.type === 'ADDR') {
+    return env[term.addr];
+  } else if (term.type === 'FN') {
+    return {
+      type: 'CLOS',
+      param: term.param,
+      body: term.body,
+      env,
+    };
+  } else if (term.type === 'APP') {
+    const op = eval(term.rator, env);
+    const arg = Thunk(term.rand, env);
+    return apply(op, arg);
+  }
+}
+```
+
+Our value type consists of _closures_, _thunks_, and two more variants that
+we'll see shortly.
+To evaluate an address, we look up its value in an environment; abstractions
+evaluate to closures, and applications dispatch to `apply`:
+
+```javascript
+function apply(op, arg) {
+  if (op.type === 'CLOS') {
+    return eval(op.body, [arg, ...op.env]);
+  } else if (op.type === 'THUNK') {
+    return apply(op.thaw(), arg);
+  } else if (op.type === 'STUCK_ADDR') {
+    return {
+      type: 'STUCK_APP',
+      op,
+      arg,
+    };
+  } else if (op.type === 'STUCK_APP') {
+    return {
+      type: 'STUCK_APP',
+      op,
+      arg,
+    };
+  }
+}
+```
+
+Here we see the two remaining value variants: "stuck addresses" and "stuck
+applications".
+Stuck addresses are created when reifying closures.
+A thunk defers evaluation until `thaw` is called, and then remembers its value:
+
+```javascript
+function Thunk(term, env) {
+  let value;
+
+  function thaw() {
+    if (value) {
+      return value;
+    }
+    value = eval(term, env);
+    return value;
+  }
+
+  return { type: 'THUNK', thaw };
+}
+```
+
+Reification transforms a value back into a term:
+
+```javascript
+function reify(value, binderCount = 0) {
+  if (value.type === 'CLOS') {
+    const arg = { type: 'STUCK_ADDR', binderCount };
+    const body = reify(apply(value, arg), binderCount + 1);
+    return {
+      type: 'FN',
+      param: value.param,
+      body,
+    };
+  } else if (value.type === 'THUNK') {
+    return reify(value.thaw(), binderCount);
+  } else if (value.type === 'STUCK_ADDR') {
+    const addr = binderCount - value.binderCount - 1;
+    return {
+      type: 'ADDR',
+      addr,
+    };
+  } else if (value.type === 'STUCK_APP') {
+    return {
+      type: 'APP',
+      rator: reify(value.op, binderCount),
+      rand: reify(value.arg, binderCount),
+    };
+  }
+}
+```
+
+Unsurprisingly, closures present the most interesting case here.
+We reify a closure by applying it to a "fake" value, reifying the result, and
+slapping a binder on top.
+
+With `eval` and `reify` defined, normalization is straightforward:
+
+```javascript
+function normalize(term) {
+  return reify(eval(term));
+}
+```
+
+Normalization by evaluation is _much_ faster than hunting for redexes.
+For example, it normalizes 6 factorial instantaneously on my machine.
+Unfortunately it's not altogether superior:
+
+- Stack overflows are now a concern, even when they shouldn't be (depending on
+  our implementation language).
+  Attempting to normalize `(\x -> x x) \x -> x x` shouldn't result in a stack
+  overflow, but it does.
+- It's not clear how to "step" terms.
+  

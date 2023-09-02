@@ -1,0 +1,90 @@
+# A new syntax for the lambda calculus
+
+"New" is being used very generously here.
+This is heavily inspired by JavaScript and Rust:
+
+```runlambda
+let id = x => x;
+
+let zero = (s, z) => z;
+let suc = n => (s, z) => s(n(s, z));
+
+let omega = {
+  let loop = f => f(f);
+  loop(loop)
+};
+
+let Y = f => {
+  let help = x => f(x(x));
+  help(help)
+};
+```
+
+If we want to write bigger programs (terms), a few more bells and whistles will
+be handy:
+
+```runlambda
+mod nat {
+  let zero = (s, z) => z;
+  let suc = n => (s, z) => s(n(s, z));
+
+  let plus = (m, n) => m(suc, n);
+  let times = (m, n) => m(plus(n), zero);
+
+  // ...
+}
+
+mod pair {
+  let cons = (f, s) => $ => $(f, s);
+  let fst = p => p((f, _) => f);
+  let snd = p => p((_, s) => s);
+}
+
+mod int {
+  use super::nat;
+  use super::pair;
+
+  let embed = n => pair::cons(n, nat::zero);
+
+  let one = embed(nat::suc(nat::zero));
+
+  // (a - b) + (c - d) = a + c - (b + d)
+  let plus = (z, w) => {
+    use pair::{cons, fst, snd};
+
+    let a = fst(z);
+    let b = snd(z);
+    let c = fst(z);
+    let d = snd(z);
+
+    cons(a `nat::plus` c, b `nat::plus` d)
+  };
+}
+
+mod rational {
+  use super::int;
+  use super::pair;
+
+  let embed = z => pair::cons(z, int::one);
+
+  //  a     c     a * d + b * c
+  // --- + --- = ---------------
+  //  b     d         b * d
+  let plus = (p, q) => {
+    use pair::{cons, fst, snd};
+    
+    let a = fst(p);
+    let b = snd(p);
+    let c = fst(q);
+    let d = snd(q);
+  
+    let num = (a `int::times` d) `int::plus` (b `int::times` d);
+    let den = b `int::times` d;
+    
+    cons(num, den),
+  };
+
+  // ...
+
+}
+```
