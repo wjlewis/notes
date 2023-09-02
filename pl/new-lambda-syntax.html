@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/notes/main.css" />
+    <title>A new syntax for the lambda calculus</title>
+  </head>
+
+  <body>
+    <main><h1 id="A-new-syntax-for-the-lambda-calculus">A new syntax for the lambda calculus</h1><p>“<!-- -->New<!-- -->”<!-- --> is being used very generously here.
+This is heavily inspired by JavaScript and Rust:</p><pre><code>let id = x =&gt; x;
+
+let zero = (s, z) =&gt; z;
+let suc = n =&gt; (s, z) =&gt; s(n(s, z));
+
+let omega = {
+  let loop = f =&gt; f(f);
+  loop(loop)
+};
+
+let Y = f =&gt; {
+  let help = x =&gt; f(x(x));
+  help(help)
+};</code></pre><p>If we want to write bigger programs (terms), a few more bells and whistles will
+be handy:</p><pre><code>mod nat {
+  let zero = (s, z) =&gt; z;
+  let suc = n =&gt; (s, z) =&gt; s(n(s, z));
+
+  let plus = (m, n) =&gt; m(suc, n);
+  let times = (m, n) =&gt; m(plus(n), zero);
+
+  // ...
+}
+
+mod pair {
+  let cons = (f, s) =&gt; $ =&gt; $(f, s);
+  let fst = p =&gt; p((f, _) =&gt; f);
+  let snd = p =&gt; p((_, s) =&gt; s);
+}
+
+mod int {
+  use super::nat;
+  use super::pair;
+
+  let embed = n =&gt; pair::cons(n, nat::zero);
+
+  let one = embed(nat::suc(nat::zero));
+
+  // (a - b) + (c - d) = a + c - (b + d)
+  let plus = (z, w) =&gt; {
+    use pair::{cons, fst, snd};
+
+    let a = fst(z);
+    let b = snd(z);
+    let c = fst(z);
+    let d = snd(z);
+
+    cons(a `nat::plus` c, b `nat::plus` d)
+  };
+}
+
+mod rational {
+  use super::int;
+  use super::pair;
+
+  let embed = z =&gt; pair::cons(z, int::one);
+
+  //  a     c     a * d + b * c
+  // --- + --- = ---------------
+  //  b     d         b * d
+  let plus = (p, q) =&gt; {
+    use pair::{cons, fst, snd};
+    
+    let a = fst(p);
+    let b = snd(p);
+    let c = fst(q);
+    let d = snd(q);
+  
+    let num = (a `int::times` d) `int::plus` (b `int::times` d);
+    let den = b `int::times` d;
+    
+    cons(num, den),
+  };
+
+  // ...
+
+}</code></pre></main>
+  </body>
+</html>
