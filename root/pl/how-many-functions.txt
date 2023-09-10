@@ -1,0 +1,165 @@
+# Just how many functions are there?
+
+We routinely encounter two "function" concepts in math:
+
+- Functions as _rules_ like `f(x) = x + 2` that give us a recipe for converting
+  an input into an output.
+- Functions as _tables_ that pair elements from one set with those from
+  another[^tables_set].
+
+[^tables_set]: This is the standard set-theoretic definition of a function as a
+  subset of the cartesian product of the domain and codomain, in which elements
+  of the domain appear at most once.
+  
+In certain limited cases (if the domain is finite, for instance), these two
+ideas coincide.
+However, in most cases there are more table-functions than rule-functions.
+In this note we'll look at why this is significant and the consequences it might
+have.
+
+## In most cases there are more tables than rules
+
+Let's focus on functions from the natural numbers to the booleans: `Nat -> Bool`.
+These are the familiar predicates on the natural numbers, like `even?` and
+`prime?`.
+
+Tables for these begin like this:
+
+```
+        n |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  | ...
+--------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+ even?[n] |  T  |  F  |  T  |  F  |  T  |  F  |  T  |  F  | ...
+--------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+prime?[n] |  F  |  F  |  T  |  T  |  F  |  T  |  F  |  T  | ...
+```
+
+Both of these have corresponding rules as well (expressed in Haskell, but any
+universal language will do):
+
+```haskell
+isEven n
+  | n == 0    = True
+  | otherwise = isOdd (n - 1)
+
+isOdd n
+  | n == 0    = False
+  | otherwise = isEven (n - 1)
+```
+
+```haskell
+isPrime n
+  | n < 2 = False
+  | otherwise = loop 2
+    where
+      loop d
+        | d >= n         = True
+        | n `rem` d == 0 = False
+        | otherwise      = loop (d + 1)
+```
+
+However, there are an _uncountable_ number of `Nat -> Bool` tables, but only a
+_countable_ number of `Nat -> Bool` rules[^counting_tables_rules].
+This means that most tables don't have corresponding rules[^table_without_rule].
+
+[^counting_tables_rules]: We can show that the number of tables is uncountable
+  using a familiar diagonalization argument:
+
+  > Suppose someone hands us a _purported_ way of pairing up all tables with the
+  > natural numbers.
+  > We coud render such a pairing as a 2-dimensional table, where each row is a
+  > `Nat -> Bool` table:
+
+  > ```
+  >      nat_to_table |  0  |  1  |  2  |  3  |  4  |  5  |  ...
+  > ----------------- + --- + --- + --- + --- + --- + --- + ---
+  >   nat_to_table[0] |  T  |  F  |  F  |  T  |  T  |  T  |  ...
+  > ----------------- + --- + --- + --- + --- + --- + --- + ---
+  >   nat_to_table[1] |  F  |  F  |  F  |  F  |  T  |  F  |  ...
+  > ----------------- + --- + --- + --- + --- + --- + --- + ---
+  >   nat_to_table[2] |  T  |  T  |  F  |  F  |  T  |  T  |  ...
+  > ----------------- + --- + --- + --- + --- + --- + --- + ---
+  >   nat_to_table[3] |  F  |  T  |  F  |  F  |  T  |  F  |  ...
+  > ----------------- + --- + --- + --- + --- + --- + --- + ---
+  >                .  |  .  |  .  |  .  |  .  |  .  |  .  |  ...
+  >                .     .     .     .     .     .     .     ...
+  >                .     .     .     .     .     .     .     ...
+  > ```
+  >
+  > If we can show that `nat_to_table` "misses" some table (i.e. it's not in the
+  > 2-D table above), then we'll have shown that the set of tables isn't
+  > countable (since we can apply this general method to _any_ purported
+  > mapping).
+  >
+  > We construct a missing table by inverting the diagonal entries.
+  > That is,
+  >
+  > 1. `missing_table(0) = !nat_to_table(0)(0)`
+  > 2. `missing_table(1) = !nat_to_table(1)(1)`
+  > 3. ...
+  >
+  > In general,
+  >
+  > ```
+  > missing_table(n) = !nat_to_table(n)(n)
+  > ```
+  >
+  > How do we know that `missing_table` doesn't appear in the 2-D table above?
+  > Well it can't be the image of
+  >
+  > 1. `nat_to_table(0)`, because `missing_table(0) != nat_to_table(0)(0)` (that
+  >     is, they disagree at `0`).
+  > 2. `nat_to_table(1)`, because `missing_table(1) != nat_to_table(1)(1)`.
+  > 3. ...
+  >
+  > So there are an uncountable number of tables from `Nat -> Bool`.
+
+  We also claimed that the number of `Nat -> Bool` _rules_ is countable.
+  More precisely, the number of _finite_ `Nat -> Bool` rules is countable, but
+  since we can't evaluate infinite rules, this is what we really care about.
+  We can show this by "alphabetizing" all rules in the language, ordering them
+  from shortest to longest, and associating each with their index.
+
+[^table_without_rule]: We've seen tables with corresponding rules (`even?`,
+  `prime?`).
+  What about a table _without_ a rule implementing it?
+  We can construct such a thing by enumerating all rules (this is possible because
+  the set of rules is countable) and inverting the diagonal.
+  If `nat_to_rule` is a table associating each natural number with a rule, then
+  our rule-less table `table_without_rule` is defined by:
+  
+  ```
+  table_without_rule[n] = !nat_to_rule[n][n]
+  ```
+
+## Tables with and without corresponding rules
+
+*It's not surprising that most tables don't have rules.*
+After all, every table is infinite, and every rule is finite.
+In order to have a corresponding rule, a table must have enough of a pattern
+to allow it to be finitely-encoded.
+This pattern is apparent in "boring" tables like
+
+```
+            n |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+ all_true?[n] |  T  |  T  |  T  |  T  |  T  |  T  |  T  |  T  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+all_false?[n] |  F  |  F  |  F  |  F  |  F  |  F  |  F  |  F  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+     zero?[n] |  T  |  F  |  F  |  F  |  F  |  F  |  F  |  F  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+      one?[n] |  F  |  T  |  F  |  F  |  F  |  F  |  F  |  F  | ...
+```
+
+but it's not immediately clear that the `prime?` table should have a rule to go
+with it.
+
+This gives us another way of thinking about tables without rules: they don't
+have any pattern to them.
+They might have _some_ structure, but as soon as we try and fit a rule to them,
+they defy it.
+They are, in a sense, "unruly".
+
+## Consequences
+
+Can't prove convergence of sequence without infinite proof.

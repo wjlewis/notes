@@ -4,19 +4,15 @@
 This is heavily inspired by JavaScript and Rust:
 
 ```runlambda
+// Simple terms
 let id = x => x;
-
 let zero = (s, z) => z;
 let suc = n => (s, z) => s(n(s, z));
 
-let omega = {
+// Blocks
+let forever = {
   let loop = f => f(f);
   loop(loop)
-};
-
-let Y = f => {
-  let help = x => f(x(x));
-  help(help)
 };
 ```
 
@@ -28,63 +24,132 @@ mod nat {
   let zero = (s, z) => z;
   let suc = n => (s, z) => s(n(s, z));
 
-  let plus = (m, n) => m(suc, n);
-  let times = (m, n) => m(plus(n), zero);
+  let one = suc(zero);
 
-  // ...
+  let plus = (m, n) => m(suc, n);
+  let times = (m, n) => m(plus(n), one);
 }
 
 mod pair {
-  let cons = (f, s) => $ => $(f, s);
+  let cons = (fst, snd) => sel => sel(fst, snd);
+
   let fst = p => p((f, _) => f);
   let snd = p => p((_, s) => s);
+
+  let match = p => handler => p(handler);
+  let match2 = (p, q) => handler => handler(
+    fst(p),
+    snd(p),
+    fst(q),
+    snd(q)
+  );
+
+  let swap = p => p((f, s) => cons(s, f));
 }
 
+// The ring of integers.
 mod int {
-  use super::nat;
-  use super::pair;
+  use root.nat;
+  use root.pair.{cons, fst, snd};
 
-  let embed = n => pair::cons(n, nat::zero);
+  let from_nat = n => cons(n, nat.zero);
 
-  let one = embed(nat::suc(nat::zero));
-
-  // (a - b) + (c - d) = a + c - (b + d)
+  // (a - b) + (c - d) = (a + c) - (b + d)
   let plus = (z, w) => {
-    use pair::{cons, fst, snd};
-
     let a = fst(z);
     let b = snd(z);
-    let c = fst(z);
-    let d = snd(z);
-
-    cons(a `nat::plus` c, b `nat::plus` d)
+    let c = fst(w);
+    let d = snd(w);
+  
+    cons(nat.plus(a, c), nat.plus(b, d))
   };
+
+  // (a - b) * (c - d) = (ac + bd) - (ad + bc)
+  let times = (z, w) => {
+    let a = fst(z);
+    let b = snd(z);
+    let c = fst(w);
+    let d = snd(w);
+
+    cons(
+      nat.plus(nat.times(a, c), nat.times(b, d)),
+      nat.plus(nat.times(a, d), nat.times(b, c)),
+    )
+  };
+
+  // Negation: the motivation for integers.
+  // -(a - b) = (b - a)
+  let negate = pair.swap;
+
+  // Negation makes subtraction possible.
+  let sub = (z, w) => plus(z, negate(w));
+
+  let is_zero = z => // ...
 }
 
+// The field of rationals.
 mod rational {
-  use super::int;
-  use super::pair;
+  use root.int;
+  use root.nat;
+  use root.pair.{cons, fst, snd};
 
-  let embed = z => pair::cons(z, int::one);
+  let from_int = z => cons(z, int.from_nat(nat.one));
 
-  //  a     c     a * d + b * c
-  // --- + --- = ---------------
-  //  b     d         b * d
-  let plus = (p, q) => {
-    use pair::{cons, fst, snd};
-    
-    let a = fst(p);
-    let b = snd(p);
-    let c = fst(q);
-    let d = snd(q);
-  
-    let num = (a `int::times` d) `int::plus` (b `int::times` d);
-    let den = b `int::times` d;
-    
-    cons(num, den),
+  // (a / b) + (c / d) = (ad + bc) / bd
+  let plus = (r, s) => pair.match2(r, s, (a, b, c, d) => {
+    cons(
+      int.plus(int.times(a, d), int.times(b, c)),
+      int.times(b, d),
+    )
+  });
+
+  // (a / b) * (c / d) = ac / bd
+  let times = (r, s) => pair.match2(r, s, (a, b, c, d) => {
+    cons(
+      int.times(a, c),
+      int.times(b, d),
+    )
+  });
+
+  // Inversion: the motivation for rationals.
+  // 1 / (a / b)
+  //   b == 0    = None
+  //   otherwise = Some(b / a)
+  let invert = r => {
+    let a = fst(r);
+    let b = snd(r);
+    logic.if(
+      int.is_zero(b),
+      option.None,
+      option.Some(cons(a, b)),
+    )
   };
 
-  // ...
+  // Inversion makes division possible.
+  let div = (r, s) => option.match(
+    invert(s),
+    s1 => option.Some(times(r, s1)),
+    option.None
+  );
+}
 
+// The computable reals.
+mod real {
+  // A real number is an equivalence class of Cauchy sequences of
+  // rationals that converge fast enough?
+}
+
+mod option {
+  let None = (s, n) => n;
+  let Some = x => (s, n) => s(x);
+
+  let match = o => (if_some, if_none) => o(if_some, if_none);
+}
+
+mod logic {
+  let true = (t, f) => t;
+  let false = (t, f) => f;
+  
+  let if = (test, if_true, if_false) => test(if_true, if_false);
 }
 ```
