@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/notes/main.css" />
+    <title>Just how many functions are there?</title>
+  </head>
+
+  <body>
+    <main><h1 id="Just-how-many-functions-are-there?">Just how many functions are there?</h1><p>We routinely encounter two <!-- -->“<!-- -->function<!-- -->”<!-- --> concepts in math:</p><ul><li><p>Functions as <em>rules</em> like <code class="inline">f(x) = x + 2</code> that give us a recipe for converting
+ an input into an output.</p></li><li><p>Functions as <em>tables</em> that pair elements from one set with those from
+ another<a id="__footnote_ref_1" href="#__footnote_1" class="footnote-ref"><sup>1</sup></a>.</p></li></ul><p>In certain limited cases (if the domain is finite, for instance), these two
+ideas coincide.
+However, in most cases there are more table-functions than rule-functions.
+In this note we&#x27;ll look at why this is significant and the consequences it might
+have.</p><h2 id="In-most-cases-there-are-more-tables-than-rules">In most cases there are more tables than rules</h2><p>Let&#x27;s focus on functions from the natural numbers to the booleans: <code class="inline">Nat -&gt; Bool</code>.
+These are the familiar predicates on the natural numbers, like <code class="inline">even?</code> and
+<code class="inline">prime?</code>.</p><p>Tables for these begin like this:</p><pre><code>        n |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  | ...
+--------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+ even?[n] |  T  |  F  |  T  |  F  |  T  |  F  |  T  |  F  | ...
+--------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+prime?[n] |  F  |  F  |  T  |  T  |  F  |  T  |  F  |  T  | ...</code></pre><p>Both of these have corresponding rules as well (expressed in Haskell, but any
+universal language will do):</p><pre><code><span class="name">isEven</span><span class="space"> </span><span class="name">n</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="name">n</span><span class="space"> </span><span class="punct">=</span><span class="punct">=</span><span class="space"> </span><span class="number">0</span><span class="space">    </span><span class="punct">=</span><span class="space"> </span><span class="name">True</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="keyword">otherwise</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="name">isOdd</span><span class="space"> </span><span class="punct">(</span><span class="name">n</span><span class="space"> </span><span class="op">-</span><span class="space"> </span><span class="number">1</span><span class="punct">)</span><span class="line">
+
+</span><span class="name">isOdd</span><span class="space"> </span><span class="name">n</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="name">n</span><span class="space"> </span><span class="punct">=</span><span class="punct">=</span><span class="space"> </span><span class="number">0</span><span class="space">    </span><span class="punct">=</span><span class="space"> </span><span class="name">False</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="keyword">otherwise</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="name">isEven</span><span class="space"> </span><span class="punct">(</span><span class="name">n</span><span class="space"> </span><span class="op">-</span><span class="space"> </span><span class="number">1</span><span class="punct">)</span></code></pre><pre><code><span class="name">isPrime</span><span class="space"> </span><span class="name">n</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="name">n</span><span class="space"> </span><span class="op">&lt;</span><span class="space"> </span><span class="number">2</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="name">False</span><span class="line">
+</span><span class="space">  </span><span class="op">|</span><span class="space"> </span><span class="keyword">otherwise</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="name">loop</span><span class="space"> </span><span class="number">2</span><span class="line">
+</span><span class="space">    </span><span class="keyword">where</span><span class="line">
+</span><span class="space">      </span><span class="name">loop</span><span class="space"> </span><span class="name">d</span><span class="line">
+</span><span class="space">        </span><span class="op">|</span><span class="space"> </span><span class="name">d</span><span class="space"> </span><span class="op">&gt;</span><span class="punct">=</span><span class="space"> </span><span class="name">n</span><span class="space">         </span><span class="punct">=</span><span class="space"> </span><span class="name">True</span><span class="line">
+</span><span class="space">        </span><span class="op">|</span><span class="space"> </span><span class="name">n</span><span class="space"> </span><span class="unknown">`</span><span class="name">rem</span><span class="unknown">`</span><span class="space"> </span><span class="name">d</span><span class="space"> </span><span class="punct">=</span><span class="punct">=</span><span class="space"> </span><span class="number">0</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="name">False</span><span class="line">
+</span><span class="space">        </span><span class="op">|</span><span class="space"> </span><span class="keyword">otherwise</span><span class="space">      </span><span class="punct">=</span><span class="space"> </span><span class="name">loop</span><span class="space"> </span><span class="punct">(</span><span class="name">d</span><span class="space"> </span><span class="op">+</span><span class="space"> </span><span class="number">1</span><span class="punct">)</span></code></pre><p>However, there are an <em>uncountable</em> number of <code class="inline">Nat -&gt; Bool</code> tables, but only a
+<em>countable</em> number of <code class="inline">Nat -&gt; Bool</code> rules<a id="__footnote_ref_2" href="#__footnote_2" class="footnote-ref"><sup>2</sup></a>.
+This means that most tables don&#x27;t have corresponding rules<a id="__footnote_ref_3" href="#__footnote_3" class="footnote-ref"><sup>3</sup></a>.</p><h2 id="Tables-with-and-without-corresponding-rules">Tables with and without corresponding rules</h2><p><strong>It&#x27;s not surprising that most tables don&#x27;t have rules.</strong>
+After all, every table is infinite, and every rule is finite.
+In order to have a corresponding rule, a table must have enough of a pattern
+to allow it to be finitely-encoded.
+This pattern is apparent in <!-- -->“<!-- -->boring<!-- -->”<!-- --> tables like</p><pre><code>            n |  0  |  1  |  2  |  3  |  4  |  5  |  6  |  7  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+ all_true?[n] |  T  |  T  |  T  |  T  |  T  |  T  |  T  |  T  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+all_false?[n] |  F  |  F  |  F  |  F  |  F  |  F  |  F  |  F  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+     zero?[n] |  T  |  F  |  F  |  F  |  F  |  F  |  F  |  F  | ...
+------------- + --- + --- + --- + --- + --- + --- + --- + --- + ---
+      one?[n] |  F  |  T  |  F  |  F  |  F  |  F  |  F  |  F  | ...</code></pre><p>but it&#x27;s not immediately clear that the <code class="inline">prime?</code> table should have a rule to go
+with it.</p><p>This gives us another way of thinking about tables without rules: they don&#x27;t
+have any pattern to them.
+They might have <em>some</em> structure, but as soon as we try and fit a rule to them,
+they defy it.
+They are, in a sense, <!-- -->“<!-- -->unruly<!-- -->”<!-- -->.</p><h2 id="Consequences">Consequences</h2><p>Can&#x27;t prove convergence of sequence without infinite proof.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>This is the standard set-theoretic definition of a function as a
+  subset of the cartesian product of the domain and codomain, in which elements
+  of the domain appear at most once.</p></div></div><div id="__footnote_2" class="footnote"><a href="#__footnote_ref_2">2<!-- -->.</a><div class="footnote-content"><p>We can show that the number of tables is uncountable
+  using a familiar diagonalization argument:</p><blockquote><p>Suppose someone hands us a <em>purported</em> way of pairing up all tables with the
+ natural numbers.
+ We coud render such a pairing as a 2-dimensional table, where each row is a
+ <code class="inline">Nat -&gt; Bool</code> table:</p><pre><code>     nat_to_table |  0  |  1  |  2  |  3  |  4  |  5  |  ...
+----------------- + --- + --- + --- + --- + --- + --- + ---
+  nat_to_table[0] |  T  |  F  |  F  |  T  |  T  |  T  |  ...
+----------------- + --- + --- + --- + --- + --- + --- + ---
+  nat_to_table[1] |  F  |  F  |  F  |  F  |  T  |  F  |  ...
+----------------- + --- + --- + --- + --- + --- + --- + ---
+  nat_to_table[2] |  T  |  T  |  F  |  F  |  T  |  T  |  ...
+----------------- + --- + --- + --- + --- + --- + --- + ---
+  nat_to_table[3] |  F  |  T  |  F  |  F  |  T  |  F  |  ...
+----------------- + --- + --- + --- + --- + --- + --- + ---
+               .  |  .  |  .  |  .  |  .  |  .  |  .  |  ...
+               .     .     .     .     .     .     .     ...
+               .     .     .     .     .     .     .     ...</code></pre><p>If we can show that <code class="inline">nat_to_table</code> <!-- -->“<!-- -->misses<!-- -->”<!-- --> some table (i.e. it&#x27;s not in the
+ 2-D table above), then we&#x27;ll have shown that the set of tables isn&#x27;t
+ countable (since we can apply this general method to <em>any</em> purported
+ mapping).</p><p>We construct a missing table by inverting the diagonal entries.
+ That is,</p><ol><li><p><code class="inline">missing_table(0) = !nat_to_table(0)(0)</code></p></li><li><p><code class="inline">missing_table(1) = !nat_to_table(1)(1)</code></p></li><li><p>...</p></li></ol><p>In general,</p><pre><code>missing_table(n) = !nat_to_table(n)(n)</code></pre><p>How do we know that <code class="inline">missing_table</code> doesn&#x27;t appear in the 2-D table above?
+ Well it can&#x27;t be the image of</p><ol><li><p><code class="inline">nat_to_table(0)</code>, because <code class="inline">missing_table(0) != nat_to_table(0)(0)</code> (that
+   is, they disagree at <code class="inline">0</code>).</p></li><li><p><code class="inline">nat_to_table(1)</code>, because <code class="inline">missing_table(1) != nat_to_table(1)(1)</code>.</p></li><li><p>...</p></li></ol><p>So there are an uncountable number of tables from <code class="inline">Nat -&gt; Bool</code>.</p></blockquote><p>We also claimed that the number of <code class="inline">Nat -&gt; Bool</code> <em>rules</em> is countable.
+  More precisely, the number of <em>finite</em> <code class="inline">Nat -&gt; Bool</code> rules is countable, but
+  since we can&#x27;t evaluate infinite rules, this is what we really care about.
+  We can show this by <!-- -->“<!-- -->alphabetizing<!-- -->”<!-- --> all rules in the language, ordering them
+  from shortest to longest, and associating each with their index.</p></div></div><div id="__footnote_3" class="footnote"><a href="#__footnote_ref_3">3<!-- -->.</a><div class="footnote-content"><p>We&#x27;ve seen tables with corresponding rules (<code class="inline">even?</code>,
+  <code class="inline">prime?</code>).
+  What about a table <em>without</em> a rule implementing it?
+  We can construct such a thing by enumerating all rules (this is possible because
+  the set of rules is countable) and inverting the diagonal.
+  If <code class="inline">nat_to_rule</code> is a table associating each natural number with a rule, then
+  our rule-less table <code class="inline">table_without_rule</code> is defined by:</p><pre><code>table_without_rule[n] = !nat_to_rule[n][n]</code></pre></div></div></main>
+  </body>
+</html>

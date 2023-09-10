@@ -45,7 +45,7 @@ div.footnote {
   margin: 1em 0;
 }
 
-.footnote-content p {
+.footnote-content p:first-of-type {
   margin: 0;
 }
 
