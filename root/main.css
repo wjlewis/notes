@@ -17,6 +17,15 @@ main {
   max-width: 45em;
 }
 
+footer {
+  margin: 1em auto;
+  max-width: 45em;
+}
+
+footer span {
+  display: block;
+}
+
 p,
 blockquote,
 pre,

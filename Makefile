@@ -5,7 +5,7 @@ dist: $(patsubst root/%.txt,dist/%.html,$(shell find root -type f -name "*.txt")
 
 dist/%.html: root/%.txt
 	mkdir -p $(dir $@)
-	tw < $< > $@
+	tw $< $@
 
 dist/%: root/%
 	mkdir -p dist
