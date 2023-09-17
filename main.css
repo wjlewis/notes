@@ -17,6 +17,15 @@ main {
   max-width: 45em;
 }
 
+footer {
+  margin: 1em auto;
+  max-width: 45em;
+}
+
+footer span {
+  display: block;
+}
+
 p,
 blockquote,
 pre,
@@ -34,6 +43,11 @@ li > p {
   margin: 0.5em 0;
 }
 
+img {
+  display: block;
+  margin: 0 auto;
+}
+
 /* Add some space before the footnotes start. */
 div.footnote:first-of-type {
   margin-top: 8em;
@@ -47,6 +61,10 @@ div.footnote {
 
 .footnote-content p:first-of-type {
   margin: 0;
+}
+
+.inline .katex {
+  font-size: 1.1em !important;
 }
 
 code {
