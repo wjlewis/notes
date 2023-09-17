@@ -1,0 +1,249 @@
+# From $0$ to $i$
+
+What are numbers, and where do they come from?
+How do we know that adding two real numbers is a commutative operation?
+Is multiplication really just repeated addition?
+
+## Finite numbers
+
+As a baby we often encounter situations in which there's:
+- A single ball
+- A single spoon
+- A single dog
+- A single bicycle.
+
+We might ask "what do these situations have in common?", and the answer is
+"oneness".
+So one way to define $1$ is as "the quality that these scenarios have in
+common":
+
+!["1" is what these 4 images have in common](./analogies-1.png)
+
+Likewise, we can define $2$ as the thing binding these situations together:
+
+!["2" is what these 4 images have in common](./analogies-2.png)
+
+We could define $3$ in an analogous fashion:
+
+!["3" is what these 4 images have in common](./analogies-3.png)
+
+And so on with $4$, $5$, $6$, etc.
+
+Here we're thinking of the familiar counting numbers as _analogies_ between
+different common situations.
+While this may feel strange, it's how most (if not all) of our familiar concepts
+arise.
+For instance, we might call many different things a "ball", all of them distinct.
+One might be made of soft rubber, another made of wood, still another made of
+wood but painted, and so on.
+None of them is _the_ ball; instead a "ball" is _what they have in common_.
+We can play the same game with other concepts like "spoon", "dog", and "bicycle".
+
+Once defined in this way, we might recognize that numbers are ordered: the
+$1$-situations are the result of taking something away from the $2$-situations,
+for instance.
+We can also define some familiar operations like addition and multiplication.
+For example, by combining all the things in a $2$-scenario and a $3$-scenario,
+we get a $5$-scenario.
+So addition can be seen as a combining or merging operation.
+Likewise, we can imagine a more complicated operation in which we replace each
+object in a scenario with _all_ of the objects from another scenario: if we
+replace each object in a $2$-scenario with all objects from a $3$-scenario, we
+get a $6$-scenario; this is multiplication.
+
+Finally, after becoming proficient in addition and multiplication we might
+realize that $1$ plays a special role in multiplication: multiplying $1$ by
+anything, or anything by $1$, just gives us back what we started with.
+We realize that the scenario containing _no_ objects plays a similar role for
+addition, and we name it $0$.
+
+## Natural numbers
+
+While our concept of number may arise from an analogy between situations
+containing the same amount of objects, it doesn't end there.
+We might never encounter a situation in which there are 103,241 things, but that
+doesn't stop us from _imagining_ such a situation.
+So our next conceptual leap is to realize that _we can always add another
+number_.
+
+Using this as our inspiration, we decide to define the natural numbers,
+$\mathbb{N}$ in this fashion:
+
+- There's some smallest natural number $0$ which is analogous to the $0$ defined
+  above
+- Every natural number has a "successor"—a number that comes immediately after
+  it.
+
+With these two properties in hand we can formally define addition:
+
+$$
+\begin{align*}
+0 + n &= n \\
+(m + 1) + n &= (m + n) + 1
+\end{align*}
+$$
+
+Our definition of $\mathbb{N}$ said that a natural number is either $0$ or $n +
+1$, where $n$ is itself a natural number.
+The definition for $+$ treats these two cases:
+
+- If the first number is $0$, the sum is just the second number
+- If the first number is $m + 1$, the sum is the successor of the sum of $m$ and
+  the other number.
+
+The definition of $+$ is defined in terms of itself, but it's not circular,
+since the first clause produces an answer, and the second reduces it to a
+smaller problem.
+
+We can define multiplication in a similar fashion:
+
+$$
+\begin{align*}
+0 \times n &= 0 \\
+(m + 1) \times n &= n + (m \times n)
+\end{align*}
+$$
+
+We can even _prove_ that addition is associative:
+
+$$
+\begin{align*}
+(0 + m) + n &= m + n &\textrm{[definition of +]} \\
+            &= 0 + (m + n) &\textrm{[definition of +]} \\
+((l + 1) + m) + n &= ((l + m) + 1) + n &\textrm{[definition of +]} \\
+                  &= ((l + m) + n) + 1 &\textrm{[definition of +]} \\
+                  &= (l + (m + n)) + 1 &\textrm{[induction hypothesis]} \\
+                  &= (l + 1) + (m + n) &\textrm{[definition of +]}
+\end{align*}
+$$
+
+In a similar fashion we can show that multiplication is associative, that
+addition and multiplication are commutative, that multiplication distributes
+over addition, and more.
+
+### Are natural numbers real?
+
+Let's imagine that a caveman has introduced his friends to this idea of
+numbers-as-analogies, and now he tells them that they can throw away the
+_acutal_ situations and just think of imaginary scenarios.
+He might wow them with some truly enormous numbers, larger than any collection
+of things that any of them has heard of.
+In response to this, one of his buddies objects that such a number doesn't
+exist.
+He says: "I see how you defined $1$ as an analogy between "single coconut",
+"single tree", "single dog", etc.
+And I see how you defined $2$, $3$, $4$, etc. in the same way.
+But now you're just making numbers up without any situation to tie them to."
+
+This is a style of object that arises with each "jump" we will make.
+Once we become familiar with one of idea of what numbers are, any additions
+(complex numbers, for instance) might seem less real.
+The caveman's mistake is not in insisting that the large numbers are "made up",
+but in thinking that the small, familiar ones weren't.
+
+## Integers
+
+In some cases, we can "undo" an addition of two natural numbers.
+For instance, there's a natural number which gives us $5$ when added to $3$
+($2$).
+But this isn't always possible: there's no natural number that gives us $3$ when
+added to $5$.
+This is unfortunate, because the question "what do I add to $x$ to get $y$?"
+shows up quite often in our daily lives:
+- A pot contains 1 liter of water, and I need it to contain 4
+- I've caught 3 fish today and I need to bring back 7
+- The top of this wall is 11 feet above the ground, but I need to it to be 10.
+
+We have two choices when faced with this asymmetry:
+1. Throw up our hands.
+   Not every question has an answer; it's a shame, but these numbers just don't
+   exist.
+2. Invent some new numbers.
+
+Something
+
+1. Create a new set $\mathrm{Z} = \mathbb{N} \times \mathbb{N}$.
+   That is, $\mathrm{Z}$ is the set of _pairs_ of natural numbers.
+2. Define an equivalence relation ($\sim$) on $Z$ by:
+   $$
+   (a, b) \sim (c, d) \Longleftrightarrow a + d = b + c
+   $$
+3. Define the set $\mathbb{Z} = \mathrm{Z} \thinspace / \sim$.
+   So $\mathbb{Z}$ is a set of _equivalence classes_ of $\mathrm{Z}$.
+
+With this definition in hand, let's define some familiar operations.
+We define each operation on $\mathrm{Z}$ and then show that it's _well-defined_
+with respect to $\sim$.
+An operation $f: \mathrm{Z} \to T$ is well-defined iff _it treats equivalent
+elements of $\mathrm{Z}$ the same_:
+
+$$
+\forall z, w \in \mathrm{Z}, z \sim w \implies f(z) = f(w)
+$$
+
+That is, if $z$ and $w$ are _equivalent_, then $f(z)$ and $f(w)$ must be
+_identical_.
+
+With that in mind, here's how $+$ is defined on $\mathrm{Z}$:
+
+$$
+(a, b) + (c, d) = (a + c, b + d)
+$$
+
+Is $+$ well-defined?
+Suppose that $x = (a, b)$ and $y = (c, d)$ are equivalent, and let $g :
+\mathrm{Z} \to \mathbb{Z}$ where
+
+$$
+g(z) = [z + (e, f)]_\sim
+$$
+
+Then $g$ is well-defined since
+
+$$
+\begin{align*}
+g(x) &= g((a, b)) \\
+     &= [(a, b) + (e, f)]_\sim \\
+     &= [(a + e, b + f)]_\sim \\
+
+\end{align*}
+$$
+
+_*Finish this*_
+
+The integers form a ring.
+Every element has an additive inverse.
+
+## Rational numbers
+
+$\mathrm{Q} = \mathbb{Z} \times \mathbb{Z}$.
+$\mathrm{Q}$ is the set of pairs of integers.
+
+$(x, y) \sim (z, w) \Longleftrightarrow x w = y z$.
+
+$\mathbb{Q} = \mathrm{Q} \thinspace / \sim$.
+
+The rational numbers form a field.
+Every nonzero element has a multiplicative inverse.
+
+## Real numbers
+
+$\mathrm{R} = \mathbb{N} \to \mathbb{Q}$.
+$\mathrm{R}$ is the set of sequences of rational numbers.
+
+$\sigma \sim \tau \Longleftrightarrow \sigma - \tau \to 0$.
+Two sequences are equivalent if their difference converges to $0$.
+
+$\mathbb{R} = \mathrm{R} \thinspace / \sim$.
+
+The real numbers are "Cauchy complete": every Cauchy sequence of real numbers
+converges to a real limit.
+
+## Complex numbers
+
+$\mathbb{C} = \mathbb{R} \times \mathbb{R}$.
+
+(No equivalence shenanigans here)
+
+The complex numbers are "algebraicly closed": every non-constant polynomial has
+a root.

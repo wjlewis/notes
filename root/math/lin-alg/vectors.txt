@@ -1,0 +1,61 @@
+# Vectors and vector spaces
+
+Vectors are objects that can be:
+
+1. Added together
+2. Stretched by some factor
+
+The operation of adding two vectors is called—unsuprisingly—_vector addition_,
+and is denoted with the usual $+$ sign.
+The "stretching" operation is called _scalar multiplication_ and is denoted with
+a $\cdot$ or juxtaposition, just like normal multiplication.
+So we need two sets in order to define a "vector space": the set of vectors, and
+the set of numbers used to stretch the vectors.
+For reasons which will be made clear below, the "stretching" set must be a
+field.
+
+These sets (which we'll call $V$ and $F$) and the operations defined on them
+must respect a number of properties.
+To keep the rules simple, the names $u$, $v$, and $w$ refer to vectors, and $a$
+and $b$ refer to scalars (elements of $F$).
+All names are implicitly universally quantified.
+
+1. Vector addition must be associative and commutative:
+   $$
+   \begin{align*}
+   (u + v) + w &= u + (v + w) \\
+   u + v &= v + u
+   \end{align*}
+   $$
+2. There must be some vector $\mathbf{0}$ that acts as identity for addition:
+   $$
+   \exists \mathbf{0} \in V : \mathbf{0} + v = v
+   $$
+3. Each vector has an additive inverse:
+   $$
+   \forall v \in V, \exists v' \in V : v + v' = \mathbf{0}
+   $$
+4. Scaling a vector by $1$ leaves it unchanged:
+   $$
+   1 \cdot v = v
+   $$
+5. Field multiplication and scalar multiplication need to associate:
+   $$
+   (a b) \cdot v = a \cdot (b \cdot v)
+   $$
+6. Finally, two distributive laws need to hold:
+   $$
+   \begin{align*}
+   a \cdot (u + v) = a \cdot u + a \cdot v \\
+   (a + b) \cdot v = a \cdot v + b \cdot v
+   \end{align*}
+   $$
+
+That's a lot of rules, but they can be nicely divided into two groups:
+
+- Rules 1, 2, and 3 exist to ensure that vector addition "makes
+  sense"[^addition_abelian]
+- Rules 4, 5, and 6 ensure that scalar multiplication
+  makes sense
+
+[^addition_abelian]: Specifically, they require that $V$ is an _abelian group_.

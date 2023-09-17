@@ -11,11 +11,11 @@ about how large web applications fit together.
 
 So it came as a surprise when Jimmy announced that I'd be taking over his role
 in the project.
-I had apparently done well on an unofficial test on one of my first days.
-I welcomed the change.
-I've always enjoyed learning new things, and this seemed like a great
-opportunity.
-Besides, this meant fewer interactions with Jimmy, who gave me the willies.
+He had given me some practice work to complete during my first week and was
+impressed with how quickly I finished it.
+He insisted that I clearly knew more than I'd let on during the interview.
+I welcomed the change: the new work promised to be more
+interesting, and I was completely unware of how little I knew.
 
 I was learning a lot, improvising quite a bit, and Dan and I were making progress.
 Jimmy even found our pace _satisfactory_.
@@ -26,8 +26,10 @@ I had just informed him and Dan over Slack that, once again, the schema needed
 to be changed, so they'd need to wipe their local databases in order to run the
 latest version of the app.
 Now in the past I would've been flustered by this: Jimmy was more direct than
-most people I've worked with, and I was quite sensitive at the time.
-I might have even whimpered that "nobody ever taught me what a migration is".
+most people I've worked with, and I was—looking back—embarrassingly sensitive at
+the time.
+I might have even whimpered some pitiful excuse like "Nobody ever taught me what
+a migration is".
 But he was gone as quickly as he'd arrived and I, fortuitously, had held my
 tongue.
 I googled "database migration", read a few articles, and made the necessary
@@ -35,13 +37,13 @@ changes.
 I learned something new, and that was the last of the manual DB update shit.
 
 This developed into a regular pattern.
-Jimmy would appear at my desk and say something like, "I think we need to add a
-queue between X and Y. That should fix it."
+Jimmy would materialize at my desk and say something like "I think we need to
+add a queue between X and Y. That should fix it."
 I'd look off into the distance, stroke my chin, look back at him, nod slowly,
 and respond, "Yeah, let's give that a shot."
 He'd vanish, I'd google "what is a queue", and we were off to the races.
 
-I learned a lot at the fireflies.
+I learned a lot with the Fireflies.
 Much more, I'm convinced, than I would have had I been relegated to working
 exclusively on user interfaces.
 And all because Jimmy took me for smarter than I actually was.
