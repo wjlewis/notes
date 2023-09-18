@@ -361,7 +361,7 @@ We also include a <code class="inline code">debug</code> primitive for printing 
 All that&#x27;s left is to write <code class="inline code">compile</code>, which simply interpolates the provided
 program into a template containing the interpreter code we just wrote.</p><p>Since we&#x27;re going to paste the interpreter source code inside a template string,
 we need to be careful to escape all backticks (<code class="inline code">`</code>); we also need to escape
-dollar signs (`$<code class="inline code">) and escape characters (</code>\`) as well.
+dollar signs (<code class="inline code">$</code>) and escape characters (<code class="inline code">\</code>) as well.
 This is easy enough to do manually, but we can also automate it with a little
 script.</p><p>If the following is saved in a file named <em>quote.js</em>:</p><pre><code class="block code"><span class="name">process</span><span class="op">.</span><span class="name">stdin</span><span class="line">
 </span><span class="space">  </span><span class="op">.</span><span class="name">setEncoding</span><span class="punct">(</span><span class="string">&#x27;utf-8&#x27;</span><span class="punct">)</span><span class="line">
