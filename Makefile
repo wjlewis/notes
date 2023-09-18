@@ -20,6 +20,11 @@ watch:
 publish:
 	make clean
 	make dist
+	# Hack to update paths to main.css
+	find dist \
+		-type f \
+	    -name "*.html" \
+		-exec sed -i 's/href="\/main.css"/href="\/notes\/main.css"/' '{}' ';'
 	git worktree add public gh-pages
 	cp -rf dist/* public
 	cd public && \
