@@ -2,9 +2,7 @@
 
 ## General
 
-[Embracing the low road](./general/embracing-the-low-road.html)
-
-[Things to remember](./general/remember.html)
+[My second job](./general/my-second-job.html)
 
 ## Programming Languages
 
