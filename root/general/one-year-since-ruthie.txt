@@ -1,0 +1,97 @@
+# Ruthie is turning 1
+
+It's hard to believe that Ruthie turns a year old in just a few days.
+As they say, "the nights are long but the years are short", and so far this
+rings true.
+Ruthie's birthday has prompted me to reflect a little on what I've learned
+during these past twelve months.
+
+As we were leaving for the hospital I remember thinking "I just need a little
+more time".
+Not to prepare for becoming a parent, but _to learn a little more linear
+algebra_.
+Ruthie, if you're reading this, I'm sorry I wasn't thinking more about you and
+your future at the time.
+I think I anticipated not having a moment of free time for the rest of my life.
+While I've certainly had much less free time than before, I still have enough to
+learn a thing here or there.
+
+And although I have less time now, I've begun to think differently about how I
+learn.
+I realized only too late that I'd become trapped in a morass of abstract
+theoretical perfection: when learning something new, if I didn't feel entirely
+confident that I understood the preliminaries with absolute confidence, I'd go
+back to those preliminaries, and repeat.
+And since this kind of certainty isn't attainable, I spent a lot of time just
+spinning my wheels.
+I had become afraid to jump blindly into new topics.
+
+I was jolted out of this while reading Verner Vinge's _Rainbows End_.
+Even though I was underwhelmed by the book[^vv], I was struck by a particular
+passage in which an old man is taught to use new technology.
+He's initially frustrated by how much things have changed, but at some point he
+relaxes, relents, and just starts playing around.
+In that moment he realizes that he's learning like a child again, "doing without
+understanding".
+
+[^vv]: Sorry V.V.
+  If it's any consolation, I give _A Fire Upon the Deep_ a 5/5.
+
+After that I began to notice, really consciously notice, that this is exactly
+what Ruthie was doing in all her waking moments.
+Somehow this little baby who knew almost nothing would someday understand
+things, but her path would involve a great deal of "doing without understanding"
+first.
+The lesson here for me is to continue to "do without understanding".
+I find it interesting that this can be parsed in two ways:
+
+- (do) (without understanding): to learn in a primarily "active" or creative
+  mode, not getting too caught up in formalities, or worrying too much about
+  correctness.
+  This is exploratory play.
+- (do without) (understanding): to make do without the luxury of full
+  understanding.
+  In any case, "full understanding" is most likely unattainable, and we almost
+  always need to make do without it.
+  
+My aim here isn't to belittle abstract thinking at all.
+I imagine that most people either tend to be more comtemplative ("thinking
+more") or more active ("doing more").
+We need to spend time in both of these modes to be productive, and if I don't
+watch myself I spend way to much time being contemplative.
+So this is a reminder to myself (thank you Ruthie and Vernor) to think, just not
+too hard.
+
+As this note testifies, I've also started writing more.
+Aside from simply improving my writing, this serves several purposes:
+- I'd like to clarify my thoughts.
+  I'm continually surprised at how lucid some idea will appear in my head, and
+  how quickly it vanishes when I attempt to write it down.
+  So far, writing has been a good check on the quality of my ideas.
+- I'd like to remember more.
+  Several years ago while looking for a new job, I wrote a short article about
+  binary heaps.
+  I've since used binary heaps on several occasions; each time I've either
+  remembered the important details or quickly refreshed my memory by consulting
+  that essay.
+- I'd like to become a clearer speaker.
+  Clear writing and clear speaking both demand clear thinking and the ability to
+  express thoughts in words.
+  I've noticed on several occasions that I'm a _terrible_ speaker, but as I've
+  written more I've begun to improve.
+
+Lastly, each day I develop a greater appreciation for just _doing the next thing_.
+What I mean by this is that, say we need to prepare dinner, and the sink is full
+of dishes, and there's laundry to be done, and a million other things besides
+those.
+Instead of becoming overwhelmed by this I now try and just do the next obvious
+thing that gets me closer to my goal.
+That might mean forgetting about everything else for a moment, and just washing
+a few dishes.
+The real power of this is that by doing the next little thing, and then the next
+little thing, and then the next, eventually a lot of stuff gets done.
+The same applies to learning.
+
+So here's to you, little Ruthie.
+Happy first birthday from a dad who loves you more than he could have imagined,
+and who's already learned more from you than he'd ever anticipated.

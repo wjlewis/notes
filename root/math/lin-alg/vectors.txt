@@ -27,7 +27,7 @@ All names are implicitly universally quantified.
    u + v &= v + u
    \end{align*}
    $$
-2. There must be some vector $\mathbf{0}$ that acts as identity for addition:
+2. There must be some vector $\mathbf{0}$ that acts as an identity for addition:
    $$
    \exists \mathbf{0} \in V : \mathbf{0} + v = v
    $$

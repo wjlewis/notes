@@ -1,0 +1,68 @@
+# Who needs power series?
+
+- Suspicious of $\cos$ because it doesn't have a simple definition.
+  The functions I was comfortable with could be generalized to any ordered field.
+  What I didn't realize is that $\cos$ requires the extra juice (Cauchy
+  completeness) offered by the reals.
+- Later suspicious of power series because they require "infinite computation".
+  This is true.
+  My error was in thinking that "nice" functions like polynomials _don't_.
+  Even evaluating a "nice" function at an irrational value requires infinite
+  computation.
+  This is the price (and value) of working with the reals.
+
+First things:
+- What can you "do" real numbers; this will inform what kind of functions we can
+  make, since functions are just an abstraction/parameterization of an expression.
+- This requires looking closely at $\mathbb{R}$.
+- $\mathbb{R}$ is an extension of $\mathbb{Q}$, so any expression that makes
+  sense there can be transferred over.
+  This is where we get our sense of "familiar": functions like $f(x) = x^2 - \frac{x}{4}$ 
+  make sense if $x$ is a real number or a rational number.
+  Importantly, if our concept of "function" only admits things that make sense
+  in $\mathbb{Q}$, _we're not taking full advantage of $\mathbb{R}$.
+- In particular, $\mathbb{R}$ is also _Cauchy complete_.
+  This means that ever Cauchy sequence has a limit.
+  It's not clear how we can make use of this to define new functions (that don't
+  make sense in $\mathbb{Q}$).
+  That's the point of this note.
+- Gist: irrational numbers are "infinite" numbers; power series are one form of
+  "infinite" function.
+
+The ratio of the diagonal of a square to its side feels like it _ought_ to be
+some number.
+This justifies the discovery (or invention) of the irrational numbers.
+Likewise, the differential equation $y' - y = 0$ feels like it _ought_ to have a
+solution.
+This justifies the discovery (or invention) of power series.
+
+Two types of functions we initially encounter in calculus:
+
+1. Recipes showing how to compute a value, like $f(x) = 2x^2 - 3$.
+2. "Magic" functions that feel like OS system calls: $\sin$, $\cos$, etc.
+
+For a long time I was suspicious of functions like $\sin$, $\cos$, and $\exp$.
+My thinking at the time ran something like this: some functions, like
+$f(x) = 2x^2 - 3$, have an _actual definition_.
+If you give me a value of $x$, I can compute $f(x)$ right here.
+On the other hand $\cos$ has a _geometric definition_, but it's not an
+abbrevation for some simple expression involving $x$'s, addition,
+multiplication, etc.
+
+Power series answered the question, "what _is_ $\cos$?", but they didn't fully
+alleviate my suspicion.
+I still saw them as "lesser functions", since they required an infinite number
+of steps to evaluate.
+But this is incorrect!
+In general, evaluating even the innocent function $f$ takes an infinite numbers
+of steps.
+This is because the reals, or—more precisely—the irrationals, are inherently
+infinite.
+
+Ultimately, we need power series for the same reason we need the irrationals:
+the ratio of the diagonal of a square to its side feels like it _ought_ to be a
+number; likewise, the differential equation $y' - y = 0$ feels like it _ought_
+to have a solution.
+
+Even evaluating $f(x) = 2x$ at an irrational number $x$ requires an infinite
+number of steps.

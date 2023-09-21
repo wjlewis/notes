@@ -1,0 +1,70 @@
+# Modern monetary theory
+
+I'm certain that I don't fully understand Modern Monetary Theory, but I'm
+intrigued by it and keep returning to some of its more basic ideas.
+One of its premises is _the federal government (or any sovereign currency
+issuer) can always print more money_.
+Upon first reading this, my knee-jerk reaction was "No it can't! That would
+create inflation."
+MMT's sly response to this is:
+
+> _Yes it can._
+> _In fact, you admit as much by saying "That would create inflation."_
+> _The federal government *can* always create more money._
+> _The pertinent question is not about capability, but whether or not this is a
+> *good idea*._
+
+A related tenet is that _sovereign nations are not just "large households"._
+They're also not just "large states" either.
+Because of this, any discussion of the federal government needing to "balance
+its budget" is suspect: if the DoD bought 100 fighter jets from Lockheed Martin,
+it can just print a bunch of $100 bills and helicopter them over to Lockheed's
+offices when the invoice arrives.
+This took a long time for me to internalize, since I tend to see "government" as
+the same everywhere.
+But MMT insists that state governments, for instance, are inherently different
+from the federal government when it comes to managing money.
+
+So the first lesson MMT has to offer seems to be this: _forget about what you
+know about managing money, because currency issuers are bound by completely
+different rules_.
+Supposing the federal government isn't bound by the same budgetary constraints
+that bind you or me, how should it behave?
+The broad prescription is to _pay attention to what actually matters, and act
+accordingly_.
+This means:
+
+- Not worrying about whether taxes collected equal dollars spent (this _feels_
+  like it matters, but it's just a comparison between two numbers).
+- Treating inflation as an indicator that the federal government is spending too
+  much relative to the economy's productivity.
+- Treating unemployment as an indicator that the economy could be more
+  productive (allowing for more government spending).
+- Using taxation to influence behavior and redistribute wealth.
+
+If we think about the federal government's spending operating inside of a
+control loop, the most important inputs are _inflation_ and _unemployment_.
+And like all but the simplest control systems, these influence—and are
+themselves influenced by—federal spending.
+
+*Unorganized thoughts below*
+
+Cities and states tax in order to raise money.
+For the federal government, taxation is always about _influencing behavior_.
+Again, MTT's constant refrain: _the federal government doesn't need your money._
+The twist offered by taxation is: _it just might need to make sure that you
+don't have it._
+
+In an economy with a fixed output, spending without collecting an equal amount
+in taxes will cause inflation.
+
+Spending into the economy doesn't guarantee stable prices, even if it lowers
+unemployment: the injected money (and labor) must be "productive".
+For instance, suppose 10% of the US was unemployed, and the government offered
+some hourly wage to dig holes and then fill them in.
+This would reduce unemployment, but also—barring an increase in taxes—introduce
+inflation (because the wages need to come from growing the money supply).
+
+A few heuristics: whenever the federal government really _needs_ to do
+something (e.g. The War on Terror), the money is always there, higher taxes or
+not.

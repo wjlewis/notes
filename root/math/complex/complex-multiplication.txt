@@ -1,0 +1,124 @@
+# Complex multiplication
+
+Each complex number is a point in the 2-dimensional plane:
+
+$$
+\mathbb{C} = \mathbb{R} \times \mathbb{R}
+$$
+
+Unsurprisingly, the complex numbers share some features in common with
+$\mathbb{R}^2$; for instance, addition of complex numbers resembles addition of
+vectors in $\mathbb{R}^2$.
+What, then, distinguishes $\mathbb{C}$ from $\mathbb{R}^2$?
+The complex numbers are a _field_, so we can multiply them together.
+
+How do we multiply two 2-dimensional numbers?
+We might first try defining multiplication "component-wise", like this:
+
+$$
+(a, b) \cdot (c, d) = (ac, bd)
+$$
+
+This has some of the properties we require: it's associative and commutative,
+for starters.
+However, it violates the _integral domain property_, which says that in any
+integral domain (including a field):
+
+$$
+a \cdot b = 0 \implies a = 0 \vee b = 0
+$$
+
+Multiplying component-wise, $(0, 1) \cdot (1, 0) = (0, 0)$.
+Since neither factor is $(0, 0)$, this isn't a valid definition of
+multiplication.
+
+## Addition and multiplication in $\mathbb{R}$, geometrically
+
+We need to think more geometrically.
+Let's return to $\mathbb{R}$ for a moment and think about how addition and
+multiplication transform the real line.
+For example, the operation of _adding 3_ translates the real line 3 units in the
+positive direction.
+Multiplication keeps the origin fixed, scaling every value by some factor.
+For instance, the operation of _multiplying by 2_ stretches the real line so
+that 1 is now where 2 was, 2 is where 4 was, etc.
+
+Multiplication by a negative number stretches the real line as well, but it also
+"flips" it, so that negative numbers appear where positive numbers did
+previously, and vice-versa.
+So in general, multiplying by a real number $x$:
+
+1. Stretches the real line by a factor of $|x|$
+2. _Rotates_ the real line by $\arg(x)$, where
+  $$
+  \arg(x) =
+  \begin{cases}
+  0 & x > 0 \\
+  \pi & \textrm{otherwise}
+  \end{cases}
+  $$
+
+In conclusion, addition in $\mathbb{R}$ corresponds to _translating_ the real
+line, and multiplication to "stretching-and-rotating" it.
+The official name for a "stretch-and-rotate" operation is a _dilative rotation_.
+
+## Dilative rotations in 2D
+
+Just as addition of complex numbers corresponds to a 2-dimensional translation,
+_complex multiplication is a dilative rotation of the plane_.
+Specifically, multiplying by a complex number $z$:
+
+1. Dilates the plane by a factor of $|z|$, where $|z|$ is the length (or
+  _modulus_) of $z$.
+2. Rotates the plane by $\arg(z)$, where $\arg(z)$ is the angle formed by $z$
+  and the positive real axis.
+
+How is this related to the standard definition?
+
+$$
+(a + bi) \cdot (c + di) = ac - bd + (ad + bc)i
+$$
+
+Let's let $T : \mathbb{C} \to \mathbb{R}^{2\times 2}$ map all complex numbers to
+their corresponding dilative rotation:
+
+$$
+T((a, b))
+
+=
+
+\sqrt{a^2 + b^2}
+\begin{bmatrix}
+\frac{a}{\sqrt{a^2 + b^2}} & \frac{b}{\sqrt{a^2 + b^2}} \\
+-\frac{b}{\sqrt{a^2 + b^2}} & \frac{a}{\sqrt{a^2 + b^2}}
+\end{bmatrix}
+
+=
+
+\begin{bmatrix}
+a & b \\
+-b & a
+\end{bmatrix}
+$$
+
+Then the dilative rotation corresponding to the product of two complex numbers
+is the product of their dilative rotations:
+
+$$
+T((a, b) \cdot (c, d)) = T((a, b)) \cdot T((c, d))
+
+=
+
+\begin{bmatrix}
+ac - bd & ad + bc \\
+-(ad + bc) & ac - bd
+\end{bmatrix}
+$$
+
+But that happens to be equal to
+
+$$
+T((ac - bd, ad + bc))
+$$
+
+So the product $(a, b) \cdot (c, d)$ is equal to $(ac - bd, ad + bc)$.

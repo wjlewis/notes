@@ -1,0 +1,205 @@
+# Contructing the reals
+
+In this note we'll work through Cantor's construction of the real numbers.
+
+## Cauchy sequences of rationals
+
+We first define a set $R$ containing all Cauchy sequences of _rational_ numbers:
+
+$$
+R = \left\{ \sigma : \mathbb{N} \to \mathbb{Q} \mid \sigma \text{ is Cauchy} \right\}
+$$
+
+where a sequence of rationals is Cauchy[^cauchy] iff
+
+$$
+\forall B \in \mathbb{N}^+, \exists N \in \mathbb{N} : m, n \ge N
+\implies
+|\sigma(m) - \sigma(n)| < \frac{1}{B}
+$$
+
+[^cauchy]: This definition is equivalent but ever so slightly different from the
+  one traditionally used in analysis.
+
+Next, we'll consider two sequences in $R$ to be equivalent iff their difference
+is _null_:
+
+$$
+\sigma \sim \tau \Longleftrightarrow \mathrm{null}(\sigma - \tau)
+$$
+
+A sequence $\sigma$ is _null_ iff
+
+$$
+\forall B \in \mathbb{N}^+, \exists N \in \mathbb{N} : n \ge N
+\implies
+|\sigma(n)| < \frac{1}{B}
+$$
+
+Now, $\sim$ is an equivalence relation:
+
+- For any sequence $\sigma$, $\sigma - \sigma$ is the constant $0$ sequence,
+  which is obviously[^obviously_null] null.
+  So $\sim$ is reflexive.
+- Suppose $\sigma \sim \tau$ and let $B \in \mathbb{N}^+$.
+  Then there's some $N \in \mathbb{N}$ such that $n \ge N$ implies
+  $|\sigma(n) - \tau(n)| < \frac{1}{B}$.
+  So for $n \ge N$, $|\tau(n) - \sigma(n)| < \frac{1}{B}$ as well.
+  Thus $\tau \sim \sigma$, and $\sim$ is symmetric.
+- Finally, suppose $\rho ~ \sigma$ and $\sigma ~ \tau$ and $B \in \mathbb{N}^+$.
+  Then there exist $N_1, N_2 \in \mathbb{N}$ such that $n \ge N_1$ implies that
+  $|\rho(n) - \sigma(n)| < \frac{1}{2B}$, and $n \ge N_2$ implies that
+  $|\sigma(n) - \tau(n)| < \frac{1}{2B}$.
+  Let $N = \max(N_1, N_2)$.
+  Then $n \ge N$ implies that
+
+  $$
+  \begin{align*}
+  |\rho(n) - \tau(n)| &= |\rho(n) - \sigma(n) + \sigma(n) - \tau(n)| \\
+                      &\le |\rho(n) - \sigma(n)| + |\sigma(n) - \tau(n)| \\
+                      &< \frac{1}{2B} + \frac{1}{2B} \\
+                      &= \frac{1}{B}
+  \end{align*}
+  $$
+  So $\rho \sim \tau$, and $\sim$ is transitive.
+  
+[^obviously_null]: For any $B$, $N = 0$ works.
+
+## $\mathbb{R}$ as a set of _equivalence classes_ of $R$
+
+We'll define $\mathbb{R}$ as the set of equivalence classes of $R$ with respect
+to $\sim$.
+Symbolically:
+
+$$
+\mathbb{R} = R \thinspace / \sim
+$$
+
+We can think of $R$ as the set of _names_ for the real numbers.
+Note that this means that a single real number may have many distinct names.
+This is analogous to the situation with the rational numbers, where
+$\frac{1}{2}$ and $\frac{2}{4}$ are two different names for the same number.
+
+Equivalence classes are somewhat awkward to work with, so when constructing a
+number system in this way, we almost always work with the set of names instead.
+For instance, we'll define addition on $R$, and then show that it can be
+extended to $\mathbb{R}$ because it "respects" $\sim$.
+
+## $\mathbb{R}$ is a field
+
+### Defining $+$ and $\cdot$ in $R$
+
+Let's first define addition and multiplication in $R$:
+
+$$
+\begin{align*}
+\sigma + \tau &= n \mapsto \sigma(n) + \tau(n) \\
+\sigma \cdot \tau &= n \mapsto \sigma(n) \cdot \tau(n)
+\end{align*}
+$$
+
+That is, addition and multiplication are defined "pointwise".
+
+### $+$ and $\cdot$ respect $\sim$
+
+We first need to show that these operations respect $\sim$ in the sense that 
+
+$$
+\begin{align*}
+\sigma' \sim \sigma, \tau' \sim \tau &\implies \sigma' + \tau' \sim \sigma + \tau \\
+                                     &\implies \sigma' \cdot \tau' \sim \sigma \cdot \tau
+\end{align*}
+$$
+
+This is critical because it means that all of the elements in an equivalence
+class are treated the same.
+
+Without further ado, suppose that $\sigma' \sim \sigma$ and $\tau' \sim \tau$
+and $B \in \mathbb{N}^+$.
+Then there exist $N_1$ and $N_2$ such that $n \ge N_1$ implies that $|\sigma'(n) - \sigma(n)| < \frac{1}{2B}$,
+and $n \ge N_2$ implies that $|\tau'(n) - \tau(n)| < \frac{1}{2B}$.
+Let $N = \max(N_1, N_2)$.
+Then $n \ge N$ implies that
+
+$$
+\begin{align*}
+|(\sigma' + \tau')(n) - (\sigma + \tau)(n)| &= |\sigma'(n) - \sigma(n) + \tau'(n) - \tau(n)| \\
+                                            &\le |\sigma'(n) - \sigma(n)| + |\tau'(n) - \tau(n)| \\
+                                            &< \frac{1}{2B} + \frac{1}{2B} \\
+                                            &= \frac{1}{B}
+\end{align*}
+$$
+
+Showing that multiplication respects $\sim$ is slightly more involved.
+We'll need to make use of the fact that all sequences in $R$ are _bounded_:
+
+$$
+\forall \sigma \in R, \exists M \in \mathbb{N} : \forall n \in \mathbb{N}, |\sigma(n)| < M
+$$
+
+And the proof: since $\sigma$ is Cauchy, let $N \in \mathbb{N}$ such that $m, n \ge N$
+implies $|\sigma(m) - \sigma(n)| < 1$.
+Let
+
+$$
+\mu = \max(|\sigma(0)|, |\sigma(1)|, \ldots, |\sigma(N-1)|, |\sigma(N)|)
+$$
+
+and define $M = \mathrm{ceil}(\mu) + 1$.
+Then
+
+$$
+\begin{align*}
+n < N \implies |\sigma(n)| &\le \mu \\ &< M \\
+\end{align*}
+$$
+
+$$
+\begin{align*}
+n \ge N \implies |\sigma(n)| &= |\sigma(n) - \sigma(N) + \sigma(N)| \\
+                             &\le |\sigma(n) - \sigma(N)| + |\sigma(N)| \\
+                             &< 1 + \mu \\
+                             &\le M
+\end{align*}
+$$
+
+So all sequences in $R$ are bounded.
+
+_Finally_ we can show that $\cdot$ respects $\sim$: given $B \in \mathbb{N}^+$,
+let $L$ and $M$ be bounds on the size of $\sigma'$ and $\tau$, respectively.
+Next, let $N_1, N_2 \in \mathbb{N}$ such that $n \ge N_1$ implies that
+$|\sigma'(n) - \sigma(n)| < \frac{1}{2MB}$ and $n \ge N_2$ implies that
+$|\tau'(n) - \tau(n)| < \frac{1}{2LB}$.
+Let $N = \max(N_1, N_2)$.
+Then for $n \ge N$,
+
+$$
+\begin{align*}
+|(\sigma' \cdot \tau')(n) - (\sigma \cdot \tau)(n)| &= |\sigma'(n)\tau'(n) - \sigma(n)\tau(n)| \\
+    &= |\sigma'(n)\tau'(n) - \sigma'(n)\tau(n) + \sigma'(n)\tau(n) - \sigma(n)\tau(n)| \\
+    &= |\sigma'(n)(\tau'(n) - \tau(n)) + \tau(n)(\sigma'(n) - \sigma(n))| \\
+    &\le |\sigma'(n)||\tau'(n) - \tau(n)| + |\tau(n)||\sigma'(n) - \sigma(n)| \\
+    &< L\frac{1}{2LB} + M\frac{1}{2MB} \\
+    &= \frac{1}{B}
+\end{align*}
+$$
+
+### Properties of $+$ and $\cdot$
+
+We now need to show that $+$ and $\cdot$ have all of the properties we require
+of addition and multiplication in a field:
+
+- $\sigma + \tau \sim \tau + \sigma$
+- $(\rho + \sigma) + \tau \sim \rho + (\sigma + \tau)$
+- $\sigma \cdot \tau \sim \tau \cdot \sigma$
+- $(\rho \cdot \sigma) \cdot \tau \sim \rho \cdot (\sigma \cdot \tau)$
+- $\rho \cdot (\sigma + \tau) \sim \rho \cdot \sigma + \rho \cdot \tau$
+- $(\rho + \sigma) \cdot \tau \sim \rho \cdot \tau + \sigma \cdot \tau$
+
+### Identities and inverses
+
+## $\mathbb{R}$ is ordered
+
+## $\mathbb{R}$ contains $\mathbb{Q}$
+
+## $\mathbb{R}$ is _Cauchy complete_

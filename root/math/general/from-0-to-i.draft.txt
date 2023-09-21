@@ -1,249 +1,275 @@
 # From $0$ to $i$
 
-What are numbers, and where do they come from?
-How do we know that adding two real numbers is a commutative operation?
-Is multiplication really just repeated addition?
+## 1, 2, 3, ...
 
-## Finite numbers
+What do these 4 scenarios have in common?
 
-As a baby we often encounter situations in which there's:
-- A single ball
-- A single spoon
-- A single dog
-- A single bicycle.
+![4 scenarios containing a single object](./analogies-1.png)
 
-We might ask "what do these situations have in common?", and the answer is
-"oneness".
-So one way to define $1$ is as "the quality that these scenarios have in
-common":
+Each contains 1 object.
+Turning this around, we can _define_ 1 as the quality they have in common.
+Likewise, we can define 2 as the common quality in the following 4 scenarios:
 
-!["1" is what these 4 images have in common](./analogies-1.png)
+![4 scenarios containing two objects](./analogies-2.png)
 
-Likewise, we can define $2$ as the thing binding these situations together:
+We can define 3 in the same way:
 
-!["2" is what these 4 images have in common](./analogies-2.png)
+![4 scenarios containing three objects](./analogies-3.png)
 
-We could define $3$ in an analogous fashion:
+And likewise with 4, 5, 6, ...
 
-!["3" is what these 4 images have in common](./analogies-3.png)
-
-And so on with $4$, $5$, $6$, etc.
-
-Here we're thinking of the familiar counting numbers as _analogies_ between
-different common situations.
-While this may feel strange, it's how most (if not all) of our familiar concepts
-arise.
-For instance, we might call many different things a "ball", all of them distinct.
-One might be made of soft rubber, another made of wood, still another made of
-wood but painted, and so on.
-None of them is _the_ ball; instead a "ball" is _what they have in common_.
-We can play the same game with other concepts like "spoon", "dog", and "bicycle".
-
-Once defined in this way, we might recognize that numbers are ordered: the
-$1$-situations are the result of taking something away from the $2$-situations,
-for instance.
-We can also define some familiar operations like addition and multiplication.
-For example, by combining all the things in a $2$-scenario and a $3$-scenario,
-we get a $5$-scenario.
-So addition can be seen as a combining or merging operation.
-Likewise, we can imagine a more complicated operation in which we replace each
-object in a scenario with _all_ of the objects from another scenario: if we
-replace each object in a $2$-scenario with all objects from a $3$-scenario, we
-get a $6$-scenario; this is multiplication.
-
-Finally, after becoming proficient in addition and multiplication we might
-realize that $1$ plays a special role in multiplication: multiplying $1$ by
-anything, or anything by $1$, just gives us back what we started with.
-We realize that the scenario containing _no_ objects plays a similar role for
-addition, and we name it $0$.
+So our first experience with numbers is as analogies.
+We can develop some basic notions of order (the "2-situations" all contain
+"1-situations" inside them, but not vice-versa).
+We can also define addition as a combining operation, and multiplication as
+"bulk replacement".
+Finally, we might recognize the "nothing situation" which contains _no_ objects;
+we've discovered 0.
 
 ## Natural numbers
 
-While our concept of number may arise from an analogy between situations
-containing the same amount of objects, it doesn't end there.
-We might never encounter a situation in which there are 103,241 things, but that
-doesn't stop us from _imagining_ such a situation.
-So our next conceptual leap is to realize that _we can always add another
-number_.
+In treating numbers as analogies, we find that we can always add another number
+to our collection.
+We also have a smallest number: 0.
+These two properties define the natural numbers, $\mathbb{N}$:
 
-Using this as our inspiration, we decide to define the natural numbers,
-$\mathbb{N}$ in this fashion:
+$$
+\begin{align*}
+0 &\in \mathbb{N} \\
+n \in \mathbb{N} \implies \mathrm{suc}(n) &\in \mathbb{N}
+\end{align*}
+$$
 
-- There's some smallest natural number $0$ which is analogous to the $0$ defined
-  above
-- Every natural number has a "successor"—a number that comes immediately after
-  it.
+That is, there's some natural number called $0$, and given any natural number
+$n$, there's another natural number $\mathrm{suc}(n)$.
+We can use these to recursively build up the first few natural numbers:
 
-With these two properties in hand we can formally define addition:
+$$
+\begin{align*}
+0 &\in \mathbb{N} \\
+\mathrm{suc}(0) &\in \mathbb{N} \\
+\mathrm{suc}(\mathrm{suc}(0)) &\in \mathbb{N} \\
+\mathrm{suc}(\mathrm{suc}(\mathrm{suc}(0))) &\in \mathbb{N} \\
+&\cdots
+\end{align*}
+$$
+
+We can define addition by:
 
 $$
 \begin{align*}
 0 + n &= n \\
-(m + 1) + n &= (m + n) + 1
+\mathrm{suc}(m) + n &= \mathrm{suc}(m + n)
 \end{align*}
 $$
 
-Our definition of $\mathbb{N}$ said that a natural number is either $0$ or $n +
-1$, where $n$ is itself a natural number.
-The definition for $+$ treats these two cases:
+This definition looks circular, but it's not: if the first number is $0$, it
+produces an answer; otherwise it reduces to a _smaller_ addition problem.
+Here's $2 + 3$:
 
-- If the first number is $0$, the sum is just the second number
-- If the first number is $m + 1$, the sum is the successor of the sum of $m$ and
-  the other number.
-
-The definition of $+$ is defined in terms of itself, but it's not circular,
-since the first clause produces an answer, and the second reduces it to a
-smaller problem.
+$$
+\begin{align*}
+\mathrm{suc}(\mathrm{suc}(0)) + \mathrm{suc}(\mathrm{suc}(\mathrm{suc}(0))) &=
+   \mathrm{suc}(\mathrm{suc}(0) + \mathrm{suc}(\mathrm{suc}(\mathrm{suc}(0)))) \\
+&= \mathrm{suc}(\mathrm{suc}(0 + \mathrm{suc}(\mathrm{suc}(\mathrm{suc}(0))))) \\
+&= \mathrm{suc}(\mathrm{suc}(\mathrm{suc}(\mathrm{suc}(\mathrm{suc}(0)))))
+\end{align*}
+$$
 
 We can define multiplication in a similar fashion:
 
 $$
 \begin{align*}
-0 \times n &= 0 \\
-(m + 1) \times n &= n + (m \times n)
+0 \cdot n &= 0 \\
+\mathrm{suc}(m) \cdot n &= n + (m \cdot n)
 \end{align*}
 $$
 
-We can even _prove_ that addition is associative:
+We can _prove_ that addition is associative:
 
 $$
 \begin{align*}
-(0 + m) + n &= m + n &\textrm{[definition of +]} \\
-            &= 0 + (m + n) &\textrm{[definition of +]} \\
-((l + 1) + m) + n &= ((l + m) + 1) + n &\textrm{[definition of +]} \\
-                  &= ((l + m) + n) + 1 &\textrm{[definition of +]} \\
-                  &= (l + (m + n)) + 1 &\textrm{[induction hypothesis]} \\
-                  &= (l + 1) + (m + n) &\textrm{[definition of +]}
+(0 + b) + c &= b + c \\
+            &= 0 + (b + c) \\
+(\mathrm{suc}(a) + b) + c &= \mathrm{suc}(a + b) + c \\
+                          &= \mathrm{suc}((a + b) + c) \\
+                          &= \mathrm{suc}(a + (b + c)) &\textrm{[Induction hypothesis]} \\
+                          &= \mathrm{suc}(a) + (b + c)
 \end{align*}
 $$
 
-In a similar fashion we can show that multiplication is associative, that
-addition and multiplication are commutative, that multiplication distributes
-over addition, and more.
-
-### Are natural numbers real?
-
-Let's imagine that a caveman has introduced his friends to this idea of
-numbers-as-analogies, and now he tells them that they can throw away the
-_acutal_ situations and just think of imaginary scenarios.
-He might wow them with some truly enormous numbers, larger than any collection
-of things that any of them has heard of.
-In response to this, one of his buddies objects that such a number doesn't
-exist.
-He says: "I see how you defined $1$ as an analogy between "single coconut",
-"single tree", "single dog", etc.
-And I see how you defined $2$, $3$, $4$, etc. in the same way.
-But now you're just making numbers up without any situation to tie them to."
-
-This is a style of object that arises with each "jump" we will make.
-Once we become familiar with one of idea of what numbers are, any additions
-(complex numbers, for instance) might seem less real.
-The caveman's mistake is not in insisting that the large numbers are "made up",
-but in thinking that the small, familiar ones weren't.
+$\mathbb{N}$ is a "commutative monoid" under both addition and multiplication.
+This means that both addition and multiplication are associative, commutative,
+and have an identity.
+We can prove all of these facts.
+Why is $\mathbb{N}$ _not_ a commutative monoid under exponentiation?
 
 ## Integers
 
-In some cases, we can "undo" an addition of two natural numbers.
-For instance, there's a natural number which gives us $5$ when added to $3$
-($2$).
-But this isn't always possible: there's no natural number that gives us $3$ when
-added to $5$.
-This is unfortunate, because the question "what do I add to $x$ to get $y$?"
-shows up quite often in our daily lives:
-- A pot contains 1 liter of water, and I need it to contain 4
-- I've caught 3 fish today and I need to bring back 7
-- The top of this wall is 11 feet above the ground, but I need to it to be 10.
+The integers are an extension of the natural numbers, in both an informal and
+technical sense.
+We begin by defining the set $\mathrm{Z} = \mathbb{N} \times \mathbb{N}$.
+That is, $\mathrm{Z}$ is the set of pairs of natural numbers.
+We think of the elements of $\mathrm{Z}$, say $(a, b)$ as representing the
+_difference_ $a - b$.
+This allows us to represent negative numbers.
 
-We have two choices when faced with this asymmetry:
-1. Throw up our hands.
-   Not every question has an answer; it's a shame, but these numbers just don't
-   exist.
-2. Invent some new numbers.
-
-Something
-
-1. Create a new set $\mathrm{Z} = \mathbb{N} \times \mathbb{N}$.
-   That is, $\mathrm{Z}$ is the set of _pairs_ of natural numbers.
-2. Define an equivalence relation ($\sim$) on $Z$ by:
-   $$
-   (a, b) \sim (c, d) \Longleftrightarrow a + d = b + c
-   $$
-3. Define the set $\mathbb{Z} = \mathrm{Z} \thinspace / \sim$.
-   So $\mathbb{Z}$ is a set of _equivalence classes_ of $\mathrm{Z}$.
-
-With this definition in hand, let's define some familiar operations.
-We define each operation on $\mathrm{Z}$ and then show that it's _well-defined_
-with respect to $\sim$.
-An operation $f: \mathrm{Z} \to T$ is well-defined iff _it treats equivalent
-elements of $\mathrm{Z}$ the same_:
+When defining $\mathbb{N}$ there was only one way to represent each number.
+Now there are many ways (an infinite amount) to represent the same number.
+We capture this idea with an equivalence relation:
 
 $$
-\forall z, w \in \mathrm{Z}, z \sim w \implies f(z) = f(w)
+(a, b) \sim (c, d) \Longleftrightarrow a + d = b + c
 $$
 
-That is, if $z$ and $w$ are _equivalent_, then $f(z)$ and $f(w)$ must be
-_identical_.
+So $(1, 3) \sim (2, 4)$ and $(5, 4) \sim (1, 0)$.
 
-With that in mind, here's how $+$ is defined on $\mathrm{Z}$:
+*TODO* Prove that this is an equivalence.
+
+We can now define $\mathbb{Z}$ as the set of equivalence classes of $\mathrm{Z}$
+with respect to $\sim$:
+
+$$
+\mathbb{Z} = \mathrm{Z} \thinspace / \sim
+$$
+
+We can define addition on $\mathrm{Z}$ by
 
 $$
 (a, b) + (c, d) = (a + c, b + d)
 $$
 
-Is $+$ well-defined?
-Suppose that $x = (a, b)$ and $y = (c, d)$ are equivalent, and let $g :
-\mathrm{Z} \to \mathbb{Z}$ where
+Can we use this to define addition on $\mathbb{Z}$?
+Yes and no.
+The elements of $\mathbb{Z}$ are entire equivalence classes (subsets) of
+$\mathrm{Z}$.
+In this cases, we could select some "canonical representative" of each
+equivalence class, which would allow us to define addition on $\mathbb{Z}$, but
+we won't always be able to do this.
+Instead, we're actually accustomed to operating on numbers _via their names_.
+
+All that we need to show is that $+$ _respects_ the equivalence relation $\sim$.
+This means that
 
 $$
-g(z) = [z + (e, f)]_\sim
+x \sim x', y \sim y' \implies x + y \sim x' + y'
 $$
 
-Then $g$ is well-defined since
+This just says that regardless of which elements of two equivalence classes we
+choose, their sum is in the same equivalence class.
+
+The integers were motivated by a desire to have additive inverses.
+Let's define negation:
 
 $$
-\begin{align*}
-g(x) &= g((a, b)) \\
-     &= [(a, b) + (e, f)]_\sim \\
-     &= [(a + e, b + f)]_\sim \\
-
-\end{align*}
+\mathrm{neg}(a, b) = (b, a)
 $$
 
-_*Finish this*_
+Negation is always well-defined.
+Subtraction is defined in terms of negation:
+
+$$
+x - y = x + \mathrm{neg}(y)
+$$
 
 The integers form a ring.
-Every element has an additive inverse.
+*TODO* Prove all of this.
+
+Note that any natural number can be "promoted" to an integer by pairing it with $0$:
+
+$$
+\mathrm{promote}(n) = (n, 0)
+$$
 
 ## Rational numbers
 
-$\mathrm{Q} = \mathbb{Z} \times \mathbb{Z}$.
-$\mathrm{Q}$ is the set of pairs of integers.
+The construction of the rationals will look familiar.
+We begin by defining a set
 
-$(x, y) \sim (z, w) \Longleftrightarrow x w = y z$.
+$$
+\mathrm{Q} = \left\{ (x, y) \in \mathbb{Z} \times \mathbb{Z} \mid y \neq 0 \right\}
+$$
 
-$\mathbb{Q} = \mathrm{Q} \thinspace / \sim$.
+That is, $\mathrm{Q}$ is the set of pairs of integers, where the second element
+isn't $0$.
+Here we're thinking of each pair $(x, y)$ as the _quotient_ $\frac{x}{y}$.
+We define an equivalence relation $\sim$ by
 
-The rational numbers form a field.
-Every nonzero element has a multiplicative inverse.
+$$
+(x, y) \sim (z, w) \Longleftrightarrow xw = yz
+$$
+
+We define addition on $\mathrm{Q}$:
+
+$$
+(x, y) + (z, w) = (xw + yz, yw)
+$$
+
+We need to prove a few things about $+$:
+
+1. The result is actually in $\mathrm{Q}$
+2. It respects $\sim$.
+
+Each integer can be promoted to a rational by pairing it with $1$:
+
+$$
+\mathrm{promote}(z) = (z, 1)
+$$
 
 ## Real numbers
 
-$\mathrm{R} = \mathbb{N} \to \mathbb{Q}$.
-$\mathrm{R}$ is the set of sequences of rational numbers.
+The ratio of the length of the diagonal of a square to its side is not
+expressible as a rational number.
+Yet both of these lengths are finite, and fairly similar in length.
+It feels like this ratio _ought_ to be expressible as a number.
 
-$\sigma \sim \tau \Longleftrightarrow \sigma - \tau \to 0$.
-Two sequences are equivalent if their difference converges to $0$.
+This should look familiar by now.
+Define
 
-$\mathbb{R} = \mathrm{R} \thinspace / \sim$.
+$$
+\mathrm{R} = \left\{ \sigma \in \mathbb{N} \to \mathbb{Q} \mid \sigma \textrm{ is Cauchy} \right\}
+$$
 
-The real numbers are "Cauchy complete": every Cauchy sequence of real numbers
-converges to a real limit.
+A sequence $\sigma$ is "Cauchy" if its terms get arbitrarily close to each other
+at some point.
+Specifically, iff
+
+$$
+\forall B \in \mathbb{N}, \exists N \in \mathbb{N} : m, n \geq N \implies |\sigma(m) - \sigma(n)| < \frac{1}{B}
+$$
+
+Define $\sim$ by
+
+$$
+\sigma \sim \tau \Longleftrightarrow (\sigma - \tau) \to 0
+$$
+
+where we've introduced a new idea: $\to 0$.
+A sequence $\sigma$ _converges to $0$_ iff
+
+$$
+\forall B \in \mathbb{N}, \exists N \in \mathbb{N} : n \geq N \implies |\sigma(n)| < \frac{1}{B}
+$$
+
+To recap: we've defined a new set $\mathrm{R}$ as the set of Cauchy sequences of
+rational numbers, and said that two elements of $\mathrm{R}$ are equivalent if
+their difference converges to $0$.
+
+Then
+
+$$
+\mathbb{R} = \mathrm{R} \thinspace / \sim
+$$
+
+$\mathbb{R}$ is _Cauchy complete_: every Cauchy sequence in $\mathbb{R}$ has a
+limit.
 
 ## Complex numbers
 
-$\mathbb{C} = \mathbb{R} \times \mathbb{R}$.
+Perhaps surprisingly, the complex numbers are _easier_ to define:
 
-(No equivalence shenanigans here)
+$$
+\mathbb{C} = \mathbb{R} \times \mathbb{R}
+$$
 
-The complex numbers are "algebraicly closed": every non-constant polynomial has
-a root.
+The complex numbers are algebraicly complete.
