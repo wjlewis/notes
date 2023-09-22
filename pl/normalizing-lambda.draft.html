@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/notes/main.css" />
     
+    <link rel="stylesheet" href="/notes/main.css" />
     <title>Normalizing lambda terms: 2 ways</title>
   </head>
 
@@ -285,7 +285,7 @@ For example, it normalizes 6 factorial instantaneously on my machine.
 Unfortunately it&#x27;s not altogether superior:</p><ul><li><p>Stack overflows are now a concern, even when they shouldn&#x27;t be (depending on
  our implementation language).
  Attempting to normalize <code class="inline code">(\x -&gt; x x) \x -&gt; x x</code> shouldn&#x27;t result in a stack
- overflow, but it does.</p></li><li><p>It&#x27;s not clear how to <!-- -->“<!-- -->step<!-- -->”<!-- --> terms.</p></li></ul><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>These rules describe the <!-- -->“<!-- -->normal order<!-- -->”<!-- --> reduction strategy.
+ overflow, but it does.</p></li><li><p>It&#x27;s not clear how to <!-- -->“<!-- -->step<!-- -->”<!-- --> terms.</p></li></ul><div class="footnotes"><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>These rules describe the <!-- -->“<!-- -->normal order<!-- -->”<!-- --> reduction strategy.
   The most common alternative strategy is <!-- -->“<!-- -->applicative order<!-- -->”<!-- -->, which requires
   that operands be normalized before redexes are reduced.</p></div></div><div id="__footnote_2" class="footnote"><a href="#__footnote_ref_2">2<!-- -->.</a><div class="footnote-content"><p>Why can&#x27;t we first perform shift (1) and then substitute the
   operand for address <code class="inline code">-1</code> within the shifted body, skipping the anticipatory
@@ -304,11 +304,6 @@ Unfortunately it&#x27;s not altogether superior:</p><ul><li><p>Stack overflows a
 </span><span class="op">-</span><span class="op">-</span><span class="space"> </span><span class="name">There</span><span class="space"> </span><span class="name">are</span><span class="space"> </span><span class="name">many</span><span class="space"> </span><span class="name">ways</span><span class="space"> </span><span class="name">to</span><span class="space"> </span><span class="name">write</span><span class="space"> </span><span class="unknown">`</span><span class="name">embed</span><span class="unknown">`</span><span class="space"> </span><span class="punct">(</span><span class="name">e</span><span class="op">.</span><span class="name">g</span><span class="op">.</span><span class="space"> </span><span class="name">map</span><span class="space"> </span><span class="name">every</span><span class="space"> </span><span class="name">normal</span><span class="space"> </span><span class="name">term</span><span class="space"> </span><span class="name">to</span><span class="space"> </span><span class="name">the</span><span class="line">
 </span><span class="op">-</span><span class="op">-</span><span class="space"> </span><span class="name">identity</span><span class="space"> </span><span class="name">term</span><span class="punct">)</span><span class="op">.</span><span class="space"> </span><span class="name">An</span><span class="space"> </span><span class="name">embedding</span><span class="space"> </span><span class="unknown">&quot;</span><span class="name">does</span><span class="space"> </span><span class="name">what</span><span class="space"> </span><span class="name">we</span><span class="space"> </span><span class="name">want</span><span class="unknown">&quot;</span><span class="space"> </span><span class="keyword">if</span><span class="space"> </span><span class="name">it</span><span class="space"> </span><span class="name">respects</span><span class="space"> </span><span class="name">evaluation</span><span class="op">:</span><span class="line">
 </span><span class="name">embed_respects_eval</span><span class="space"> </span><span class="op">:</span><span class="space"> </span><span class="punct">(</span><span class="name">n</span><span class="space"> </span><span class="op">:</span><span class="space"> </span><span class="name">NormalTerm</span><span class="punct">)</span><span class="space"> </span><span class="op">-</span><span class="op">&gt;</span><span class="space"> </span><span class="name">eval</span><span class="space"> </span><span class="punct">(</span><span class="name">embed</span><span class="space"> </span><span class="name">n</span><span class="punct">)</span><span class="space"> </span><span class="unknown">≡</span><span class="space"> </span><span class="name">n</span><span class="line">
-</span><span class="name">embed_respects_eval</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="op">.</span><span class="op">.</span><span class="op">.</span></code></pre></div></div></main>
-  
-    <footer>
-      <span>Created: 8/14/2023</span>
-      <span>Last updated: 8/14/2023</span>
-    </footer>
+</span><span class="name">embed_respects_eval</span><span class="space"> </span><span class="punct">=</span><span class="space"> </span><span class="op">.</span><span class="op">.</span><span class="op">.</span></code></pre></div></div></div></main>
   </body>
 </html>

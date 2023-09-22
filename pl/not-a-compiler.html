@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/notes/main.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+    <link rel="stylesheet" href="/notes/main.css" />
     <title>This is not a compiler</title>
   </head>
 
@@ -453,16 +453,11 @@ Practically-speaking this poses no problem: those definitions don&#x27;t really
 matter when compiling or evaluating programs.
 But it does raise an interesting question: can we devise a different pair of
 definitions that excludes our compiler?
-My gut tells me no, but I&#x27;ll think about this some more.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>In this case, <code class="inline code">node</code> is our interpreter function <code class="inline code">i: JS -&gt; M</code>, and <code class="inline code">node
+My gut tells me no, but I&#x27;ll think about this some more.</p><div class="footnotes"><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>In this case, <code class="inline code">node</code> is our interpreter function <code class="inline code">i: JS -&gt; M</code>, and <code class="inline code">node
       not-a-compiler.js</code> is our compiler <code class="inline code">k: Scheme -&gt; JS</code>.</p></div></div><div id="__footnote_2" class="footnote"><a href="#__footnote_ref_2">2<!-- -->.</a><div class="footnote-content"><p>Marie will still need to infer or ask about some of the surrounding
             context (who does <!-- -->“<!-- -->moi<!-- -->”<!-- --> refer to?).
             Alice should really augment her template with an <!-- -->“<!-- -->initial
             environment<!-- -->”<!-- --> containing bindings for <!-- -->“<!-- -->global<!-- -->”<!-- --> identifiers, like</p><pre><code class="block code">moi -&gt; Bob
-...</code></pre></div></div></main>
-  
-    <footer>
-      <span>Created: 8/14/2023</span>
-      <span>Last updated: 8/17/2023</span>
-    </footer>
+...</code></pre></div></div></div></main>
   </body>
 </html>

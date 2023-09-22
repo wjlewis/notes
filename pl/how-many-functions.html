@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="/notes/main.css" />
     
+    <link rel="stylesheet" href="/notes/main.css" />
     <title>Just how many functions are there?</title>
   </head>
 
@@ -53,7 +53,7 @@ with it.</p><p>This gives us another way of thinking about tables without rules:
 have any pattern to them.
 They might have <em>some</em> structure, but as soon as we try and fit a rule to them,
 they defy it.
-They are, in a sense, <!-- -->“<!-- -->unruly<!-- -->”<!-- -->.</p><h2 id="Consequences">Consequences</h2><p>Can&#x27;t prove convergence of sequence without infinite proof.</p><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>This is the standard set-theoretic definition of a function as a
+They are, in a sense, <!-- -->“<!-- -->unruly<!-- -->”<!-- -->.</p><h2 id="Consequences">Consequences</h2><p>Can&#x27;t prove convergence of sequence without infinite proof.</p><div class="footnotes"><div id="__footnote_1" class="footnote"><a href="#__footnote_ref_1">1<!-- -->.</a><div class="footnote-content"><p>This is the standard set-theoretic definition of a function as a
   subset of the cartesian product of the domain and codomain, in which elements
   of the domain appear at most once.</p></div></div><div id="__footnote_2" class="footnote"><a href="#__footnote_ref_2">2<!-- -->.</a><div class="footnote-content"><p>We can show that the number of tables is uncountable
   using a familiar diagonalization argument:</p><blockquote><p>Suppose someone hands us a <em>purported</em> way of pairing up all tables with the
@@ -87,11 +87,6 @@ They are, in a sense, <!-- -->“<!-- -->unruly<!-- -->”<!-- -->.</p><h2 id="C
   We can construct such a thing by enumerating all rules (this is possible because
   the set of rules is countable) and inverting the diagonal.
   If <code class="inline code">nat_to_rule</code> is a table associating each natural number with a rule, then
-  our rule-less table <code class="inline code">table_without_rule</code> is defined by:</p><pre><code class="block code">table_without_rule[n] = !nat_to_rule[n][n]</code></pre></div></div></main>
-  
-    <footer>
-      <span>Created: 8/14/2023</span>
-      <span>Last updated: 8/14/2023</span>
-    </footer>
+  our rule-less table <code class="inline code">table_without_rule</code> is defined by:</p><pre><code class="block code">table_without_rule[n] = !nat_to_rule[n][n]</code></pre></div></div></div></main>
   </body>
 </html>
