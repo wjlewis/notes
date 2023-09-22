@@ -1,4 +1,1 @@
-- Evaluation steps: ready, just need to write up
-- Scheme with generators (`lambda*`): not started
-- Y combinators: finish and polish
-- Not a compiler: polish
+- Generate index pages
