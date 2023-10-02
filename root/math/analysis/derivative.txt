@@ -1,0 +1,46 @@
+# The derivative
+
+## The limit of a function
+
+The limit of a function $f$ at a point $c$ is equal to $L$ iff for all $\epsilon > 0$
+there exists $\delta > 0$ such that $|x - c| < \delta$ implies that $|f(x) - L| < \epsilon$.
+A few remarks about this definition:
+- It's important that $\delta > 0$: as a result, all "candidate" $x$ values
+  under consideration are _distinct_ from $c$ itself.
+  Even if $f$ is discontinuous at $c$, it may still have a limit there.
+- If $c$ is an [_isolated point_](./limit-points.html) if $f$'s domain, the
+  $lim_{x \to c} f = f(c)$.
+
+## The derivative at a point
+
+A function $f : \mathbb{R} \to \mathbb{R}$, is _differentiable_ at a point $c
+\in \mathbb{R}$ iff
+
+$$
+\lim_{x \to c} \frac{f(x + h) - f(x)}{h}
+$$
+
+exists.
+If the limit exists, then the _derivative_ of $f$ at $c$ is equal to the value
+of the limit.
+
+## The derivative as a function
+
+The derivative of a function $f$ is _another_ function whose value at any point
+is the derivative of $f$ at that point (if it exists).
+That is,
+
+$$
+f' = x \mapsto \lim_{t \to x} \frac{f(t + h) - f(t)}{h}
+$$
+
+Even though we've defined the derivative of a function point-wise, most
+derivatives of "nice" functions will themselves be "nice".
+
+## Derivatives of some familiar functions
+
+The definition above doesn't give us many tools for actually _computing_
+derivatives; it appears as though we'd need a magic "limit-computing" operation
+to do so.
+Nonetheless, we can build up an arsenal of results about derivatives that allow
+us to differentiate many familiar functions.

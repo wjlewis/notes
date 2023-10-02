@@ -1,0 +1,14 @@
+# The power rule
+
+The power rule is a staple of the working-man's calculus.
+It says that
+
+$$
+\frac{d}{dx}x^n = nx^{n-1}
+$$
+
+It's used anywhere we need to differentiate or integrate expressions of this
+form.
+Which is to say, all over the place.
+
+## Proof for $n \in \mathbb{N}$

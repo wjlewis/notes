@@ -1,0 +1,73 @@
+# Limit points and isolated points
+
+Two important topological concepts that show up in elementary real analysis.
+For now, we'll just define them in $\mathbb{R}$.
+These definitions can be easily extended to any metric space.
+
+## Limit points
+
+Let $S \subseteq \mathbb{R}$.
+A point $c$ is a _limit point_ of $S$ iff every open ball around $c$ contains
+some point of $S$ other than $c$.
+That is:
+
+$$
+\forall \varepsilon > 0, \exists p \in S : |c - p| < \varepsilon
+$$
+
+## Isolated points
+
+If it's possible to cover $c \in S$ with some $\varepsilon$ ball so that no
+other points in $S$ are within $B_\varepsilon(c)$, then $c$ is an _isolated
+point_ of $S$.
+
+A few remarks are in order:
+
+### A set need not contain its limit points
+
+Consider the set $\left\{ \frac{1}{n} \mid n \in \mathbb{N} \right\}$.
+This set doesn't contain $0$, but $0$ is a limit point (its only limit point, in
+fact).
+Proof: Given $\varepsilon > 0$, the Archimedean principle guarantees the
+existence of some natural number $N > \frac{1}{\varepsilon}$.
+With this in hand,
+
+$$
+\begin{align*}
+\left|0 - \frac{1}{N}\right| &= \frac{1}{N} \\
+                             &< \varepsilon
+\end{align*}
+$$
+
+### Limit points and isolated points are complementary
+
+That is, given $S \subseteq \mathbb{R}$ and $c \in S$, $c$ is a limit point of
+$S$ if and only if it's not an isolated point of $S$.
+This follows immediately from the two definitions.
+
+## Open and closed sets
+
+Here we introduce two additional definitions which rely on the notion of limit
+points: _open_ and _closed sets_.
+A set $S$ is open iff an $\varepsilon$ ball can be placed over every point $c$
+so that $B_\varepsilon(c)$ is contained entirely within $S$.
+A set is closed iff it contains its limit points.
+
+These definitions turn out to be complementary, although this complementarity is
+not immediately obvious.
+That is, a set $S$ is open iff its complement $S^c$ is closed.
+Proof: $\Rightarrow$ Suppose $S$ is open, and let $l$ be a limit point of $S^c$.
+Then for all $\varepsilon > 0$, $B_\varepsilon(l)$ contains some point from
+$S^c$ other than $l$.
+That is, $B_\varepsilon(l) \not\subseteq S$.
+So $l \not\in S$, since each point $c \in S$ admits _some_ $\varepsilon$ ball
+around it that's contained entirely within $S$ (and $l$ admits _none_).
+Thus, $l \in S^c$, and $S^c$ is closed.
+$\Leftarrow$ Suppose instead that $S$ is closed, and let $p \in S^c$.
+Since $S$ is closed, it contains all its limit points; so $p$ is _not_ a limit
+point of $S$.
+So there exists some $\varepsilon > 0$ such that $B_\varepsilon(p)$ is contained
+entirely within $S^c$.
+Thus $S^c$ is open.
+
+Perhaps surprisingly, $\emptyset$ and $\mathbb{R}$ are both open _and_ closed.

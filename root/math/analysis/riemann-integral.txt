@@ -1,0 +1,155 @@
+# The Riemann integral
+
+Differentiation lets us to do the seemingly impossible: to compute the slope of
+a function at a single point.
+Integration will allow us to perform an equally impressive trick: to calculate
+the area bounded by a function.
+Not only is this intellectually satisfying, it opens up new avenues in physics,
+probability, and other fields.
+
+## Integrating by hand
+
+In order to motivate the definition to come, and to gain a little appreciation
+for the task at hand, let's try integrating some simple functions "by hand".
+First, we'll try and compute
+
+$$
+\int_0^1 x^2 \, dx
+$$
+
+by hand[^notation].
+
+[^notation]: A little note on notation: we'll develop some theory related to
+  integrating functions, but then—without warning—we'll use notation that only
+  ever mentions expressions (as we've done above).
+  This is the same thing that happens with differentiation.
+  We can think of
+
+  $$
+  \int_a^b \mathrm{expr} \, dx
+  $$
+
+  as shorthand for
+
+  $$
+  \int_a^b x \mapsto \mathrm{eval}(\mathrm{expr}, x)
+  $$
+
+  So the integral
+
+  $$
+  \int_0^1 x^2 + 3x \, dx
+  $$
+
+  is shorthand for
+
+  $$
+  \int_0^1 x \mapsto x^2 + 3x
+  $$
+
+This is the area beneath the parabola $f(x) = x^2$ between $x = 0$ and $x = 1$.
+Unlike a triangle, whose area can be rather easily obtained through a geometric
+argument, it's not at all clear if the area beneath a parabola can be found
+_through any means_.
+
+Instead of approaching the problem geometrically, let's try something more in
+line with the rest of analysis: we'll try approximating the area using shapes
+with known areas, and then look at how this approximate area behaves in the
+limit.
+To keep things simple, let's cut our interval into $n$ equal pieces, and in each
+subinterval construct a rectangle whose height is equal to the function's value
+at the subinterval's _right_ endpoint; that is, the kth rectangle has a base of
+length $\frac{1}{n}$ and a height of $\left(\frac{k}{n}\right)^2$.
+Then the total approximate area is
+
+$$
+\begin{align*}
+U(n) &= \sum_{k = 1}^n \frac{1}{n} \cdot \left(\frac{k}{n}\right)^2 \\
+     &= \frac{1}{n^3} \sum_{k = 1}^n k^2
+\end{align*}
+$$
+
+which is just $\frac{1}{n^3}$ times the sum of the first $n$ squares.
+The sum itself is just the nth "square pyramidal number", which can also be
+expressed as
+
+$$
+\sum_{k = 1}^n k^2 = \frac{n^3}{3} + \frac{n^2}{2} + \frac{n}{6}
+$$
+
+So we can replace the summation in $U$ with a simpler expression:
+
+$$
+U(n) = \frac{1}{3} + \frac{1}{2n} + \frac{1}{6n^2}
+$$
+
+Evaluating the limit of $U$ as $n$ goes to infinity gives
+
+$$
+\lim_{n \to \infty} U(n) = \frac{1}{3}
+$$
+
+Is this truly the area beneath $f(x) = x^2$ between $0$ and $1$?
+On the one hand, as $n$ increase, the approximations get better and better.
+On the other hand, they were always overestimates.
+Let's see what happens if we approximate with _underestimates_ instead.
+In this case, the sum is
+
+$$
+\begin{align*}
+L(n) &= \sum_{k = 1}^n \frac{1}{n} \cdot \left(\frac{k - 1}{n}\right)^2 \\
+     &= \frac{1}{n^3} \sum_{k = 1}^n (k^2 - 2k + 1) \\
+     &= \frac{1}{n^3} \left(\sum_{k = 1}^n k^2 - \sum_{k = 1}^n k + \sum_{k = 1}^n 1\right) \\
+     &= \frac{1}{3} + \frac{1}{2n} + \frac{1}{6n^2} - \left(\frac{1}{2n} + \frac{1}{2n^2}\right) + \frac{1}{n} \\
+     &= \frac{1}{3} + \frac{1}{n} - \frac{1}{3n^2}
+\end{align*}
+$$
+
+A slightly different expression, but just as before
+
+$$
+\lim_{n \to \infty} L(n) = \frac{1}{3}
+$$
+
+We approximated the area twice: first with consistent overestimates, then with
+consistent underestimates; and in both cases the approximations converged to
+$\frac{1}{3}$ as we increased their "granularity".
+We can feel fairly confident that the value of the integral is, in fact,
+$\frac{1}{3}$.
+
+As a final exercise, let's see what happens if we "parameterize" the integral:
+
+$$
+\int_a^b x^2 \, dx
+$$
+
+In this case, the (overestimating) approximation looks like:
+
+$$
+\begin{align*}
+A(n) &= \sum_{k = 1}^n \frac{b - a}{n} \cdot \left(a + \frac{k(b - a)}{n}\right)^2 \\
+     &= \frac{b - a}{n^3} \left((b - a)^2 \sum_{k = 1}^n k^2 + 2na(b - a) \sum_{k = 1}^n k + n^2a^2 \sum_{k = 1}^n 1\right) \\
+     &= \frac{b^3}{3} - \frac{a^3}{3} + \frac{A}{n} + \frac{B}{n^2}
+\end{align*}
+$$
+
+and so
+
+$$
+\lim_{n \to \infty} A(n) = \frac{b^3}{3} - \frac{a^3}{3}
+$$
+
+Curiously enough, this is what we get if we subtract the value of an
+_antiderivative_ of $x^2$ at $a$ from its value at $b$.
+This isn't a coincidence, but is instead at the heart of the _fundamental
+theorem of calculus_.
+
+## Overview
+
+Our goal is to find some way to _compute_ areas bounded by functions.
+We'll first define what we mean by an "integral", and prove some results that
+allow us to determine _if_ a function is integrable.
+Critically, this won't provide us with any tools for actually calculating
+integrals.
+Only then will we discover the fundamental theorem of calculus, part of which
+gives us a way to compute integrals for suitable functions.
