@@ -1,0 +1,158 @@
+# The codomain of a measure
+
+Given a set $X$ and a $\sigma$-algebra on $X$ named $\mathcal{A}$, a function
+$\mu : \mathcal{A} \to [0, \infty]$ is a _measure_ on $\mathcal{A}$ iff
+
+$$
+\mu(\emptyset) = 0 \\
+$$
+
+and
+
+$$
+\mu(\bigcup_{k\in\mathbb{N}} A_k) = \sum_{k\in\mathbb{N}} \mu(A_k)
+$$
+
+where the $A_k$'s are pairwise disjoint.
+These requirements are motivated by the following intuition:
+
+- The empty set should have no "size"
+- The size of some composite set should just be the sum of their individual
+  sizes
+
+This much makes sense.
+But how are we to interpret the codomain of $\mu$?
+After all, $\infty$ is _not_ a real number.
+In order for the second condition ("$\sigma$-additivity") to make sense, the
+elements in $[0, \infty]$ must be things we can
+
+1. Add together, and
+2. Form (potentially) convergent sequences with
+
+To that end, we'll provide an interpretation of $[0, \infty]$ as a _complete
+metric space_, with a concept of addition.
+
+## A metric for $[0, \infty]$
+
+Let's think of the set $[0, \infty]$ as all of the _symbols_ ("numerals") from
+$[0, \infty)$, along with a new symbol $\infty$.
+We can't just naively _extend_ the usual metric on $\mathbb{R}$, since there's
+no sensible finite distance between $\infty$ and any real number.
+We need to be a little more clever...
+
+The trick is to find a continuous function $\phi$ that maps $[0, \infty)$ onto $[0, 1)$.
+We can then _define_ $\phi(\infty)$ to be $1$.
+For example, if we define
+
+$$
+\phi(x) =
+\begin{cases}
+\frac{x}{1 + x} &\textrm{ if } x \in [0, \infty) \\
+1               &\textrm{ if } x = \infty
+\end{cases}
+$$
+
+which looks like this:
+
+![a plot of x over 1 plus x](x-over-1-plus-x.png)
+
+we can use $\phi$ to define a metric on $[0, \infty]$.
+Specificaly, for any $x, y \in [0, \infty]$[^numbers_vs_numerals]:
+
+$$
+d(x, y) = \left|\phi(x) - \phi(y)\right|
+$$
+
+[^numbers_vs_numerals]: If we want to be _extra pendantic_ here (and why not),
+  we should be careful to distinguish between the elements of $[0, \infty]$,
+  which are just _numerals_, and the real numbers, which we can actually
+  calculate with.
+  We can let $\nu : \textrm{Numerals} \to \mathbb{R}$ be a function that maps a
+  numeral for a real number to its corresponding number.
+  Then $\phi$ would be defined as:
+
+  $$
+  \phi(x) =
+  \begin{cases}
+  \frac{\nu(x)}{1 + \nu(x)} &\textrm{ if } x \in [0, \infty) \\
+  1                         &\textrm{ if } x = \infty
+  \end{cases}
+  $$
+
+Let's verify that $d$ is, in fact, a metric:
+
+1. For any $x$
+   $$
+   d(x, x) = \left|\phi(x) - \phi(x)\right| = 0
+   $$
+
+2. For any $x \ne y$
+   $$
+   \begin{align*}
+   d(x, y) &= \left|\phi(x) - \phi(y)\right| \\
+           &=
+   \begin{cases}
+   \left|\frac{x}{1 + x} - \frac{y}{1 + y}\right| = \left|\frac{x - y}{(1 + x)(1 + y)}\right| > 0 &\textrm{ if } x, y \ne \infty \\
+   \left|\frac{x}{1 + x} - 1\right| = \left|\frac{1}{1 + x}\right| > 0                            &\textrm{ if } x \ne \infty, y = \infty \\
+   \left|1 - \frac{y}{1 + y}\right| = \left|\frac{1}{1 + y}\right| > 0                            &\textrm{ if } x = \infty, y \ne \infty \\
+   \end{cases}
+   \end{align*}
+   $$
+  
+3. For any $x, y$
+   $$
+   \begin{align*}
+   d(x, y) &= \left|\phi(x) - \phi(y)\right| \\
+           &= \left|\phi(y) - \phi(x)\right| \\
+           &= d(y, x)
+   \end{align*}
+   $$
+
+4. For any $x, y, z$
+   $$
+   \begin{align*}
+   d(x, z) &= \left|\phi(x) - \phi(z)\right| \\
+           &= \left|\phi(x) - \phi(y) + \phi(y) - \phi(z)\right| \\
+           &\le \left|\phi(x) - \phi(y)\right| + \left|\phi(y) - \phi(z)\right| \\
+           &= d(x, y) + d(y, z)
+   \end{align*}
+   $$
+
+## Sequences in $[0, \infty]$
+
+We've shown that $d$ is a metric on $[0, \infty]$.
+One concern we might have is that the notion of convergence supported by $d$ is
+radically different from what we're used to when using the usual metric on
+$\mathbb{R}$.
+This is because the distance between points is "distorted" by $\phi$.
+
+However, $\phi$ is continuous on $[0, \infty)$ (i.e. all the reals in $[0, \infty]$),
+and as a result, convergence under $d$ is the exact same as convergence under
+the usual metric.
+Specifically: a sequence $\sigma : \mathbb{N} \to \mathbb{R}$ converges to $l$
+in the metric space $\langle\mathbb{R}, |\cdot|\rangle$ if and only if it
+converges to $l$ in $\langle[0, \infty], d\rangle$.
+
+_Proof_: This follows immediately from two facts:
+1. $\phi$ is continuous on $[0, \infty)$, and its inverse is continuous on $[0, 1)$.
+2. Continuous maps preserve limits
+
+## Addition in $[0, \infty]$
+
+In order for series to make sense, we need to be able to add the elements of
+$[0, \infty]$.
+Luckily it's easy to extend addition in $\mathbb{R}$ to include the newcomer
+$\infty$.
+If $x, y \in [0, \infty)$, then:
+
+$$
+\begin{align*}
+x      &\oplus y = x + y \\
+x      &\oplus \infty = \infty \\
+\infty &\oplus x = \infty \\
+\infty &\oplus \infty = \infty \\
+\end{align*}
+$$
+
+It's trivial to show that $\oplus$ is associative and commutative, and has $0$
+has an identity.

@@ -1,0 +1,71 @@
+# Convergent sequences
+
+A complex sequence converges if and only if its component sequences converge,
+and the limits are "where you expect".
+That is, suppose $\sigma : \mathbb{N} \to \mathbb{C}$ and $\tau, \upsilon : \mathbb{N} \to \mathbb{R}$
+so that $\sigma_n = \tau_n + i\upsilon_n$.
+Then $\sigma \to a + ib$ if and only if $\tau \to a$ and $\upsilon \to b$.
+This is particularly useful: to show that a complex sequence converges, it's
+enough to show that its components converge (in which case the limit is where
+you expect); we can also show that a sequence diverges by showing that one of
+its components does so.
+
+_Proof_: $\Rightarrow$ Suppose that $\sigma \to a + ib$, and let $\epsilon > 0$.
+Then there exists $N \in \mathbb{N}$ such that for $n \ge N$, $\lVert\sigma_n - (a + ib)\rVert < \epsilon$.
+But since $\sigma = \tau + i\upsilon$, this means that
+$\lVert\tau_n + i\upsilon_n - (a + ib)\rVert = \lVert\tau_n - a + i(\upsilon_n - b)\rVert < \epsilon$.
+
+Now if $z = x + iy$, then $|x| \le \lVert z \rVert$ and $|y| \le \lVert z \rVert$, where $|x|$ is the
+absolute value of $x$ and $\lVert z \rVert$ is the _complex modulus_ of $z$.[^parts_lt_whole]
+Thus for $n \ge N$, $|\tau_n - a| < \lVert\tau_n - a + i(\upsilon_n - b)\rVert < \epsilon$
+and likewise $|\upsilon_n - b| < \epsilon$.
+So $\tau \to a$ and $\upsilon \to b$.
+
+[^parts_lt_whole]: In case there's any question about this, observe that
+  $|a| = \sqrt{a^2} \le \sqrt{a^2 + b^2} = \lVert z \rVert$.
+
+$\Leftarrow$ Suppose that $\tau \to a$ and $\upsilon \to b$, and let $\epsilon > 0$.
+Then there exist $N_1, N_2 \in \mathbb{N}$ such that $n \ge N_1$ implies that
+$|\tau_n - a| < \frac{\epsilon}{2}$ and $n \ge N_2$ implies that
+$|\upsilon_n - b| < \frac{\epsilon}{2}$.
+Let $N = \max(N_1, N_2)$.
+Then for $n \ge N$,
+
+$$
+\begin{align*}
+\lVert \sigma_n - (a + ib) \rVert &= \lVert \tau_n - a + i(\upsilon_n - b) \rVert \\
+                                  &\le |\tau_n - a| + |\upsilon_n - b| \\
+                                  &< \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+                                  &= \epsilon
+\end{align*}
+$$
+
+So $\sigma \to a + ib$[^tri_ineq].
+
+[^tri_ineq]: Here we've used a special case of the triangle inequality for
+  complex numbers.
+  In general, for complex numbers $z, w$, $\lVert z + w\rVert \le \lVert z \rVert + \lVert w \rVert$.
+  (In the case above, $z = \tau_n - a + 0i$ and $w = 0 + i(\upsilon_n - b)$.)
+  This is a little tricky to prove, so we'll show it here.
+  Suppose that $z = a + ib$ and $w = c + id$.
+  We'll show that $\lVert z + w \rVert^2 \le \left(\lVert z \rVert + \lVert w \rVert\right)^2$.
+  Since $x \mapsto x^2$ is _monotonic_ on the nonnegative reals, we can then
+  conclude that the triangle inequality holds.
+
+  We first note that $\lVert z + w \rVert^2 = a^2 + c^2 + b^2 + d^2 + 2(ac + bd)$, and
+  $\left(\lVert z \rVert + \lVert w \rVert\right)^2 = a^2 + b^2 + c^2 + d^2 + 2\lVert z\rVert\lVert w\rVert$.
+  So it's enough to show that $2(ac + bd) \le 2\lVert z\rVert\lVert w \rVert$, and
+  that's what we'll focus on.
+  
+  In particular, $2\lVert z\rVert\lVert w\rVert = 2\sqrt{a^2c^2 + b^2c^2 + a^2d^2 + b^2d^2}$
+  and $2(ac + bd) = 2\sqrt{a^2c^2 + 2abcd + b^2d^2}$.
+  Thus, if we can show that $2abcd \le b^2c^2 + a^2d^2$, that is enough to
+  establish the inequality.
+  So let's look at the difference:
+
+  $$
+  b^2c^2 + a^2d^2 - 2abcd = \left(ad - bc\right)^2 > 0
+  $$
+  
+  So this inequality holds, as do the others.
+  

@@ -1,0 +1,181 @@
+# Fourier series
+
+The idea is to express a periodic function as a sum of sines and cosines.
+That is, suppose that $f : \mathbb{R} \to \mathbb{R}$ is periodic.
+Our goal is to provide a way to compute $a_k$ and $b_k$ such that
+
+$$
+f(x) = \sum_{n \in \mathbb{N}} a_n \cos(nx) + b_n \sin(nx)
+$$
+
+We'll go about this by thinking of $\cos(kx)$ and $\sin(kx)$ as _basis vectors_
+in a vector space, and the sum above as an expression of $f$ in terms of that
+basis.
+Specifically, $a_k$ is the magnitude of the _projection_ of $f$ onto the basis
+vector $\cos(kx)$.
+
+## Orthogonality
+
+To that end, let's first show that $\cos(kx)$ and $\sin(kx)$ (for all $k \in
+\mathbb{N}$) are _orthogonal_.
+This amounts to showing that $\int_{-\pi}^\pi \cos(mx)\cos(nx) \, dx = 0$
+whenever $m \ne n$, and likewise with $\sin(mx)\sin(nx) $ and
+$\cos(mx)\sin(nx)$[^l2_norm].
+It's not immediately clear how to contort a product of cosines into something we
+know an antiderivative for.
+Here's a nice trick to help us out:
+
+[^l2_norm]: Say more about the $L^2$ inner product we're using here.
+
+$$
+\begin{align*}
+\cos(mx)\cos(nx) &= \frac{e^{imx} + e^{-imx}}{2} \frac{e^{inx} + e^{-inx}}{2} \\
+                 &= \frac{1}{4}\left(e^{i(m+n)x} + e^{i(m-n)x} + e^{-i(m-n)x} + e^{-i(m+n)x}\right) \\
+                 &= \frac{1}{2}\left(\frac{e^{i(m+n)x} + e^{-i(m+n)x}}{2} + \frac{e^{i(m-n)x} + e^{-i(m-n)x}}{2}\right) \\
+                 &= \frac{1}{2}\left(\cos((m+n)x) + \cos((m-n)x)\right)
+\end{align*}
+$$
+
+So, supposing $m \ne n$,
+
+$$
+\begin{align*}
+\int_{-\pi}^\pi \cos(mx)\cos(nx) \, dx &= \frac{1}{2} \int_{-pi}^\pi \cos((m+n)x) + \cos((m-n)x) \, dx \\
+                                       &= \frac{1}{2} \left(\frac{\sin((m+n)x)}{m+n} + \frac{\sin((m-n)x)}{m-n}\right) \Big|_{-\pi}^\pi \\
+                                       &= 0
+\end{align*}
+$$
+
+The same basic technique works for $\sin(mx)\sin(nx)$ and $\cos(mx)\sin(nx)$.
+
+What about $\int_{-\pi}^\pi \cos^2(mx) \, dx$?
+In this case,
+
+$$
+\begin{align*}
+\int_{-\pi}^\pi \cos^2(mx) \, dx &= \frac{1}{2} \int_{-\pi}^\pi \cos(2mx) + 1 \, dx \\
+                                 &= \frac{1}{2} \left(\frac{1}{2m}\sin(2mx) + x\right) \Big|_{-\pi}^\pi \\
+                                 &= \pi
+\end{align*}
+$$
+
+so long as $m \ne 0$.
+If $m = 0$, then $\int_{-\pi}^\pi \cos^2(mx) \, dx = \int_{-\pi}^\pi \cos^2(0) \, dx = 2\pi$.
+
+Likewise, $\int_{-\pi}^\pi \sin^2(mx) \, dx = \pi$ if $m \ne 0$, and if $m = 0$, then
+$\int_{-\pi}^\pi \sin^2(mx) \, dx = \int_{-\pi}^\pi \sin^2(0) \, dx = 0$.
+
+## Computing the coefficients
+
+We'd like to answer two questions:
+- Under what conditions can a function $f$ be expressed as a Fourier Series?
+- If $f$ can be expressed as a Fourier Series, what are its coefficients?.
+We'll look at the second question first.
+
+That is, suppose that
+
+$$
+f(x) = \sum_{n\in\mathbb{N}} a_n \cos(nx) + b_n \sin(nx)
+$$
+
+Multiplying by $\cos(kx)$ and integrating between $-\pi$ and $\pi$ gives
+
+$$
+\int_{-\pi}^\pi f(x) \cos(kx) \, dx = \int_{-\pi}^\pi \left(\sum_{n\in\mathbb{N}} a_n \cos(nx) + b_n \sin(nx)\right)\cos(kx) \, dx
+$$
+
+But every term in the righthand sum except the $k^{th}$ cosine term evaluates to
+$0$ because of the orthogonality property we showed earlier:
+
+$$
+\begin{align*}
+\ldots &= \int_{-\pi}^\pi a_k \cos^2(kx) \, dx \\
+       &=
+\begin{cases}
+\pi a_k \textrm{ if } k \ne 0 \\
+2\pi a_k \textrm{ if } k = 0
+\end{cases}
+\end{align*}
+$$
+
+As a result,
+
+$$
+a_k = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(kx) \, dx
+$$
+
+for $k \ne 0$, and
+
+$$
+a_0 = \frac{1}{2\pi} \int_{-\pi}^\pi f(x) \, dx
+$$
+
+We use the same technique to find the $b_k$'s:
+
+$$
+b_k = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(kx) \, dx
+$$
+
+for $k \ne 0$, and
+
+$$
+b_0 = 0
+$$
+
+## Convergence
+
+TK (I need to learn more about this).
+
+## An example
+
+As a quick sanity check, we should verify that the coefficients for any _pure_
+cosine or sine match our expectations.
+That is, the Fourier coefficients for $f(x) = \cos(2x)$ should be $0$ except for
+$a_2$, which should be $1$.
+Using what we learned earlier about integrals of products of cosines and sines,
+this is clearly the case.
+
+What about a classic "sawtooth" wave:
+
+$$
+f(x) = \frac{1}{\pi} x \textrm{ where } x \in [-\pi, \pi]
+$$
+
+The coefficient $a_0$ is $0$:
+
+$$
+a_0 = \frac{1}{2\pi^2} \int_{-\pi}^\pi x \, dx = 0
+$$
+
+And not surprisingly—since $f$ is _odd_—all of the subsequent cosine
+coefficients are $0$ as well:
+
+$$
+\begin{align*}
+a_k &= \frac{1}{\pi^2} \int_{-\pi}^\pi x\cos(kx) \, dx \\
+    &= \frac{1}{\pi^2} \left(\frac{x\sin(kx)}{k} + \frac{\cos(kx)}{k^2}\right) \Big|_{-\pi}^\pi \\
+    &= 0
+\end{align*}
+$$
+
+On the other hand, the $b_k$'s are nonzero:
+
+$$
+\begin{align*}
+b_k &= \frac{1}{\pi} \int_{-\pi}^\pi x\sin(kx) \, dx \\
+    &= \frac{1}{\pi} \left(\frac{-x\cos(kx)}{k} + \frac{\sin(kx)}{k^2}\right) \Big|_{-\pi}^\pi \\
+    &= -\frac{2\cos(k\pi)}{k\pi} \\
+    &= (-1)^{k+1}\frac{2}{k\pi}
+\end{align*}
+$$
+
+So (assuming this series converges),
+
+$$
+f(x) = \sum_{n=1}^\infty (-1)^{k+1}\frac{2}{n\pi}\sin(nx)
+$$
+
+A plot of the seventh partial sum:
+
+![The seventh partial sum of the fourier series for the sawtooth
+function](./fourier-sawtooth-7.png)

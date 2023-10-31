@@ -1,0 +1,126 @@
+# Strictly increasing functions, and inequalities
+
+If $f$ is strictly increasing on some set $A$, then $a \le b$ iff $f(a) \le f(b)$
+for all $a, b \in A$.
+This is particularly useful for proving inequalities involving square roots.
+For instance, to show that $\sqrt{a^2 + b^2} \le \sqrt{a^2} + \sqrt{b^2}$ it's
+enough to show that $\left(\sqrt{a^2 + b^2}\right)^2 \le \left(\sqrt{a^2} + \sqrt{b^2}\right)^2$,
+which is much easier to do.
+
+This result follows immediately once we establish two facts about strictly
+increasing functions: they're invertible, and their inverses are also strictly
+increasing.
+
+_Proof_: Suppose $f$ is strictly increasing on $A$.
+That is, for $x_1, x_2 \in A$, $x_1 < x_2$ implies that $f(x_1) < f(x_2)$.
+Now suppose $y \in f(A)$.
+We claim that the preimage of $y$ is a singleton: that is, that there's a unique
+value $x \in A$ such that $f(x) = y$.
+Since $y \in f(A)$, we know that there's _some_ value $x_0 \in A$ for which
+$f(x_0) = y$.
+Suppose also that $f(x_1) = y$.
+Then either $x_0 < x_1$, $x_0 > x_1$, or $x_0 = x_1$.
+If $x_0 < x_1$ or $x_0 > x_1$, then $f(x_0) < f(x_1)$ or $f(x_0) > f(x_1)$,
+since $f$ is strictly increasing.
+So $x_0 = x_1$.
+
+With that in hand, define $f^{-1}(y)$ as the unique value $x \in A$ such that
+$f(x) = y$.
+As promised, $f^{-1}$ is strictly increasing as well: suppose $y_1, y_2 \in
+f(A)$, and $y_1 < y_2$.
+Then there exist $x_1, x_2 \in A$ such that $f(x_1) = y_1$ and $f(x_2) = y_2$.
+Thus
+
+$$
+f^{-1}(y_1) = f^{-1}(f(x_1)) = x_1 < x_2 = f^{-1}(f(x_2)) = f^{-1}(y_2)
+$$
+
+so $f^{-1}$ is strictly increasing as well.
+
+The proof of the promised result follows immediately from this: if $a \le b$,
+then $f(a) \le f(b)$ by definition; and if $f(a) \le f(b)$, then $a = f^{-1}(f(a)) \le f^{-1}(f(b)) = b$.[^strict_ineq]
+
+[^strict_ineq]: Wait a second!
+  We've been proving things about _strict_ inequalities, and now we're
+  cavalierly using non-strict inequalities ($\le$).
+  This is justified: if $a < b$ implies that $f(a) < f(b)$, then $a \le b$
+  implies that $f(a) \le f(b)$.
+  A simple case analysis shows that if
+  1. $a < b$, then $f(a) < f(b)$ (by our hypothesis)
+  2. $a = b$, then $f(a) = f(b)$ (because $a$ and $b$ are the same)
+
+## Example
+
+Let's use this to prove the triangle inequality in $\mathbb{R}^2$.
+That is, for any $u, v \in \mathbb{R}^2$:
+
+$$
+|u + v| \le |u| + |v|
+$$
+
+If $u = (a, b)$ and $v = (c, d)$, this amounts to showing that
+
+$$
+\sqrt{(a + c)^2 + (b + d)^2} \le \sqrt{a^2 + b^2} + \sqrt{c^2 + d^2}
+$$
+
+However, if we can instead establish that
+
+$$
+|u + v|^2 \le \left(|u| + |v|\right)^2
+$$
+
+we can invoke the result above to prove the triangle inequality.
+The second inequality is _much_ easier to manage, since it removes most of the
+square roots.
+
+The lefthand side is equal to $a^2 + b^2 + c^2 + d^2 + 2(ac + bd)$, and the
+righthand side to $a^2 + b^2 + c^2 + d^2 + 2\sqrt{(ac)^2 + (bc)^2 + (ad)^2 + (bd)^2}$.
+So it suffices to show that
+
+$$
+ac + bd \le \sqrt{(ac)^2 + (bc)^2 + (ad)^2 + (bd)^2}
+$$
+
+To that end, note that
+
+$$
+ac + bd = \sqrt{(ac + bd)^2} = \sqrt{(ac)^2 + 2acbd + (bd)^2}
+$$
+
+so it's enough to show that
+
+$$
+\sqrt{(ac)^2 + 2acbd + (bd)^2} \le \sqrt{(ac)^2 + (bc)^2 + (ad)^2 + (bd)^2}
+$$
+
+But here again we can invoke our "trick": since $x \mapsto x^2$ is strictly
+increasing, so is its inverse.
+This means it's enough to show that
+
+$$
+(ac)^2 + 2acbd + (bd)^2 \le (ac)^2 + (bc)^2 + (ad)^2 + (bd)^2
+$$
+
+which amounts to showing that
+
+$$
+2acbd \le (bc)^2 + (ad)^2
+$$
+
+But
+
+$$
+(bc)^2 + (ad)^2 - 2acbd = (ad - bc)^2
+$$
+
+which is certainly greater than or equal to $0$.
+
+### The squaring function is increasing
+
+Lastly, we need to show that $x \mapsto x^2$ is strictly increasing on $[0, \infty)$.
+This is easy enough: suppose $x_1, x_2 \in [0, \infty)$ and $x_1 < x_2$.
+Then $x_2^2 - x_1^2 = (x_2 - x_1)(x_2 + x_1)$.
+The first factor is positive, since $x_2 > x_1$, and the second is positive as
+well since $x_1$ and $x_2$ are both non-negative.
+So $x_2^2 - x_1^2 > 0$, which means $x_1^2 < x_2^2$.

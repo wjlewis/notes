@@ -1,0 +1,148 @@
+# Differential equations
+
+What does an equation like $x^2 + y^2 = 1$ mean?
+It's not a _definition_, even though it contains an $=$ sign.
+Rather it's a _constraint_, demonstrating a relationship between two unknown
+values $x$ and $y$.
+It poses a question: _which values of $x$ and $y$ (if any) satisfy this
+relationship?_
+
+In general, an equation like this may have no solutions, a single solution, a
+finite number of solutions, or an infinite number.
+We may discover some tricks that allow us to solve or simplify certain classes
+or families of equations, but no general technique exists.
+
+The most fundamental operation available to us is "doing the same thing to both
+sides of the equation"; since both "sides" are equal, doing the same thing to
+them preserves that equality.
+In many cases this is straightforward.
+For instance, given the equation $2x + 1 = 3$, we can subtract $1$ from both
+sides to reduce this to $2x = 2$.
+We can then divide both sides by $2$ and conclude that $x = 1$.
+
+All of these ideas carry over nicely to _differential equations_.
+A differential equation is an equation involving a function, its derivatives,
+applications of a function and its derivatives, and other unknown values (like
+$x$ and $y$ above).
+For instance, $f'' = -2f$ (where $f : \mathbb{R} \to \mathbb{R}$) is a
+differential equation.
+So too is $f'(x) = xf(x) + 3x^2$.
+
+At the risk of being too explicit, let's take an extended look at these two
+examples.
+The first establishes a relationship between a function and its second
+derivative.
+What does the equal sign mean here?
+It means that these two functions—$f''$ and $-2f$—are "extensionally equal",
+that is, equal at all points in their domains.
+So there's an implicit universal quantification here: we could just as well have
+written $\forall x \in A, f''(x) = -2f(x)$, where $A$ is the relevant domain.
+
+The second differential equation might also cause some confusion: what do the
+$x$'s refer to here?
+Unlike in the case of $x^2 + y^2 = 1$, we're not trying to "solve for $x$".
+Again, there's a missing universal quantifier; adding it clears things up:
+
+$$
+f'(x) = xf(x) + 3x^2
+$$
+
+really means
+
+$$
+\forall x \in A, f'(x) = xf(x) + 3x^2
+$$
+
+## Antiderivatives
+
+Returning to our first example, $f'' = -2f$, note that finding a function $f$
+that satisfies this relationship involves searching for a function whose second
+derivative is the same as the negative of twice itself (at every point).
+This is "antidifferentiation".
+But we need to be careful here: antiderivatives are not unique.
+For instance, by playing around we might find that $f(x) = 2\sin(x)$ is a
+solution to this equation.
+However, $f_1(x) = 2\cos(x)$ _also_ works.
+Are there any others?
+
+Clearly differentiation is not an _invertible_ process, but thankfully it is
+nearly so.
+It's not too different from the situation $x^2 = 4$: the operation of squaring a
+number is not invertible, but it's two inverses are nicely structured (one is
+the negative of the other).
+So it is with antidifferentiation as well: if $F$ is some antiderivative of $f$,
+then _every_ antiderivative of $f$ has the form $F + c$, where $c$ is some
+constant.
+
+This is important enough to be worth proving.
+First, a lemma:
+
+_Lemma_: if $f$ is continuous and $f'(x) = 0$ for all $x$, then $f$ is a
+constant function.
+This follows immediately from the mean value theorem.
+Let $r$ be some point in the domain, and suppose $f(r) = c$.
+Consider some point $x \ne r$.
+Either $f(x) = c$ or $f(x) \ne c$.
+If $f(x) \ne c$, then there exists some point $p$ between $x$ and $r$ such
+that $f'(p) = \frac{f(x) - f(r)}{x - r} \ne 0$.
+But $f'(x) = 0$ for all $x$, including $p$, so it must be the case that $f(x) = c$.
+
+_Proof_: Suppose that $F_1$ and $F_2$ are both antiderivatives of $f$.
+That is, for all $x$, $F_1'(x) = f(x)$ and $F_2'(x) = f(x)$.
+Our claim is that $F_2 = F_1 + c$.
+Recall that the derivative of a sum (or difference) of functions is equal to the
+sum (or difference) of the derivatives (differentiation is "additive").
+That means that $F_2'(x) - F_1'(x) = (F_2 - F_1)'(x)$.
+And since $F_2'(x) = F_1'(x)$, this means that $(F_2 - F_1)'(x) = 0$ for all
+$x$.
+According to our lemma, if the derivative of $F_2 - F_1$ is always zero, then
+$F_2 - F_1$ is _constant_.
+In other words, $(F_2 - F_1)(x) = c$.
+So $F_2(x) = F_1(x) + c$.[^missing_continuity]
+
+[^missing_continuity]: The eagle-eyed will notice that the lemma requires $F_2 -
+  F_1$ to be _continuous_.
+  Discontinuities do appear to cause issues here.
+  Consider
+  
+  $$
+  \begin{align*}
+  f(x) &=
+  \begin{cases}
+  |x| &\textrm{ if } x \ne 0 \\
+  1   &\textrm{ if } x = 0
+  \end{cases} \\
+  
+  g(x) &=
+  \begin{cases}
+  |x| &\textrm{ if } x \ne 0 \\
+  2   &\textrm{ if } x = 0
+  \end{cases}
+  \end{align*}
+  $$
+  
+  Clearly, $g \ne f + c$, yet for $x \ne 0$
+
+  $$
+  \begin{align*}
+  f'(x) &= \mathrm{sgn}(x) \\
+  g'(x) &= \mathrm{sgn}(x)
+  \end{align*}
+  $$
+  
+  That is, $f' = g'$, for all $x$ _in their domain_.
+  And that's the key: we "cheated" by making $f$ and $g$'s domains larger than
+  their derivative's.
+  If we restrict our attention to $\mathbb{R} - 0$, then indeed $g = f + c$.
+  
+What was the point of this exercise?
+We can now solve "separable" differential equations like $x''(t) = g$.
+1. We find an antiderivative for $g$, say $gt$, and realize that _all_
+   antiderivatives of $g$ take the form $gt + c$.
+   So $x'(t) = gt + c$.
+2. We repeat, finding an antiderivative of $gt + c$, say $\frac{1}{2}gt^2 + ct$,
+   and realize that _all_ antiderivatives of $gt + c$ take the form
+   $\frac{1}{2}gt^2 + ct + d$.
+   So $x(t) = \frac{1}{2}gt^2 + ct + d$.
+3. We can then use any available "initial conditions" to solve for $c$ and $d$
+   (in this case, the initial position and velocity).

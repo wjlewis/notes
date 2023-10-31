@@ -1,0 +1,152 @@
+# The extended reals
+
+The extended reals, $\overline{\mathbb{R}}$, are the reals along with positive
+and negative infinity.
+While $\overline{\mathbb{R}}$ is not a field, it is a metric space.
+Moveover, unlike $\mathbb{R}$, the extended real line is _compact_, which has
+some nice consequences.
+
+We define $\overline{\mathbb{R}}$ as all of the _numerals_ from $\mathbb{R}$
+along with two new symbols: $-\infty$ and $\infty$.
+Clearly this is a set.
+Perhaps suprisingly, we can define a metric on it.
+However, we can't naively extend the usual metric on $\mathbb{R}$ to
+$\overline{\mathbb{R}}$[^naive_extension].
+
+[^naive_extension]: What would the distance between, say, $0$ and $\infty$ be?
+  The output of a metric must be finite, but assigning any finite distance would
+  cause issues with the triangle inequality.
+  TODO Is this true? Finish the proof.
+
+The trick is to find a continuous, invertible, monotone function $\varphi : \mathbb{R} \to (-1, 1)$.
+For instance
+
+$$
+\varphi(x) = \frac{x}{|x| + 1}
+$$
+
+We then _extend_ $\varphi$ to include $-\infty$ and $\infty$.
+So $\varphi: \overline{\mathbb{R}} \to [-1, 1]$ where
+
+$$
+\varphi(x) =
+\begin{cases}
+\frac{x}{|x| + 1} &\textrm{ if } x \in \mathbb{R} \\
+-1                &\textrm{ if } x = -\infty \\
+1                 &\textrm{ if } x = \infty
+\end{cases}
+$$
+
+will do.
+We then define $d: \overline{\mathbb{R}} \times \overline{\mathbb{R}} \to \mathbb{R}$
+by
+
+$$
+d(x, y) = |\varphi(x) - \varphi(y)|
+$$
+
+Note that the definition of our metric $d$ on the extended reals "dispatches" to
+the usual metric on $\mathbb{R}$.
+Together with the continuity of $\varphi$, this means that convergence looks
+similar in $\mathbb{R}$ and $\overline{\mathbb{R}}$.
+
+Let's prove that $d$ is, in fact, a metric:
+
+1. The distance between a point and itself is zero:
+   $$
+   d(x, x) = |\varphi(x) - \varphi(x)| = 0
+   $$
+2. $d$ is "positive definite": if $x \ne y$, then
+   $$
+   \begin{align*}
+   d(x, y) &= |\varphi(x) - \varphi(y)| \\
+           &= \textrm{lots of cases TODO}
+   \end{align*}
+   $$
+2. $d$ is symmetric:
+   $$
+   \begin{align*}
+   d(x, y) &= |\varphi(x) - \varphi(y)| \\
+           &= |\varphi(y) - \varphi(x)| \\
+           &= d(y, x)
+   \end{align*}
+   $$
+3. The triangle inequality holds:
+   $$
+   \begin{align*}
+   d(x, z) &= |\varphi(x) - \varphi(z)| \\
+           &\le |\varphi(x) - \varphi(y)| + |\varphi(y) - \varphi(z)| \\
+           &= d(x, y) + d(y, z)
+   \end{align*}
+   $$
+
+## Convergence
+
+So we have a metric, but is it "wonky"?
+We might worry that by introducing $\varphi$, we've radically changed what it
+means for a sequence to converge.
+If a $\sigma$ converges to a real number $l$ under the usual metric in
+$\mathbb{R}$, we'd hope that it would _still_ converge to $l$ under our metric
+$d$.
+Luckily, this is the case!
+
+Suppose $\sigma \to l$.
+Recall that a function is _continuous_ at a point $a$[^accum] iff for _any_
+sequence $\sigma \to a$, $f \circ \sigma \to f(a)$.
+Since $\varphi$ is continuous (on the entire real line), there exists some $N$
+such that $n \ge N$ implies $|\varphi(\sigma_n) - \varphi(l)| < \epsilon$.
+So, for $n \ge N$
+
+$$
+\begin{align*}
+d(\sigma_n, l) &= |\varphi(\sigma_n) - \varphi(l)| \\
+               &< \epsilon
+\end{align*}
+$$
+
+Thus $\sigma \to l$ in $\overline{\mathbb{R}}$, as desired.
+
+[^accum]: We should note that $a$ must also be an "accumulation point" (or
+  "limit point").
+  This is a natural condition, since otherwise every sequence converging to $a$
+  must end in a tail of $a$'s, in which case _every_ function is continuous at
+  $a$.
+
+## Convergence to infinity
+
+We typically say that a real sequence "converges to infinity" if its terms get
+arbitrarily large (in one direction or the other).
+Thus we have _two_ definitions of convergence in $\mathbb{R}$: one for bounded
+sequences, and one for unbounded ones.
+One of the benefits of $\overline{\mathbb{R}}$ is that the normal definition of
+convergence covers _both_ cases.
+As an example, consider the sequence $\sigma_n = n$.
+We can show that $\sigma \to \infty$ as follows:
+
+_Proof_: let $\epsilon > 0$, and define $N \in \mathbb{N}$ as
+
+$$
+N = \mathrm{ceil}\left(\frac{1}{\epsilon} - 1\right)
+$$
+
+Then for $n \ge N$,
+
+$$
+\begin{align*}
+d(\sigma_n, \infty) &= d(n, \infty) \\
+                    &= |\varphi(n) - \varphi(\infty)| \\
+                    &= \left|\frac{n}{|n| + 1} - 1\right| \\
+                    &= \left|\frac{1}{n + 1}\right| \\
+                    &< \epsilon
+\end{align*}
+$$
+
+## Compactness
+
+We can generalize the previous result to extend the Bolzano-Weierstrass theorem
+to the entire extended real line: _every_ sequence in $\overline{\mathbb{R}}$
+has a convergent subsequence.
+This is just another way of saying that $\overline{\mathbb{R}}$ is _sequentially
+compact_.
+
+TODO Complete

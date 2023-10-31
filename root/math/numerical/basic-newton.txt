@@ -1,0 +1,72 @@
+# Newton's method
+
+Newton's method is a basic technique for approximating the roots of a function.
+The idea is to improve an initial guess using the function's first derivative.
+Specifically, we construct the line tangent to the function at the guess, $r_0$:
+
+$$
+l(x) = f'(r_0)x + f(r_0) - f'(r_0)r_0
+$$
+
+and solve for where it intersects the x-axis:
+
+$$
+x = r_0 - \frac{f(r_0)}{f'(r_0)}
+$$
+
+We then repeat this process with our (hopefully) improved guess until the
+difference between successive approximations is within some tolerance.
+That is
+
+$$
+r_{k+1} = r_k - \frac{f(r_k)}{f'(r_k)}
+$$
+
+In `python`:
+
+```python
+def newton_iter(r0, f, df, tolerance=0.1):
+    """Approximate a root of f near r0."""
+    diff = None
+    r = r0
+    while True:
+        next_r = r - f(r) / df(r)
+        diff = abs(r - next_r)
+        r = next_r
+        if diff < tolerance:
+            break
+
+    return r
+```
+
+Let's test it with a particular function.
+Suppose we want to determine where $\log$ and $\sin$ intersect.
+This is the same as finding a root of $f(x) = \log(x) - \sin(x)$.
+Then $f'(x) = \frac{1}{x} - \cos(x)$.
+
+Let's define these:
+
+```python
+def f(x):
+    return math.log(x) - math.sin(x)
+
+def df(x):
+    return 1 / x - math.cos(x)
+```
+
+What about the initial guess?
+We know that $\sin(\frac{\pi}{2}) = 1$, $\sin(\pi) = 0$, $\log(1) = 0$, and
+$\log(e) = 1$.
+So these functions ought to cross somewhere between $\frac{\pi}{2} \approx 1.5$
+and $e \approx 2.7$.
+Let's try $r_0 = 2$:
+
+```python
+print(newton_iter(2.0, f, df, 0.01))
+# => 2.2191855215314233
+```
+
+We can verify this visually by plotting the two functions between $\frac{pi}{2}$
+and $e$:
+
+![A plot of log and sin between pi/2 and e](./log-sin-intersection.png)

@@ -1,0 +1,60 @@
+# Continuity
+
+_Most (all?) of the definitions that follow apply in _any_ metric space, but
+I've specialized them to $\mathbb{C}$ to make them clearer._
+
+## Sequences and convergence
+
+A _complex sequence_ is just a function from the natural numbers into
+$\mathbb{C}$.
+That is, something of the form $\mathbb{N} \to \mathbb{C}$.
+Most of the time we refer to the $n^\textrm{th}$ term in the sequence $\sigma$
+with the notation $\sigma_n$, rather than the more standard notation $\sigma(n)$.
+
+A sequence $\sigma$ _converges_ to a complex number $z$ iff for any $\varepsilon > 0$,
+there exists $N \in \mathbb{N}$ such that $n \ge N$ implies that $|\sigma_n - z| < \varepsilon$.
+
+_Theorem_: a complex sequence $\sigma$ converges to $z$ iff its real and
+imaginary projections converge to $\mathrm{Re}(z)$ and $\mathrm{Im}(z)$,
+respectively.
+
+> _Is the same true for the modulus and argument?_
+
+A sequence $\sigma$ is called _Cauchy_ if its terms get arbitrarily "bunched up".
+Specifically, if for any $\varepsilon > 0$, there exists $N \in \mathbb{N}$ such
+that for $m, n \ge N$, $|\sigma_n - \sigma_m| < \varepsilon$.
+
+_Theorem_: a sequence is Cauchy iff it converges.
+
+## Limit points
+
+How important is this?
+In most cases we're only interested in _open sets_.
+All points in an open set are limit points (prove this).
+However, the definitions that follow only require the (weaker) notion of a
+_limit point_.
+
+Practically-speaking, what this means for us is that we can forget all of the
+"if $z_0$ is a limit point" conditions as long as we stipulate that $f$'s domain
+is _open_.
+
+## Functional limits
+
+Sequences, convergence, and limit points provide us with enough material to
+define the _limit of a function_.
+In particular, if $f : \mathbb{C} \to \mathbb{C}$, and $z_0$ is a limit point of
+$f$'s domain[^lim_pt], then $\lim_{z \to z_0} f(z) = w$ iff for every sequence
+$\sigma$ that converges to $z_0$, $f \circ \sigma$ converges to $w$.
+
+[^lim_pt]: Note that $z_0$ doesn't need to be _in_ $f$'s domain.
+
+## Continuity
+
+With functional limits defined, continuity is a straightfoward concept.
+A function $f$ is _continuous_ at a limit point $z_0$ _in $f$'s domain_ iff
+
+$$
+\lim_{z \to z_0} f(z) = f(z_0)
+$$
+
+That is, $f$ is continuous at $z_0$ if $f(z_0)$ is where you expect it to be.

@@ -1,0 +1,141 @@
+# Sequences and series of functions
+
+A sequence of functions is just a function from $\mathbb{N}$ to a set of
+functions, say $\mathbb{R} \to \mathbb{R}$.
+For instance, $\sigma_n = x \mapsto x^n$.
+
+## Pointwise and uniform convergence
+
+A sequence of (real-valued) functions $\sigma$ _converges pointwise_ to some
+limit function $l : \mathbb{R} \to \mathbb{R}$ iff for all $x$ in the domain,
+for all $\varepsilon > 0$, there exists $N \in \mathbb{N}$ such that $n \ge N$
+implies that
+
+$$
+\left|\sigma_n(x) - l(x)\right| < \varepsilon
+$$
+
+What is this saying, informally?
+Pick some value $x$ in the domain, and consider the sequence $\tau : \mathbb{N} \to \mathbb{R}$
+where $\tau_n = \sigma_n(x)$.
+This is just a normal, real-valued sequence, which may or may not converge to $l(x)$.
+If it does converge to $l(x)$ for every possible choice of $x$ in the domain,
+then the sequence of functions $\sigma$ converges pointwise to $l$.
+
+We've been careful to always include the modifier "pointwise" because a stronger
+notion of convergence is available: _uniform convergence_.
+A sequence of functions $\sigma$ _converges uniformly_ to some limit function
+$l$ iff for all $\varepsilon > 0$, and all $x \in \mathbb{R}$, there exists $N \in \mathbb{N}$
+such that $n \ge N$ implies that
+
+$$
+\left|\sigma_n(x) - l(x)\right| < \varepsilon
+$$
+
+### Uniform convergence implies pointwise convergence
+
+If a sequence of functions converges uniformly to some limit, it also converges
+pointwise to it.
+The converse is not true; uniform convergence is a stronger notion than
+pointwise convergence.
+To see this, suppose that $\sigma \to l$ uniformly, let $x$ be some point in
+the relevant domain, and let $\varepsilon > 0$.
+Then there exists $N \in \mathbb{N}$ such that $n \ge N$ implies that
+$|\sigma_n(t) - l(t)|$ for _all_ $t$ in the domain.
+So naturally that choice of $N$ will work when our attention is restricted to
+$x$ alone.
+
+For an example of a sequence of functions that converges pointwise but _not_
+uniformly, consider
+
+$$
+\sigma_n = x \mapsto \frac{x}{n + 1}
+$$
+
+This sequence converges pointwise to $x \mapsto 0$ (for any particular $x$, the
+sequence is harmonic-ish), but doesn't do so uniformly.
+
+## Cauchy sequences of functions, and completeness
+
+The real numbers are special in a large part because they are _Cauchy complete_:
+construct a Cauchy sequence and its limit must be in $\mathbb{R}$.
+We can define an analogous notion of "Cauchy sequence" for sequences of
+functions:
+
+A sequence of functions $\sigma : \mathbb{N} \to \mathbb{R} \to \mathbb{R}$ is
+_Cauchy_ iff for all $\varepsilon > 0$, for all $x \in \mathbb{R}$, there exists
+$N \in \mathbb{N}$ such that $m, n \ge N$ implies that $|\sigma_m(x) - \sigma_n(x)| < \varepsilon$.
+
+### Cauchy sequences have limits
+
+It turns out that Cauchy sequences of functions also have limits.
+Furthermore, a Cauchy sequence of functions converges _uniformly_ to its limit.
+Proof: let's suppose that $\sigma$ is a Cauchy sequence of functions.
+We'll first propose a candidate limit function, and then show that it converges
+to it uniformly.
+
+First, an observation: for each $x$ in the domain, note that $\tau_n = \sigma_n(x)$
+is a real-valued Cauchy sequence (for any $\varepsilon > 0$, pick an $N$ that
+works for _every_ point in the domain—the sequence of functions is Cauchy after
+all—and so this $N$ will work for our particular choice of $x$).
+Since $\mathbb{R}$ is Cauchy, this function has a limit.
+So we define the candidate limit function as
+
+$$
+l(x) = \lim_{n \to \infty} \sigma_n(x)
+$$
+
+To show that $\sigma \to l$ uniformly, suppose $\varepsilon > 0$.
+We'll show that there exists some $N$ such that for every $x$,
+$|\sigma_n(x) - l(x)| < \varepsilon$.
+Since $\sigma$ is Cauchy, we can fix $N \in \mathbb{N}$ such that $m, n \ge N$
+implies that $|\sigma_m(x) - \sigma_n(x)| < \frac{\varepsilon}{2}$ for every $x$
+in the domain.
+For any particular $x$, $\lim_{n \to \infty} \sigma_n(x) = l(x)$ by definition.
+So there exists some $N_x \in \mathbb{N}$ such that $n \ge N_x$ implies that
+$|\sigma_n(x) - l(x)| < \frac{\varepsilon}{2}$.
+Let $N^* = \max(N, N_x)$.
+Then for $n \ge N$:
+
+$$
+\begin{align*}
+|\sigma_n(x) - l(x)| &= |\sigma_n(x) - \sigma_{N^*}(x) + \sigma_{N^*}(x) - l(x)| \\
+                     &\le |\sigma_n(x) - \sigma_{N^*}(x)| + |\sigma_{N^*}(x) - l(x)| \\
+                     &< \frac{\varepsilon}{2} + \frac{\varepsilon}{2} \\
+                     &= \varepsilon
+\end{align*}
+$$
+
+## Continuity and differentiability
+
+When are properties like continuity and differentiability "inherited" in the limit?
+That is, if $\sigma \to l$, and for all $n \in \mathbb{N}$, $\sigma_n$ is
+continuous at $c$, is $l$ continuous at $c$?
+If we allow pointwise convergence, then the answer is "no".
+
+For instance, consider the sequence $\sigma_n(x) = x^n$ on the interval $[0, 1]$.
+Each function in the sequence passes through the point $(1, 1)$, but as $n$
+increases, they do so at increasingly steep angles.
+Although each $\sigma_n$ is continuous on $[0, 1]$, the sequence converges
+pointwise to
+
+$$
+f(x) =
+\begin{cases}
+0 & \textrm{ if } x \in [0, 1) \\
+1 & \textrm { if } x = 1
+\end{cases}
+$$
+
+which is _not_ continuous at $1$.
+
+Similarly, consider $\sigma_n(x) = x^{1 + \frac{1}{2n - 1}}$.
+Each term in the sequence is differentiable, but the sequence itself converges
+pointwise to $l(x) = |x|$, which is _not_ differentiable at $0$.
+
+_However_, it turns out that uniform convergence is a strong enough hypothesis:
+if $\sigma$ converges _uniformly_ to some limit $l$, then
+
+- If every $\sigma_n$ is continuous at $c$, then so is $l$
+- If every $\sigma_n$ is differentiable at $c$, then so is $l$, and
+  $l'(c) = \lim_{n \to \infty} \sigma'_n(c)$
