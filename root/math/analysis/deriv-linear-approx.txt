@@ -1,0 +1,165 @@
+# Derivative as best linear approximation
+
+A function is differentiable at a point $x_0$ if it looks more like a line the
+more you "zoom in" on it.
+As a precursor to a note on the Jacobian (which itself helps us to understand
+the Cauchy-Riemann equations), we'll make this notion precise by recasting our
+definition of differentiability and the derivative in terms of "linear
+approximation".
+In particular, we'll show that a function is differentiable if and only if it's
+"locally linear", in which case its derivative is the slope of this line.
+
+## Locally linear
+
+A function $f$ is "locally linear" at a point $x_0$ if it can be expressed as
+the sum of a line and a _sublinear_ "remainder".
+That is, if
+
+$$
+f(x) = f(x_0) + m(x - x_0) + \rho(x)
+$$
+
+where $\lim_{x\to x_0} \frac{\rho(x)}{|x - x_0|} = 0$.
+_We'll have more to say about this condition shortly._
+
+The term $f(x_0) + m(x - x_0)$ certainly looks line-like, but what line is it?
+It's the equation of the line intersecting $f$ at $x_0$ with slope $m$.
+The equation for a general line is, of course $l(x) = mx + b$.
+Requiring the intersection $l(x_0) = f(x_0)$ allows us to determine that $b = f(x_0) - mx_0$.
+So $l(x) = f(x_0) + m(x - x_0)$.
+
+What about $\rho$?
+This is the amount by which the linear approximation is off at any given point.
+It's important to note that _any_ function can be written as the sum of a line
+and a remainder; only differentiable functions have a _sublinear_ remainder (and
+vice-versa).
+Which brings us to the condition on $\rho$:
+
+$$
+\lim_{x\to x_0} \frac{\rho(x)}{|x - x_0|} = 0
+$$
+
+Strange as it may seem, this encodes the "zooming in" action described above.
+Imagine plotting $f$ and looking through a window whose left edge is at $x_0$
+and right edge is at $x$ (or vice-versa).
+Then look at the difference between $f$ and the linear approximation.
+That's $\rho(x)$.
+Now move $x$ a little closer to $x_0$.
+If the difference shrinks _visually_, then $\frac{\rho(x)}{|x - x_0|}$ is
+tending to $0$.
+This fraction is precisely "how big $\rho$ looks relative to the window size".
+
+The image below shows this for two functions: one is differentiable at the point
+$x_0$, and the other is not.
+
+![Zooming in on two functions](./linear-approx.png)
+
+If the significance of this fraction is still unclear, it may help to think of
+$\rho$ and $|x - x_0|$ as lengths with units.
+In this case, the expression $\frac{\rho(x)}{|x - x_0|}$ is _unitless_, and just
+expresses how big $\rho$ is, relative to the window size.
+
+## A proof
+
+Let's show that this definition is equivalent to the standard one.
+In particular, we'll show that a function $f$ is differentiable at a point $x_0$
+with derivative $f'(x_0)$ if and only if
+
+$$
+f(x) = f(x_0) + f'(x_0)(x - x_0) + \rho(x)
+$$
+
+where $\lim_{x \to x_0} \frac{\rho(x)}{|x - x_0|} = 0$.
+
+_Proof_: $\Rightarrow$ Suppose $f$ is differentiable at $x_0$.
+Define
+
+$$
+\rho(x) = f(x) - f(x_0) - f'(x_0)(x - x_0)
+$$
+
+Then $f(x) = f(x_0) + f'(x_0)(x - x_0) + \rho(x)$, as required.
+We only need to show that $\rho$ is sublinear w.r.t. $x_0$.
+Note that
+
+$$
+\begin{align*}
+\frac{\rho(x)}{|x - x_0|} &= \frac{f(x) - f(x_0) - f'(x_0)(x - x_0)}{|x - x_0|} \\
+                          &= \frac{f(x) - f(x_0)}{|x - x_0|} - \frac{f'(x_0)(x - x_0)}{|x - x_0|} \\
+                          &= \sigma(x)\left(\frac{f(x) - f(x_0)}{x - x_0} - f'(x_0)\right)
+\end{align*}
+$$
+
+for $x \ne x_0$, where
+
+$$
+\sigma(x) =
+\begin{cases}
+1  &\textrm{ if } x \ge x_0 \\
+-1 &\textrm{ if } x < x_0
+\end{cases}
+$$
+
+So
+
+$$
+\begin{align*}
+\lim_{x \to x_0} \frac{\rho(x)}{|x - x_0|} &= \lim_{x \to x_0} \sigma(x)\left(\frac{f(x) - f(x_0)}{x - x_0} - f'(x_0)\right) \\
+                                           &= 0
+\end{align*}
+$$
+
+Done[^limit_of_bounded].
+
+[^limit_of_bounded]: The eagle-eyed may have noticed that $\sigma$ does not
+  converge at $0$, so we ought to justify our conclusion here.
+  We'll show that if $f$ is _bounded_ and $\lim_{x \to x_0} g(x) = 0$, then
+  $\lim_{x \to x_0} f(x)g(x) = 0$ as well.
+  
+  _Proof_: Suppose $f$ is bounded by $B \in \mathbb{R}$, and let $\epsilon > 0$.
+  Because $g \to 0$, there exists $\delta > 0$ such that for $|x - x_0| < \delta$,
+  $|g(x) - 0| < \frac{\epsilon}{B}$.
+  So for $|x - x_0| < \delta$,
+  
+  $$
+  \begin{align*}
+  |f(x)g(x) - 0| &= |f(x)g(x)| \\
+                 &\le B |g(x)| \\
+                 &< B \frac{\epsilon}{B} \\
+                 &= \epsilon
+  \end{align*}
+  $$
+  
+  Thus $\lim_{x \to x_0} f(x)g(x) = 0$.
+  
+  In our case, $\sigma$ is the bounded function $f$ and $g$ is $\frac{f(x) - f(x_0)}{x - x_0} - f'(x_0)$.
+
+$\Leftarrow$ Now suppose that $f$ can be expressed as a linear approximation
+around $x_0$:
+
+$$
+f(x) = f(x_0) + m(x - x_0) + \rho(x)
+$$
+
+Then
+
+$$
+\begin{align*}
+\frac{f(x) - f(x_0)}{x - x_0} &= \frac{f(x_0) + m(x - x_0) + \rho(x) - f(x_0)}{x - x_0} \\
+                              &= m + \frac{\rho(x)}{x - x_0}
+\end{align*}
+$$
+
+for $x \ne x_0$, so
+
+$$
+\begin{align*}
+\lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0} &= \lim_{x \to x_0} \left(m + \frac{\rho(x)}{x - x_0}\right) \\
+                                               &= m + \lim_{x \to x_0} \frac{\rho(x)}{x - x_0} \\
+                                               &= m + \lim_{x \to x_0} \sigma(x) \frac{\rho(x)}{|x - x_0|} \\
+                                               &= m
+\end{align*}
+$$
+
+So $f$ is differentiable at $x_0$, and its derivative is equal to $m$, the slope
+of the approximating line.
