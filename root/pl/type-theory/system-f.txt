@@ -1,0 +1,104 @@
+# System F
+
+_Examples in this note use the syntax of [propcalc2](https://github.com/wjlewis/propcalc2)._
+
+In the simply typed lambda calculus
+
+```propcalc2
+let id_A: A => A = supposing(a) {
+    a
+};
+```
+
+and
+
+```propcalc2
+let id_B: B => B = supposing(b) {
+    b
+};
+```
+
+are two distinct terms: `id_A` cannot be used in a setting where an inhabitant
+of `B => B` is expected, and vice-versa.
+From a programming point of view, this prevents code-reuse.
+From a logical perspective, it means that theorems must be re-proved for each
+specific instance where they're used.
+System F fixes this issue by introducing _parameric polymorphism_.
+
+## Parametric polymorphism
+
+System F introduces _universally-quantified types_ which express the desire for
+a type to represent _all possible types_.
+For example, the type
+
+```propcalc2
+∀ T; T => T
+```
+
+subsumes the types of `id_A` and `id_B` above.
+Terms of this type are constructed using a "type abstraction":
+
+```propcalc2
+let id: ∀ T; T => T = <A>supposing(t) {
+    t
+};
+```
+
+To _use_ `id`, we need to first apply it to a type.
+For example, we can redefine `id_A` and `id_B` above in terms of the more
+general `id`:
+
+```propcalc2
+let id_A: A => A = id<A>;
+
+let id_B: B => B = id<B>;
+```
+
+Just as `supposing` (aka `lambda`) allows us to parameterize terms by other
+terms, angle brackets preceding a term allow us to paramterize it by a _type_.
+That's right: terms in System F may _contain types_.
+This "level-mixing" of terms and types makes System F a nice stepping-stone
+between the simply typed lambda calculus, and more sophisticated systems like
+MLTT and CoC.
+
+## Higher-rank types
+
+Benefits
+
+```propcalc2
+let mk_pair: ∀ F, S; F => S => (∀ R; (F => S => R) => R) = <F, S>{
+    supposing(fst, snd) {
+        <R>supposing(sel) {
+            sel(fst, snd)
+        }
+    }
+};
+```
+
+### Existential types
+
+```propcalc2
+let mk_pair: ∀ F, S; ∀ R; (F => S => R) => R = <F, S>{
+    supposing(fst, snd) {
+        $trust_me
+    }
+};
+```
+
+## Impredicativity
+
+System F is _impredicative_.
+From Pierce in Chapter 23 of _Types and Programming Languages_:
+
+> In general, a definition (of a set, a type, etc.) is called "impredicative" if
+> it involves a quantifier whose domain includes the very thing being defined.
+> For example, in System F, the type variable `X` in the type `T = ∀ X; X => X`
+> ranges over all types, including `T` itself (so that, for example, we can
+> instantiate a term of type `T` at type `T`, yielding a function from `T` to
+> `T`).
+
+```propcalc2
+T = ∀ X; X => X
+//    ^ X ranges over all possible types, including
+//      the type `∀ X; X => X`, that is, `T` itself!
+```

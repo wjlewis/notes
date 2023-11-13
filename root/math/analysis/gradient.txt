@@ -1,0 +1,67 @@
+# The gradient
+
+The gradient is a _vector_ indicating the direction of greatest/fastest increase
+of a scalar-valued function.
+More specifically, if $f : \mathbb{R}^m \to \mathbb{R}$ is differentiable at
+some point $\mathbf{x_0} \in \mathbb{R}^m$, the gradient $\nabla f$ indicates
+the direction in which $f$ increase most steeply at $\mathbf{x_0}$.
+
+Moreover, the gradient describes a "best linear approximation" of $f$ at
+$\mathbf{x_0}$ and, as such, it's a generalization of the derivative.
+In this note, we'll derive the gradient by attempting to calculate this linear
+approximation.
+
+## Extending our notion of differentiability
+
+Let's cavalierly extend our definition of differentiability and the derivative
+to functions with higher-dimensional domains ($\mathbb{R}^m \to \mathbb{R}$).
+That is, we'll say a function is differentiable at $\mathbf{x_0} \in \mathbb{R}^m$
+iff there exists $l, \varphi : \mathbb{R}^m \to \mathbb{R}$ such that
+
+$$
+f(\mathbf{x}) = f(\mathbf{x_0}) + l(\mathbf{x})(\mathbf{x} - \mathbf{x_0}) + \varphi(\mathbf{x})
+$$
+
+where $l$ is _linear_ and
+
+$$
+\lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\varphi(\mathbf{x})}{\lVert \mathbf{x} - \mathbf{x_0} \rVert} = 0
+$$
+
+If a function $f$ is differentiable at $\mathbf{x_0}$, then its _derivative at
+$\mathbf{x_0}$_ is the linear transform $l$.
+
+## Coordinates
+
+The definition above is "coordinate-free", dealing only with abstract vectors,
+linear transforms, etc.
+To actually compute the quantities, we need to select a basis for $\mathbb{R}^m$
+and $\mathbb{R}$.
+Having done so, we can represent $l$ as a matrix multiplication:
+
+$$
+l(\mathbf{x}) = M \mathbf{x}
+$$
+
+The (transpose of the) matrix of the linear transformation $l$ is what we call
+the gradient of $f$ at $\mathbf{x_0}$.
+
+Let's see how this works for the standard basis in two dimensions.
+Suppose $f : \mathbb{R}^2 \to \mathbb{R}$ and $(x_0, y_0) \in \mathbb{R}^2$.
+We're looking for suitable scalars $m_x$ and $m_y$ such that
+
+$$
+\begin{align*}
+f(x, y) &= f(x_0, y_0) + \begin{bmatrix} m_x & m_y \end{bmatrix} \cdot \begin{bmatrix} x - x_0 \\ y - y_0 \end{bmatrix} + \varphi(x, y) \\
+        &= f(x_0, y_0) + m_x(x - x_0) + m_y(y - y_0) + \varphi(x)
+\end{align*}
+$$
+
+But $f(x_0, y_0) + m_x(x - x_0) + m_y(y - y_0)$ is just the equation of a plane
+that intersects $f$ at $(x_0, y_0)$, with a slope $m_x$ in the $x$ direction,
+and $m_y$ in the $y$ direction.
+If we wish for this plane to be _tangent_ to $f$ at $(x_0, y_0)$, then the
+slopes ought to match the partial derivatives of $f$ at $(x_0, y_0)$.
+In other words, $m_x = \frac{\partial f}{\partial x}(x_0, y_0)$ and $m_y = \frac{\partial f}{\partial y}(x_0, y_0)$.
+
+*TODO* Complete

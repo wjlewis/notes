@@ -1,0 +1,76 @@
+# Partial derivatives
+
+Partial derivatives are a straightforward extension of derivatives in a single
+dimension.
+In fact, they require no new machinery at all.
+Specifically, a function $f : \mathbb{R}^2 \to \mathbb{R}$ is _partially
+differentiable_ at a point $(x_0, y_0)$ iff
+
+$$
+\lim_{h \to 0} \frac{f(x_0 + h, y_0) + f(x_0, y_0)}{h}
+$$
+
+exists, in which case its value is the value of the _partial derivative_ of $f$
+at $(x_0, y_0)$:
+
+$$
+\frac{\partial f}{\partial x}(x_0, y_0)
+$$
+
+What we're doing is considering only a 1-dimensional "slice" of $f$ parallel to
+a particular axis (in this case, the $x$ axis).
+This is even clearer if we write the "slice" explicitly.
+If
+
+$$
+g(x) = f(x, y_0)
+$$
+
+Then $f$ is partially differentiable at $x_0$ iff $g$ is differentiable (in the
+usual 1-dimensional sense) at $x_0$.
+I don't think there's anything to prove here, since the definition above is just
+a "macro-expansion" of the 1-D derivative of $g$ at $x_0$:
+
+$$
+\lim_{h \to 0} \frac{g(x_0 + h) - g(x_0)}{h} = \lim_{h \to 0} \frac{f(x_0 + h, y_0) - f(x_0, y_0)}{h}
+$$
+
+Clearly this definition makes sense for function mapping $\mathbb{R}^n$ to
+$\mathbb{R}$.
+It does _not_, however, convey to functions whose codomain has dimension greater
+than 1.
+
+### Examples
+
+Let $f(x, y, z) = x^2 y \sin(z)$.
+The possible "slice" functions look like
+
+$$
+\begin{align*}
+g_1(x) &= x^2 y_0 \sin(z_0) \\
+g_2(y) &= x_0^2 y \sin(z_0) \\
+g_3(z) &= x_0^2 y_0 \sin(z)
+\end{align*}
+$$
+
+where $(x_0, y_0, z_0)$ is some point in the domain.
+Clearly each of the $g$'s is a differentiable function, and their (1-D)
+derivatives look like
+
+$$
+\begin{align*}
+g_1'(x) &= 2x y_0 \sin(z_0) \\
+g_2'(y) &= x_0^2 \sin(z_0) \\
+g_3'(z) &= x_0^2 y_0 \cos(z)
+\end{align*}
+$$
+
+Thus
+
+$$
+\begin{align*}
+\frac{\partial f}{\partial x}(x_0, y_0, z_0) &= 2x_0 y_0 \sin(z_0) \\
+\frac{\partial f}{\partial y}(x_0, y_0, z_0) &= x_0^2 \sin(z_0) \\
+\frac{\partial f}{\partial z}(x_0, y_0, z_0) &= x_0^2 y_0 \cos(z_0) \\
+\end{align*}
+$$

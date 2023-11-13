@@ -1,0 +1,99 @@
+# The Cauchy-Riemann equations
+
+The Cauchy-Riemann equations reveal a shocking contraint on holomorphic
+functions.
+
+Given a function $f: \mathbb{C} \to \mathbb{C}$, we can define
+$u, v: \mathbb{R}^2 \to \mathbb{R}$ as
+
+$$
+\begin{align*}
+u(x, y) &= \mathrm{Re}\left(f(x + iy)\right) \\
+v(x, y) &= \mathrm{Im}\left(f(x + iy)\right)
+\end{align*}
+$$
+
+Likewise, given $u, v : \mathbb{R}^2 \to \mathbb{R}$, we can define $f : \mathbb{C} \to \mathbb{C}$
+by
+
+$$
+f(x + iy) = u(x, y) + iv(x, y)
+$$
+
+So every complex function _induces_ a unique[^unique] pair of real scalar-valued
+functions, and vice-versa.
+It turns out that $f$ is holomorphic if and only if
+
+$$
+\begin{align*}
+\frac{\partial u}{\partial x} &= \frac{\partial v}{\partial y} \\
+\frac{\partial u}{\partial y} &= -\frac{\partial v}{\partial x}
+\end{align*}
+$$
+
+[^unique]: TODO
+
+## The Jacobian
+
+We can pair up the two scalar-valued transforms induced by $f$ into a
+_vector-valued_ transform $f^\star : \mathbb{R}^2 \to \mathbb{R}^2$:
+
+$$
+f^\star(x, y) = (u(x, y), v(x, y))
+$$
+
+Then $f^\star$ is differentiable at some point $(x_0, y_0)$ if
+
+$$
+f^\star(x, y) = f^\star(x_0, y_0) + J\cdot (x - x_0, y - y_0) + \varphi(x, y)
+$$
+
+where $J$ is the _Jacobian_ at $(x_0, y_0)$ and
+
+$$
+\lim_{(x, y) \to (x_0, y_0)} \frac{\varphi(x, y)}{\lVert (x, y) - (x_0, y_0) \rVert} = 0
+$$
+
+Likewise $f$ is _holomorphic_ at $x_0 + iy_0$ iff
+
+$$
+f(x + iy) = f(x_0 + iy_0) + w \cdot (x + iy - (x_0 + iy_0)) + \rho(x + iy)
+$$
+
+for suitable $z, \rho$.
+Thus $f$ is holomorphic wherever multiplication by the _matrix_ $J$ can be
+interpreted as multiplication by a _complex number_ w.
+In particular, $J$ must be a "dilative rotation":
+
+$$
+J =
+\begin{bmatrix}
+a & -b \\
+b & a
+\end{bmatrix}
+$$
+
+But this means that
+
+$$
+\begin{bmatrix}
+\frac{\partial u}{\partial x} & \frac{\partial u}{\partial y} \\
+\frac{\partial v}{\partial x} & \frac{\partial v}{\partial y}
+\end{bmatrix}
+
+= J =
+
+\begin{bmatrix}
+a & -b \\
+b & a
+\end{bmatrix}
+$$
+
+Thus
+
+$$
+\begin{align*}
+\frac{\partial u}{\partial x} &= \frac{\partial v}{\partial y} \\
+\frac{\partial u}{\partial y} &= -\frac{\partial v}{\partial x}
+\end{align*}
+$$

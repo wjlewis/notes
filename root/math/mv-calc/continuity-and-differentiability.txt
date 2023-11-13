@@ -1,0 +1,70 @@
+# Continuity and differentiability
+
+A function is _continuous_ at a point if it is where you expect it to be at that
+point.
+A function is _differentiable_ at a point if it's locally linear there.
+
+A function is continuous on a set if it's continuous at every point in that set,
+and likewise with differentiability.
+
+Both of these notions can be expressed rigorously.
+
+## Continuity
+
+A function $f: \mathbb{R}^m \to \mathbb{R}^n$ is continuous at a point $c$ iff
+the _image_ of every sequence converging to $c$ converges to $f(c)$.
+That is, for all sequences $\sigma : \mathbb{N} \to \mathbb{R}^m$ for which
+$\sigma \to c$, we have $f \circ \sigma \to f(c)$.
+
+Referring to our slogan above, each sequence $\sigma \to c$ establishes an
+"expectation":
+1. Select any sequence $\sigma$ that converges to $c$.
+2. Obscure $f(c)$ so we can't see its value.
+3. Now "track" $f \circ \sigma$: as $\sigma \to c$, is $f \circ \sigma$
+   converging to a point in the codomain?
+   If so, this is where we "expect" $f(c)$ to be.
+
+A function is then continuous at $c$ if all of these possible "expectations" are
+consistent.
+
+## Differentiability
+
+A function $f: \mathbb{R}^m \to \mathbb{R}^n$ is (totally) differentiable at a
+point $c$ iff there exist $L, \rho : \mathbb{R}^m \to \mathbb{R}^n$ such that
+
+$$
+f(x) = f(c) + L(x - c) + \rho(x - c)
+$$
+
+where $L$ is a _linear transform_ and $\rho$ vanishes as we "zoom in":
+
+$$
+\lim_{x \to c} \frac{\rho(x - c)}{|x - c|} = 0
+$$
+
+In this case we're justified in calling the _transform_ $L$ the derivative of
+$f$ at $c$.
+The fact that $\rho$ vanishes as we zoom in on the graph of $f$ at $c$ is
+what we mean by "locally linear".
+But why this strange form?
+This is simply a [generalization](/math/analysis/deriv-linear-approx.html) of
+the one-dimensional case, where a differentiable function $f$ may be expressed
+as
+
+$$
+f(x) = f(c) + f'(c)(x - c) + \rho(c)
+$$
+
+If we define $L(x) = f'(c)x$[^1d_linear] then we can rewrite this as:
+
+$$
+f(x) = f(c) + L(x - c) + \rho(c)
+$$
+
+[^1d_linear]: A linear transform, and indeed, the only possible kind of linear
+  transform in 1 dimension.
+
+In higher dimensions, linear transforms may do more than just "stretch" the
+space: they might skew it, rotate it, mirror it, etc.
+However, linear transforms are still _much more constrained_ than general
+functions.

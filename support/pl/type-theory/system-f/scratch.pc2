@@ -1,0 +1,38 @@
+let mk_pair: ∀ F, S; F => S => ∀ R; (F => S => R) => R = <F, S>{
+    supposing(fst, snd) {
+        <R>supposing(sel) {
+            sel(fst, snd)
+        }
+    }
+};
+
+// (∃ X; X => X)
+// "There exists an X such that X => X".
+//
+// ≡
+//
+// ∀ Y; (∀ X; (X => X) => Y) => Y
+
+let module: ∀ A, B, C, Out; A => B => C => Out => Out = <A, B, C, Out>{
+    supposing(a, b, c, out) {
+        let bool_package: ∀ Y; (∀ X; (X => X) => Y) => Y = <Y>{
+            supposing(sel) {
+                sel<A => A>(supposing(x) {
+                    x
+                })
+            }
+        };
+
+        let nat_package: ∀ Y; (∀ X; ((X => X) => X) => Y) => Y = <X>{
+            supposing(sel) {
+                sel<(X => X) =>X>(supposing(n) {
+                    $check(n);
+                    $trust_me
+                    // succ(n)
+                })
+            }
+        };
+
+        out
+    }
+};
