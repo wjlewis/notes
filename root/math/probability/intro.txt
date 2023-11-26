@@ -1,0 +1,96 @@
+# Probability
+
+What are the odds that we roll a 2, 4, or 6 with a standard 6-faced die?
+This is the kind of question we're trying to answer.
+We say that the _probability_ of this occurring is $P({2, 4, 6}) = \frac{1}{2}$.
+But what does this mean?
+Specifically, what does the $\frac{1}{2}$ mean here?
+After all, it's _possible_ to roll a die many times and not see a 2, 4, or 6.
+Instead, the probability should reflect the long-term behavior of a system.
+We'd like $P({2, 4, 6}) = \frac{1}{2}$ to mean that if we repeatedly roll a die,
+counting the number of times we rolled an even value, then the ratio of this
+count to the total number of rolls should converge to $\frac{1}{2}$.
+So already we see that any theory of probability touches concepts like
+_measurement_ and _convergence_.
+
+Big question: how do we handle (or sidestep) the idea that "nature" is deciding
+an outcome in our experiments?
+This feels impossible to encode mathematically, so the solution should be pretty
+clever.
+
+## Basic concepts
+
+A _sample space_ is a collection of "things that can happen": the set of all
+possible outcomes.
+For instance, the sample space for our dice roll scenario might be $\{1, 2, 3, 4, 5, 6\}$,
+the sample space for a coin toss experiment could be $\{0, 1\}$, etc.
+The sample space is typically denoted by $\Omega$.
+
+An _event space_ $\mathcal{F}$ is a
+[$\sigma$-algebra](../measure-theory/sigma-algebras.html) on $\Omega$.
+That is, an event is a set of outcomes from the sample space.
+For instance, $\{2, 4, 6\}$ is the event discussed in the introduction.
+We think of an event as having "occurred" after an experiment if the "outcome"
+of the experiment is an element of the event.
+For instance, the event $\{2, 4, 6\}$ occurs if we roll a $4$, but not if we
+roll a $3$.
+  
+A _probability measure_ $P : \mathcal{F} \to [0, 1]$.
+That is, it maps each event to a _probability_, a value in $[0, 1]$.
+As indicated by the name, $P$ must be a measure with some additional constraints:
+
+- $P(\emptyset) = 0$ and $P(\Omega) = 1$
+- $P\left(\bigcup_{i = 0}^\infty A_i\right) = \sum_{i = 0}^\infty P(A_i)$ for
+  _pairwise disjoint_ events $\{ A_i \mid i \in \mathbb{N} \}$.
+
+The second of these is called "countable addivity" or "$\sigma$-additivity".
+
+Together, the triple $\langle \Omega, \mathcal{F}, P \rangle$ is called a
+_probability space_.
+
+_Remark_: Some subsets of $\Omega$ might be beyond our consideration.
+That is, we might be able to think of an event, but not be able to determine its
+probability, because it doesn't "fit" into any $\sigma$-algebra on the sample
+space.
+
+## Examples
+
+Let's recast the dice roll scenario in the terms defined above.
+The sample space is the set $\{1, 2, 3, 4, 5, 6\}$.
+The event space is the power set of the sample space: the so-called _discrete
+$\sigma$-algebra_ on $\{1, 2, 3, 4, 5, 6\}$.
+And the probability measure $P$ is defined by $P(A) = \frac{|A|}{6}$.
+Is $P$ a bona-fide probability measure?
+
+$P(\emptyset) = \frac{|\emptyset|}{6} = 0$ and
+$P(\{1, 2, 3, 4, 5, 6\}) = \frac{|\{1, 2, 3, 4, 5, 6\}|}{6} = 1$.
+And
+
+$$
+\begin{align*}
+P\left(\bigcup_{i=0}^\infty A_i\right) &= \frac{\left|\bigcup_{i=0}^\infty A_i\right|}{6} \\
+                                       &= \frac{\sum_{i=0}^\infty |A_i|}{6} \\
+                                       &= \sum_{i=0}^\infty \frac{|A_i|}{6} \\
+                                       &= \sum_{i=0}^\infty P(A_i)
+\end{align*}
+$$
+
+for any pairwise disjoint family of sets $\{ A_i \mid i \in \mathbb{N} \}$[^union_abs].
+
+[^union_abs]: We should probably prove that the size of a union is equal to the
+  sum of the sizes of the members, so long as they're pairwise-disjoint.
+  That is, $\left|\bigcup_{i=0}^\infty A_i\right| = \sum_{i=0}^\infty |A_i|$.
+  I'm not actually sure how to do this, but luckily in our example, we only need
+  to handle _finite_ unions.
+
+## Basic properties
+
+Not surprisingly, the probability of the _complement_ of any event is $1$ minus
+the probability of the original event.
+This is a direct consequence of the fact that $P(\Omega) = 1$.
+In particular, $1 = P(\Omega) = P(A \cup A^c) = P(A) + P(A^c)$, so $P(A^c) = 1 - P(A)$.
+
+Probability measures are monotonic: $A \subseteq B \implies P(A) \le P(B)$.
+Since $B = A \cup (B - A)$, we have $P(B) = P(A \cup (B - A)) = P(A) + P(B - A)$.
+Because $P : \mathcal{F} \to [0, 1]$, $P(B - A) \ge 0$.
+So $P(B) \ge P(A)$.

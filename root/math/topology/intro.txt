@@ -1,0 +1,215 @@
+# Topology
+
+A _topological space_ is a set $X$ along with a notion of what it means for a
+set to be "open" in $X$.
+Specifically, a topogical space is a pair $\langle X, \mathcal{T} \rangle$, where
+$\mathcal{T} \subseteq 2^X$ satisfying 3 properties:
+
+1. $\emptyset \in \mathcal{T}$ and $X \in \mathcal{T}$
+2. $\mathcal{T}$ is closed under finite intersections
+3. $\mathcal{T}$ is closed under arbitrary unions
+
+In this case $\mathcal{T}$ is called a _topology on $X$_.
+
+## Examples
+
+Given any set $X$, the _trivial topology on $X$_ contains only the empty set and
+$X$ itself: $\langle X, \left\{\emptyset, X\right\} \rangle$.
+This clearly satisfies property 1, and it's easy to check the other two.
+
+At the other extreme lies the _discrete topology on $X$_, which contains _every_
+subset: $\langle X, 2^X \rangle$.
+Again, this clearly satisfies the conditions above.
+
+It's often possible to define many different topologies on a single given set.
+For instance, $\mathbb{R}$ admits the familiar topology:
+
+$$
+\langle \mathbb{R}, \left\{ S \subseteq \mathbb{R} \mid x \in S \implies B_\varepsilon(x) \subseteq S \right\} \rangle
+$$
+
+But we can also define the _right ray topology_ on $\mathbb{R}$:
+
+$$
+\langle \mathbb{R}, \left\{ (a, \infty) \mid a \in \mathbb{R} \right\} \cup \{ \emptyset, \mathbb{R} \} \rangle
+$$
+
+_Proof (that this is indeed a topological space)_:
+Let $\mathcal{T} = \left\{ (a, \infty) \mid a \in \mathbb{R} \right\} \cup \{ \emptyset, \mathbb{R} \}$.
+
+1. $\emptyset \in \mathcal{T}$ and $\mathbb{R} \in \mathcal{T}$ by definition.
+2. Suppose $A \in \mathcal{T}$ and $B \in \mathcal{T}$.
+   If either $A$ or $B$ is the empty set, then $A \cap B = \emptyset$; if either
+   is $\mathbb{R}$, then $A \cap B$ is either $A$ or $B$.
+   In both these cases, $A \cap B$ is again in $\mathcal{T}$.
+   If $A = (a, \infty)$ and $B = (b, \infty)$, then $A \cap B = (\textrm{max}(a, b), \infty)$,
+   which is again in $\mathcal{T}$.[^extend_to_finite_intersections]
+3. Now suppose that $I$ is any set, and $\{ A_i \subseteq \mathcal{T} \mid i \in I \}$
+   is a "family" of sets in $\mathcal{T}$ indexed by $I$.
+   If for all $i \in I$, $A_i = \emptyset$, then $\bigcup_{i\in I} A_i = \emptyset \in \mathcal{T}$.
+   If for _any_ $i \in I$, $A_i = \mathbb{R}$, then $\bigcup_{i\in I} A_i = \mathbb{R} \in \mathcal{T}$.
+   Finally, if for all $i \in I$, $A_i = (a_i, \infty)$, then there are two
+   cases:
+   
+   1. If $l = \inf(\{ a_i \mid i \in I \})$ exists, then $\bigcup_{i\in I} A_i = (l, \infty)$
+   2. Otherwise $\bigcup_{i\in I} A_i = \mathbb{R}$.
+   
+   We show this in the usual manner (by showing that each side is a subset of
+   the other).
+   
+   1. Suppose $x \in \bigcup_{i\in I} A_i$.
+      Then $x$ is in _some_ $A_k = (a_k, \infty)$.
+      But $l$ is a greatest lower bound for the $a_i$'s, so $l \le a_k$.
+      Thus $l \le a_k < x$, so $x \in (l, \infty)$.
+      
+      Now suppose $x \in (l, \infty)$.
+      Then $l < x$.
+      Because $l$ is a greatest lower bound, any value greater than $x$ is _not_
+      a lower bound on the $a_i$'s.
+      This means that there exists some $a_k$ such that $a_k < x$.
+      So $x \in (a_k, \infty) = A_k$, and thus $x \in \bigcup_{i\in I} A_i$.
+   2. Clearly $\bigcup_{i\in I} A_i \subseteq \mathbb{R}$.
+      So suppose $x \in \mathbb{R}$.
+      Since the $a_i$'s have no lower bound, there's some $a_k < x$ (otherwise
+      $x$ itself would be a lower bound).
+      Then $x \in (a_k, \infty) = A_k$, and thus $x \in \bigcup_{i\in I} A_i$.
+      
+[^extend_to_finite_intersections]: Technically we need to show that
+  $\mathcal{T}$ is closed over all _finite_ intersections, but this can be
+  proved via induction.
+  Suppose that any intersection of $n$ sets from $\mathcal{T}$ is again in
+  $\mathcal{T}$, and let $A_1, A_2, \ldots, A_n, A_{n+1} \in \mathcal{T}$.
+  Then
+
+  $$
+  \begin{align*}
+  \bigcap_{k=1}^{n+1} A_k &= \left(\bigcap_{k=1}^n A_k\right) \cap A_{n+1} \\
+                          &= B \cap A_{n+1} \\
+                          &= C \in \mathcal{T}
+  \end{align*}
+  $$
+  
+  where in the second equality we've made use of the induction hypothesis to
+  conclude that the intersection of $n$ sets is some set $B$ in $\mathcal{T}$.
+
+### More examples
+
+The _particular-point topology_: given a point $p \in X$, define
+
+$$
+\mathcal{T}_p = \{ S \subseteq X \mid p \in S \}
+$$
+
+The _co-finite topology_: $\mathcal{T} = \{ S \subseteq X \mid S^c \textrm{ is finite } \}$.
+
+The _co-countable topology_: $\mathcal{T} = \{ S \subseteq X \mid S^c \textrm{ is countable } \}$.
+  
+## Additional concepts
+
+Because topological spaces are so general, we forfeit many of the "nice"
+properties of, say, $\mathbb{R}$.
+However, we can still formulate familiar notions like "inside", "outside", "on
+the boundary", etc.
+
+Given a topological space $\langle X, \mathcal{T} \rangle$, a set $S \subseteq X$
+(_note that $S$ is not necessarily a subset of $\mathcal{T}$_), and a point $p \in X$,
+
+- $p$ is in the _interior_ of $S$ iff there's an open set containing $p$ that is
+  itself completely contained in $S$: that is, if there exists $U \in \mathcal{T}$
+  such that $p \in U$ and $U \subseteq S$.
+- $p$ is in the _exterior_ of $S$ iff it's in the interior of $S^c$.
+- $p$ is on the _boundary_ of $S$ iff it's neither in the interior or exterior
+  of $S$.
+
+With these definitions in hand we can define the interior, exterior, and
+boundary _of a set_ in the obvious way:
+
+- The _interior of $S$_, denoted $S^\circ$, is the set of interior points of
+  $S$.
+- The _exterior of $S$_, denoted $\mathrm{Ext}(S)$, is the set of exterior
+  points of $S$.
+- The _boundary of $S$_, denoted $\partial S$, is the set of boundary points of
+  $S$.
+
+These allow us to define the _closure_ of a set:
+
+- The _closure of $S$_, denoted $\overline{S}$, is the union of $S$ with its
+  boundary: $S \cup \partial S$.
+
+
+Finally, we define _accumulation points_ of a set:
+
+- $p$ is an _accumulation point_ of $S$ iff every open set containing $p$
+  overlaps $S$ at some point other than $p$.
+  That is, for all $U \in \mathcal{T}$, if $p \in U$, then $\left(U - \{p\}\right) \cap S \ne \emptyset$.
+  Accumulation points are arbitrarily "near" to other points in $S$ in the sense
+  that any neighborhood containing $p$ also contains some other point from $S$.
+
+Note that an accumulation point of a set _does not need to be an element of that
+set_.
+For instance, in $\mathbb{R}$ with the usual topology, $0$ is an accumulation
+point of $(0, 1)$, even though $0 \not\in (0, 1)$.
+
+Things are even stranger in the right-ray topology: suppose $S \in \mathbb{R}$
+is nonempty and bounded above; then $p$ is an accumulation point of $S$ iff $p \le \mathrm{sup}(S)$.
+(If $S$ is empty, then it has no accumulation points; if $S$ is not bounded
+above, then _every_ point in $\mathbb{R}$ is an accumulation point).
+
+_Proof_: $\Rightarrow$ Let $p$ be an accumulation point of $S$.
+If $p > \mathrm{sup}(S)$ then there must be a point $x$ between the two:
+$\mathrm{sup}(S) < x < p$.
+But $p \in (x, \infty)$, yet $(x, \infty) \cap S = \emptyset$, which violates
+our hypothesis that $p$ was an accumulation point of $S$.
+$\rightarrow\leftarrow$
+So $p \le \mathrm{sup}(S)$.
+
+$\Leftarrow$ Now suppose that $p \le \mathrm{sup}(S)$, and consider any open set
+$(a, \infty)$ containing $p$.
+This means that $a < p$, so $a < \mathrm{sup}(S)$.
+We can use this to find a point $x \in S$ that's not equal to $p$ but is still
+in $(a, \infty)$.
+If $p < \mathrm{sup}(S)$, then we can find $a < p < x < \mathrm{sup}(S)$; if $p = \mathrm{sup}(S)$,
+then we can still find $a < x < \mathrm{sup}(S) = p$.
+So $\left((a, \infty) - \{p\}\right) \cap S \supseteq \{ x \} \ne \emptyset$.[^missing_empty_and_r]
+Thus $p$ is an accumulation point of $S$.
+
+[^missing_empty_and_r]: Technically we must also consider $\emptyset$ and
+  $\mathbb{R}$ here, but these don't result in interesting cases ($p$ _can't_ be
+  in the empty set, and $\mathbb{R} \cap S \ne \emptyset$).
+
+### Metric spaces are topological spaces
+Every metric space is a topological space.
+_Proof_: Let $\langle X, d \rangle$ be a metric space.
+We'll define a topology on $X$ whose elements are just the familiar open sets in
+the metric space.
+
+That is, let $\mathcal{T} = \{ U \mid U \textrm{ is open in the metric space} \}$[^metric_space_open].
+We need to show that $\langle X, \mathcal{T} \rangle$ satisfies the conditions
+above.
+
+1. $\emptyset$ is vacuously open, and $X$ is open for obvious reasons ($B_1(x) \in \mathbb{R}$
+   for any $x$, for instance).
+2. Suppose $U_1, U_2 \in \mathcal{T}$, and consider $x \in U_1 \cap U_2$.
+   Since $x \in U_1$, there exists some $r_1 \in \mathbb{R}^+$ such that
+   $B_{r_1}(x) \subseteq U_1$, and $r_2 \in \mathbb{R}^+$ such that
+   $B_{r_2}(x) \subseteq U_2$.
+   Let $r = \mathrm{min}(r_1, r_2)$.
+   Then $B_r(x) \subseteq B_{r_1}(x) \subseteq U_1$ and $B_r(x) \subseteq B_{r_2}(x) \subseteq U_2$.
+   So $B_r(x) \subseteq U_1 \cap U_2$.
+   Hence $U_1 \cap U_2$ is open.
+3. Let $I$ be any set, and $\{ A_i \mid i \in I \}$ be a family of sets indexed
+   by the elements of $I$.
+   We need to show that the union of the $A_i$'s is itself open.
+   To that end, let $x \in \bigcup_{i\in I} A_i$.
+   Then $x$ is in _some_ $A_k$.
+   So there exists $\varepsilon$ such that $B_\varepsilon(x) \subseteq A_k$.
+   Since $A_k \subseteq \bigcup_{i\in I} A_i$, so is $B_\varepsilon(x)$.
+   Thus $\bigcup_{i\in I} A_i$ is open.
+
+[^metric_space_open]: A set is open in a metric space iff every point in it can
+  be contained within an $\varepsilon$-ball that's _also_ within the set.
+  That is, a set $S \subseteq X$ is _open_ iff for all $x \in S$, there exists
+  $\varepsilon \in \mathbb{R}^+$ such that $B_\varepsilon(x) \subseteq S$.
+  Note that the empty set is vacuously open: it has no elements to consider, so
+  this is true for all of them.
+  

@@ -1,0 +1,74 @@
+# This statement is false
+
+This sentence rankles because it has the form of a statement that _ought_ to be
+either true or false, and yet neither fits.
+The classically-minded would like to affirm that every statment is either true
+or false.
+Or equivalently, that if a statement isn't true then it's false, and vice-versa.
+"This statement is false", and other similar paradoxical phrases defy this.
+
+Paradoxical statements like this simply reveal the cracks in this way of
+thinking that were always present.
+For instance, the same statement—that is, the same sequence of words—might be
+true or false depending on the context.
+So it's not statements that are true or false, but statements along with their
+entire context.
+
+But this isn't the whole story either.
+It's not words, but their _meanings_ that matter.
+And meaning requires interpretation.
+Statements are easy to talk about, but meanings are much subtler.
+When Neal Armstrong said "The eagle has landed" after touching down on the Moon,
+was he lying?
+
+In one sense, our initial impulse _is correct_: this doesn't deal a death-blow
+to truth and falsehood as we use them day-to-day, only to our abstract theories
+about them.
+When we say, "That's not true", we have a rough-and-ready, common-sense meaning
+in mind.
+_All that matters is that you understand what I'm trying to say._
+
+What to take home?
+Forget about abstract theories of truth: they're flawed, and more importantly,
+they're absolutely useless.
+
+### ...
+
+This sentence induces anxiety in the classically-minded.
+We race to dismiss it as meaningless, or as a minor blemish.
+But this paradoxical statement and others like it reveal a significant
+shortcoming in a certain way of thinking.
+In this note we'll examine why this statement is important, along with its
+consequences.
+
+There are many attempts to dismiss this statement.
+
+> The sentence is meaningless.
+> There are other meaningless phrases in English, like "Walk green river run".
+> Is that sentence true?
+> False?
+> Neither, because it is simply ill-posed.
+> This sentence is just like that.
+
+However, depending on the context, the sentence "This statement is false" isn't
+meaningless at all.
+It's ordinary to the point of escaping notice:
+
+> Jones testified that his company had ceased operations well before the
+> incident.
+> This statement is false.
+
+But we might object to this comparison: after all, the context matters.
+The sentence "This statement is false" is objectionable because it's
+self-referential.
+We might try and ban all self-referential statements, or at least brand them as
+meaningless.
+This is easier said than done, though.
+Not only is it not clear _how_ to do this, but doing so might remove significant
+and useful parts of language as well.
+
+_"yields falsehood when preceded by its own quotation." yields falsehood when
+preceded by its own quotation._
+
+So we arrive at the final objection: that this sentence is a mere curiosity, a
+quirk of the English language.

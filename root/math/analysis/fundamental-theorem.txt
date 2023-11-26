@@ -1,0 +1,8 @@
+# Fundamental theorem of calculus
+
+Lost on me as an undergrad.
+I thought that integrals $\Leftrightarrow$ antiderivatives.
+This closes a lot of doors: what is the point of other integrals, like the
+Lesbesgue integral, if integrals and antiderivatives are the same?
+How can you possibly have a better way of finding antiderivatives?
+Also topics like the theory of distributions.

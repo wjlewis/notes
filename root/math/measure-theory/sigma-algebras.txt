@@ -1,0 +1,21 @@
+# Sigma algebras
+
+$\sigma$-algebras form the foundation of measure theory.
+Given a set $X$, a $\sigma$-algebra on $X$ is, roughly, the set of all subsets
+of $X$ whose size we can measure.
+So a $\sigma$-algebra $\Sigma$ is some set of subsets of a "host set" $X$.
+Naturally, it must satisfy a few other conditions:
+
+- $X \in \Sigma$: we should be able to measure the size of the entire set.
+- $A \in \Sigma \implies A^C \in \Sigma$: if a set can be measured, we should be
+  able to measure its complement (for instance, by subtracting the size of the
+  original set $A$ from the size of the entire set $X$).
+- If $\{ A_i \mid i \in \mathbb{N} \} \subseteq \Sigma$ is some countable family
+  of sets in $\Sigma$, then their union is also present: $\bigcup_{i\in\mathbb{N}} A_i \in \Sigma$
+
+The elements of a $\sigma$-algebra are often called the _measurable sets_ of
+$X$, and the pair $\langle X, \Sigma \rangle$ is called a _measurable space_.
+
+## Basic results
+
+Trivial and discrete $\sigma$-algebras, DeMorgan's laws, empty set, etc.

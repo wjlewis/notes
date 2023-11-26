@@ -1,0 +1,81 @@
+# Hausdorff spaces
+
+It's possible to "port" convergence to general topological spaces, but not
+without losing some of the nice features it enjoys in metric spaces.
+Namely, we lose the uniqueness of limits.
+We can recover this notion (which is important for doing calculus on topological
+spaces) by constraining our topological spaces slightly.
+These are _Hausdorff spaces_.
+
+## Convergence in a general topological space
+
+Suppose $\langle X, \mathcal{T} \rangle$ is a topological space, and
+$\sigma : \mathbb{N} \to X$ is a sequence in $X$.
+Then $\sigma \to l \in X$ iff for every open neighborhood $U$ of $l$, there
+exists $N \in \mathbb{N}$ such that $n \ge N$ implies that $\sigma_n \in U$.
+(An _open neighborhood_ of a point $x$ is any open set containing $x$.
+That is, $U \in \mathcal{T}$ such that $x \in U$.)
+
+More colloquially, a sequence converges to $l$ if, given any open neighborhood
+$U$ of $l$, there's a "tail" of the sequence entirely within $U$ (after _some_
+index, the rest of the sequence is in $U$).
+
+In general, _limits are not unique_.
+For instance, in the trivial topology on $\mathbb{R}$, the sequence $\sigma(n) = 0$
+converges to _every_ real number.
+
+_Proof_: Let $l \in \mathbb{R}$.
+The only open set in $\langle \mathbb{R}, \{ \emptyset, \mathbb{R} \} \rangle$
+containing $l$ is $\mathbb{R}$.
+Choosing $N = 0$, $n \ge N$ implies that $\sigma(n) = 0 \in \mathbb{R}$.
+So $\sigma \to l$.
+
+This doesn't just happen in the trivial topology, either.
+In the right ray topology on $\mathbb{R}$, any bounded sequence converges to
+_every value less than or equal to its limit inferior_.
+That is, if $\sigma : \mathbb{N} \to \mathbb{R}$ is a bounded sequence, then
+$\sigma \to l$ whenever $l \le \lim\inf \sigma$.
+
+## Hausdorff spaces
+
+A topological space $\langle X, \mathcal{T} \rangle$ is called _Hausdorff_ if
+all points in $X$ can be "separated".
+Specifically, for any $x, y \in X$, where $x \ne y$, there exist $U_x, U_y \in \mathcal{T}$
+such that $x \in U_x$ and $y \in U_y$, but $U_x \cap U_y = \emptyset$.
+
+Every metric space is Hausdorff.
+
+_Proof_: Let $\langle X, d \rangle$ be a metric space, and let $x, y \in X$ with
+$x \ne y$.
+Let $l = d(x, y)$ be the distance between $x$ and $y$.
+Then $l > 0$, so for any point $p \in X$, $B_{l/2}(p)$ is an open set in the
+[topological space associated with this metric space](./intro.html#Metric-spaces-are-topological-spaces).
+Define $U_x = B_{l/2}(x)$ and $U_y = B_{l/2}(y)$.
+Then $x \in U_x$ and $y \in U_y$, but $B_{l/2}(x) \cap B_{l/2}(y) = \emptyset$[^empty_intersection].
+So this space is Hausdorff, as promised.
+
+[^empty_intersection]: Showing this rigorously involves the triangle inequality.
+
+But *not every Hausdorff space is a metric space*.
+That is, Hausdorff spaces are more general than metric spaces.
+
+_Proof_: Not quite sure about this, at the moment.
+It's easy to show that we don't _need_ a metric for a space to be Hausdorff.
+For instance, using the discrete topology on any set results in a Hausdorff
+space.
+The more important question seems to be whether there are Hausdorff spaces that
+are not _metrizable_.
+
+Convergence is unique in a Hausdorff space.
+That is, in a Hausdorff space, if $\sigma \to x$ and $\sigma \to y$, then $x = y$.
+
+_Proof_: This is pretty straightforward.
+Either $x = y$ or $x \ne y$.
+If $x \ne y$, then we can find $U_x, U_y$ such that $x \in U_x$, $y \in U_y$, but
+$U_x \cap U_y = \emptyset$.
+Then there exists $N_1 \in \mathbb{N}$ such that $n \ge N_1$ implies that $\sigma_n \in U_x$.
+Likewise there exists $N_2$ such that $n \ge N_2$ implies that $\sigma_n \in U_y$.
+Let $N = \mathrm{max}(N_1, N_2)$.
+Then for $n \ge N$, $\sigma_n \in U_x$ and $\sigma_n \in U_y$.
+But no points are in both of these sets $\rightarrow\leftarrow$.
+So $x = y$.

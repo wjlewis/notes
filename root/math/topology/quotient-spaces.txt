@@ -1,0 +1,203 @@
+# Quotient spaces
+
+Forming the quotient of a set $X$ by an equivalence relation $\sim$ is a
+ubiquitous operation in mathematics.
+Unsurprisingly, there's a natural way to construct a topology on the quotient
+given a topology on the original set.
+The result is called the _quotient space_.
+
+## The canonical map
+
+Given a set $X$, a topology $\mathcal{T}$ on $X$, and an equivalence relation
+$\sim$ on $X$, the _canonical map_ $q : X \to X/\!\sim$ maps every element in
+$X$ to its equivalence class:
+
+$$
+q(x) = [x]_\sim
+$$
+
+If we arrange the elements of $X$ so that related elements are aligned
+vertically, then $q$ "flattens" $X$ into a single line of points:
+
+![Forming the quotient of a set w.r.t. an equivalence relation](./quotient.png)
+
+This picture might be deceiving for several reasons: it's important to keep in
+mind that the equivalence classes may not have the same number of elements.
+
+## Quotient spaces
+
+With $q$ in hand we're ready to define the _quotient space_ $\langle X/\!\sim, \hat{\mathcal{T}} \rangle$.
+Specifically, define
+
+$$
+\hat{\mathcal{T}} = \{ q^{-1}(U) \mid U \in \mathcal{T} \}
+$$
+
+So $\hat{\mathcal{T}}$ is the collection of sets in $X/\!\sim$ whose _preimages_
+are open in the original topology.
+
+_Remark_: $\hat{\mathcal{T}}$ "forgets" about any open sets in $\mathcal{T}$
+that cut across equivalence classes.
+This is because the preimage of _any_ set in $X/\!\sim$ can't contain any
+incomplete "pieces" of an equivalence class.
+More precisely, if $x \in q^{-1}(A)$ and $y \sim x$, then $y \in q^{-1}(A)$ as
+well.
+This is easy to see: if $x \in q^{-1}(A)$, then $q(x) \in A$, so $[x]_\sim \in A$.
+Likewise if $y \sim x$, then $q(y) = [x]_\sim \in A$, so $y \in q^{-1}(A)$.
+
+We need to show that $\hat{\mathcal{T}}$ is actually a topology on the quotient
+$X/\!\sim$:
+
+1. $\emptyset \in \hat{\mathcal{T}}$.
+   The justification for this is straightforward, but tends to sound like an
+   Abbott and Costello routine: the preimage of the empty set contains all
+   elements of $X$ that don't map to _any_ element in $X/\!\sim$; but $q$ maps
+   _every_ element of $X$ to _some_ element of $X/\!\sim$ (it's a function), so
+   it maps _no_ elements of $X$ to _nothing_.
+   Hence $q^{-1}(\emptyset) = \emptyset$.
+   Since $\emptyset \in \mathcal{T}$, $\emptyset \in \hat{\mathcal{T}}$.
+   
+   $X/\!\sim \in \hat{\mathcal{T}}$.
+   This is because $q$ is _surjective_ (and $X \in \mathcal{T}$).
+   That is, $q^{-1}(X/\!\sim) = X$, and $X \in \mathcal{T}$, so $X/\!\sim \in \hat{\mathcal{T}}$.
+
+2. Suppose $A, B \in \hat{\mathcal{T}}$.
+   This is easy, since set operations and preimages play nicely with each other.
+   The fact that $A$ and $B$ are in the quotient topology means that their
+   preimages are open in the original topology.
+   That is, $q^{-1}(A)$ and $q^{-1}(B)$ are in $\mathcal{T}$.
+   But $\mathcal{T}$ is closed under finite intersections by virtue of being a
+   topology, so $q^{-1}(A) \cap q^{-1}(B)$ is in $\mathcal{T}$.
+   Furthermore, _the intersection of preimages is the same as the preimage of
+   the intersection_[^preimage_set_ops]: $q^{-1}(A) \cap q^{-1}(B) = q^{-1}(A \cap B)$.
+   This means that $A \cap B \in \hat{\mathcal{T}}$.
+
+3. Suppose $I$ is any set, and $A = \{ A_i \mid i \in I \}$ is a family of sets
+   in $\hat{\mathcal{T}}$ indexed by $I$.
+   We need to show that $\bigcup_{i\in I} A_i \in \hat{\mathcal{T}}$.
+   Again, this is easy given how preimages and set operations interact.
+   Specifically
+
+   $$
+   q^{-1}\left(\bigcup_{i\in I} A_i\right) = \bigcup_{i\in I} q^{-1}(A_i)
+   $$
+   
+   Since each $A_i$ is in $\hat{\mathcal{T}}$, each $q^{-1}(A_i)$ is in
+   $\mathcal{T}$.
+   And because $\mathcal{T}$ is a topology, the union $\bigcup_{i\in I} q^{-1}(A_i)$
+   is in $\mathcal{T}$ as well.
+   But this means that the equivalent set $q^{-1}\left(\bigcup_{i\in I} A_i\right)$
+   is in $\mathcal{T}$.
+   So $\bigcup_{i\in I} A_i$ is in $\hat{\mathcal{T}}$, as promised.
+   
+[^preimage_set_ops]: Let's cut to the chase and just show that
+  1. The preimage of an arbitrary union is the same as the union of the
+     preimages, and
+  2. The preimage of an arbitrary intersection is the same as the intersection
+     of the preimages.
+
+  _Proof_: Let $X$ and $Y$ be any sets, and $\varphi : X \to Y$.
+  Furthermore, let $I$ be some set, and $A = \{ A_i \in Y \mid i \in I \}$ be a
+  family of subsets of $Y$ indexed by $I$.
+  Then
+  
+  $$
+  \begin{align*}
+  \varphi^{-1}\left(\bigcup_{i\in I} A_i\right) &= \bigcup_{i\in I} \varphi^{-1}(A_i) \\
+  \varphi^{-1}\left(\bigcap_{i\in I} A_i\right) &= \bigcap_{i\in I} \varphi^{-1}(A_i) \\
+  \end{align*}
+  $$
+  
+  For unions
+
+  $$
+  \begin{align*}
+  x \in \varphi^{-1}\left(\bigcup_{i\in I} A_i\right) &\Longleftrightarrow \varphi(x) \in \bigcup_{i\in I} A_i \\
+                                                      &\Longleftrightarrow \exists k \in I \textrm{ s.t. } \varphi(x) = A_k \\
+                                                      &\Longleftrightarrow \exists k \in I \textrm{ s.t. } x \in \varphi^{-1}(A_k) \\
+                                                      &\Longleftrightarrow x \in \bigcup_{i\in I} \varphi^{-1}(A_i)
+  \end{align*}
+  $$
+  
+  and for intersections:
+    
+  $$
+  \begin{align*}
+  x \in \varphi^{-1}\left(\bigcap_{i\in I} A_i\right) &\Longleftrightarrow \varphi(x) \in \bigcap_{i\in I} A_i \\
+                                                      &\Longleftrightarrow \forall k \in I, \varphi(x) = A_k \\
+                                                      &\Longleftrightarrow \forall k \in I, x \in \varphi^{-1}(A_k) \\
+                                                      &\Longleftrightarrow x \in \bigcap_{i\in I} \varphi^{-1}(A_i)
+  \end{align*}
+  $$
+
+  Notice the nice duality between these proofs!
+  With a little more cleverness we could probably get one for free.
+
+## Examples
+
+What's the point of all this?
+
+### The möbius strip
+
+Equivalence relations give us a way of saying that certain points are the same
+as others.
+This allows us to construct new topological spaces by "gluing" points together
+in existing spaces.
+
+For example, we can construct a topological space equivalent[^homeomorphic] to
+the möbius strip below:
+
+[^homeomorphic]: Equivalent in the sense that the two topological spaces are
+  _homeomorphic_.
+  This means that there's a bijection between the the two that is continuous,
+  and whose inverse is continuous.
+  We'll have much more to say about this in a separate note.
+
+![A möbius strip](./mobius.png)
+
+by gluing the lefthand edge of this rectangle to its righthand edge, _after
+giving it a half-rotation_:
+
+![A gluing diagram for the möbius strip](./mobius-plane.png)
+
+The rectangle is the subset $[0, 1] \times (-1, 1) \subseteq \mathbb{R}^2$.
+"Gluing instructions" are provided by the arrows on the left and righthand sides
+of the rectangle: the two edges should be identified in such a way that the
+arrows point in the same direction.
+Specifically, a point of the form $(0, s)$ should be glued to $(1, -s)$.
+How do we "glue" two points mathematically?
+We define an equivalence relation in which they're related.
+ 
+In our case, that's the smallest equivalence relation $\sim$ containing all
+points in $[0, 1] \times (-1, 1)$ in which $(0, s) \sim (1, -s)$, for all $s \in (-1, 1)$.
+So, for instance, $\left(\frac{1}{2}, \frac{\pi}{4}\right) \sim \left(\frac{1}{2}, \frac{\pi}{4}\right)$,
+but also $\left(0, \frac{2}{3}\right) \sim \left(1, -\frac{2}{3}\right)$, and
+$\left(1, -\frac{2}{3}\right) \sim \left(0, \frac{2}{3}\right)$,
+$\left(0, \frac{2}{3}\right) \sim \left(0, \frac{2}{3}\right)$, etc.
+
+With the equivalence relation $\sim$ in hand, the quotient topology w.r.t.
+$\sim$ of the usual topology on $[0, 1] \times (-1, 1)$ _behaves like the möbius
+strip_.
+
+Let's define $R = [0, 1] \times (-1, 1)$.
+To illustrate this, consider the set $\{ (x, y) \in R \mid \sqrt{x^2 + y^2} < \frac{1}{4} \}$.
+This is just $B_\frac{1}{4}(0, 0)$ in $R$.
+So unsurprisingly, this set is open in $R$ under the usual topology:
+
+![A ball around the origin in the plane](./origin-plane-ball.png)
+
+Even though $(0, 0)$ is "on the edge" of this set, it's open by definition: for
+every point in the set, there's some open ball around the point that's
+completely contained in the set.
+This works because the open balls look like half-circles.
+
+However, when considered on the möbius strip, this set is _not_ open.
+This is because the open balls now "wrap around" to the other side:
+
+![A ball around the origin on the möbius strip](./origin-mobius-ball.png)
+
+So, for instance, every ball $B_\varepsilon(0, 0)$ around $(0, 0)$ contains
+points like $(1 - \frac{\varepsilon}{2}, 0)$, which are _not_ in the original
+set.
+
+### Projective spaces
